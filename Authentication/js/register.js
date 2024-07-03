@@ -191,6 +191,8 @@ signupBtn.addEventListener("click", function () {
     password: signPassword.value,
     role: signRole.value,
     isLogin: false,
+    cart: [],
+    orders: [],
   };
   if (
     nameValidation() &&
@@ -200,7 +202,7 @@ signupBtn.addEventListener("click", function () {
     rePasswordValidation()
   ) {
     if (searchUserEmail()) {
-      swal("", "SignUp Successfully", "success");
+      // swal("", "SignUp Successfully", "success");
       allUsers.push(user);
       localStorage.setItem("allUsers", JSON.stringify(allUsers));
       clearInputs();

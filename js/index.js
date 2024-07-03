@@ -3,6 +3,10 @@ document.addEventListener("DOMContentLoaded", function () {
   displayAllProducts();
 });
 
+let currentUserIndex = 0;
+let currentUser = "";
+let allUsers = [];
+
 function updateNav() {
   let navUl = document.getElementById("navUl");
 
@@ -45,7 +49,7 @@ function updateNav() {
 
 function logout() {
   let allUsers = JSON.parse(localStorage.getItem("allUsers"));
-  let currentUserIndex = JSON.parse(localStorage.getItem("currentUserIndex"));
+  currentUserIndex = JSON.parse(localStorage.getItem("currentUserIndex"));
   allUsers[currentUserIndex].isLogin = false;
   localStorage.setItem("allUsers", JSON.stringify(allUsers));
   localStorage.removeItem("currentUser");
@@ -337,6 +341,14 @@ function addToCart(event, i) {
     }, 1000);
   } else {
     console.log(i);
+    allUsers = JSON.parse(localStorage.getItem("allUsers"));
+    currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    currentUserIndex = JSON.parse(localStorage.getItem("currentUserIndex"));
+    console.log(allUsers[currentUserIndex].cart);
+    allUsers[currentUserIndex].cart.push(allProducts[i]);
+    currentUser = allUsers[currentUserIndex];
+    localStorage.setItem("allUsers", JSON.stringify(allUsers));
+    localStorage.setItem("currentUser", JSON.stringify(currentUser));
   }
 }
 
