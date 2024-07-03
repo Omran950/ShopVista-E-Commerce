@@ -1,0 +1,41 @@
+/* General */
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-image: url(../../images/Under\ the\ Lake.jpg);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: white;
+  font-weight: bolder;
+}
+
+a {
+  color: white;
+  text-decoration: underline;
+}
+
+/* Buttons */
+.btn {
+  background-color: teal;
+  color: white;
+}
+
+.btn:hover {
+  color: white;
+  background-color: rgb(0, 128, 128, 0.7);
+}
+
+/* NavBar */
+#navBar {
+  background-color: transparent;
+  color: white;
+}
+
+#navBar .navbar-brand {
+  color: inherit;
+}

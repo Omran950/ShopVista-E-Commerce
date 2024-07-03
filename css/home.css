@@ -1,0 +1,122 @@
+/* General */
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: teal;
+  font-weight: bolder;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* NavBar */
+#navBar {
+  background-color: teal;
+  color: white;
+}
+
+#navBar .nav-link {
+  color: inherit;
+}
+#navBar .navbar-brand {
+  color: inherit;
+}
+
+#navBar li:hover {
+  color: teal;
+  background-color: white;
+  border-radius: 6px;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  -ms-border-radius: 6px;
+  -o-border-radius: 6px;
+}
+
+/* Card */
+.container .row .card {
+  transition: 0.5s;
+  -webkit-transition: 0.5s;
+  -moz-transition: 0.5s;
+  -ms-transition: 0.5s;
+  -o-transition: 0.5s;
+  border: teal 1px solid;
+  cursor: pointer;
+}
+
+.container .row .card:hover {
+  transform: translateY(-10px);
+  -webkit-transform: translateY(-10px);
+  -moz-transform: translateY(-10px);
+  -ms-transform: translateY(-10px);
+  -o-transform: translateY(-10px);
+  box-shadow: 0 4px 8px rgba(0, 128, 128, 0.6);
+}
+
+/* Buttons */
+.btn {
+  background-color: teal;
+  color: white;
+}
+
+.btn:hover {
+  color: white;
+  background-color: rgb(0, 128, 128, 0.7);
+}
+
+/* Footer */
+.footerContainer {
+  background-color: #2b3035;
+  color: #fdfdfd;
+}
+
+.footerContainer i {
+  transition: 0.5s;
+  -webkit-transition: 0.5s;
+  -moz-transition: 0.5s;
+  -ms-transition: 0.5s;
+  -o-transition: 0.5s;
+}
+
+.footerContainer .fa-facebook-f:hover {
+  color: #0866ff;
+}
+.footerContainer .fa-youtube:hover {
+  color: red;
+}
+.footerContainer .fa-linkedin:hover {
+  color: #0a66c2;
+}
+.footerContainer .fa-x-twitter:hover {
+  color: black;
+}
+
+/* Rest of page */
+#price,
+#priceAfter {
+  color: tomato;
+  font-weight: bold;
+}
+
+#priceBefore {
+  color: #000;
+  font-weight: bold;
+}
+
+/* Rating */
+.fa-star {
+  color: goldenrod;
+}
+
+/* carosel */
+.carousel-item img {
+  max-height: 350px;
+}
