@@ -4,6 +4,12 @@ let loginPassword = document.getElementById("login-password");
 let loginBtn = document.getElementById("login-btn");
 let passwordIcon = document.getElementById("toggle-password");
 let allUsers = [];
+let currentUser = [];
+let currentUserIndex = 0;
+if (localStorage.getItem("currentUserIndex")) {
+  currentUser = JSON.parse(localStorage.getItem("currentUser"));
+  currentUserIndex = JSON.parse(localStorage.getItem("currentUserIndex"));
+}
 
 // Get data from local storage and copy it in an array
 if (JSON.parse(localStorage.getItem("allUsers")) != null) {
@@ -11,9 +17,6 @@ if (JSON.parse(localStorage.getItem("allUsers")) != null) {
 } else {
   allUsers = [];
 }
-
-// Make user info index of array global with initial value
-let index = 0;
 
 // Clear Function
 function clearInputs() {
@@ -25,7 +28,7 @@ function clearInputs() {
 function searchUserEmailLogin() {
   for (let i = 0; i < allUsers.length; i++) {
     if (allUsers[i].email == loginEmail.value) {
-      index = i;
+      currentUserIndex = i;
       return true;
     }
   }
@@ -43,12 +46,20 @@ function searchUserPasswordLogin() {
 
 // Login Button and store user info index in session storage
 loginBtn.addEventListener("click", function () {
+  if (localStorage.getItem("currentUser")) {
+    if (currentUser.email != loginEmail.value) {
+      allUsers[currentUserIndex].isLogin = false;
+    }
+  }
   if (searchUserEmailLogin() && searchUserPasswordLogin()) {
     clearInputs();
-    allUsers[index].isLogin = true;
+    allUsers[currentUserIndex].isLogin = true;
     localStorage.setItem("allUsers", JSON.stringify(allUsers));
-    sessionStorage.setItem("currentUser", JSON.stringify(allUsers[index]));
-    sessionStorage.setItem("currentUserIndex", JSON.stringify(index));
+    localStorage.setItem(
+      "currentUser",
+      JSON.stringify(allUsers[currentUserIndex])
+    );
+    localStorage.setItem("currentUserIndex", JSON.stringify(currentUserIndex));
     Swal.fire({
       position: "top-center",
       icon: "success",
@@ -56,11 +67,11 @@ loginBtn.addEventListener("click", function () {
       showConfirmButton: false,
       timer: 1000,
     });
-    if (allUsers[index].role == "customer") {
+    if (allUsers[currentUserIndex].role == "customer") {
       setTimeout(() => {
-        window.location.replace("../home.html");
+        window.location.replace("../index.html");
       }, 1000);
-    } else if (allUsers[index].role == "seller") {
+    } else if (allUsers[currentUserIndex].role == "seller") {
       setTimeout(() => {
         window.location.replace("../Seller/seller.html");
       }, 1000);

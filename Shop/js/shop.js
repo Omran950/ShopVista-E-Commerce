@@ -1,5 +1,5 @@
-if (!sessionStorage.getItem("currentUser")) {
-  window.location.replace("../home.html");
+if (!localStorage.getItem("currentUser")) {
+  window.location.replace("../index.html");
 } else {
   let allProducts;
   if (localStorage.getItem("allProducts")) {
@@ -17,13 +17,11 @@ if (!sessionStorage.getItem("currentUser")) {
 
   function logout() {
     let allUsers = JSON.parse(localStorage.getItem("allUsers"));
-    let currentUserIndex = JSON.parse(
-      sessionStorage.getItem("currentUserIndex")
-    );
+    let currentUserIndex = JSON.parse(localStorage.getItem("currentUserIndex"));
     allUsers[currentUserIndex].isLogin = false;
     localStorage.setItem("allUsers", JSON.stringify(allUsers));
-    sessionStorage.removeItem("currentUser");
-    sessionStorage.removeItem("currentUserIndex");
+    localStorage.removeItem("currentUser");
+    localStorage.removeItem("currentUserIndex");
     Swal.fire({
       position: "top-center",
       icon: "success",
@@ -32,7 +30,7 @@ if (!sessionStorage.getItem("currentUser")) {
       timer: 1000,
     });
     setTimeout(() => {
-      window.location.replace("home.html");
+      window.location.replace("../index.html");
     }, 1000);
   }
 
@@ -252,7 +250,7 @@ if (!sessionStorage.getItem("currentUser")) {
 
   function addToCart(event, i) {
     event.stopPropagation();
-    if (!sessionStorage.getItem("currentUser")) {
+    if (!localStorage.getItem("currentUser")) {
       Swal.fire({
         position: "top-center",
         icon: "warning",

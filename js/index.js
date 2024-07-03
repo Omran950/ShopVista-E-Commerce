@@ -6,10 +6,10 @@ document.addEventListener("DOMContentLoaded", function () {
 function updateNav() {
   let navUl = document.getElementById("navUl");
 
-  if (!sessionStorage.getItem("currentUser")) {
+  if (!localStorage.getItem("currentUser")) {
     navUl.innerHTML = `
       <li class="nav-item">
-        <a class="nav-link active" aria-current="page" href="home.html">Home</a>
+        <a class="nav-link active" aria-current="page" href="index.html">Home</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="About/about.html">About</a>
@@ -26,7 +26,7 @@ function updateNav() {
   } else {
     navUl.innerHTML = `
       <li class="nav-item">
-        <a class="nav-link active" aria-current="page" href="home.html">Home</a>
+        <a class="nav-link active" aria-current="page" href="index.html">Home</a>
       </li>
       <li class="nav-item isUserCheck">
         <a class="nav-link active" aria-current="page" href="Shop/shop.html">Shop</a>
@@ -45,11 +45,11 @@ function updateNav() {
 
 function logout() {
   let allUsers = JSON.parse(localStorage.getItem("allUsers"));
-  let currentUserIndex = JSON.parse(sessionStorage.getItem("currentUserIndex"));
+  let currentUserIndex = JSON.parse(localStorage.getItem("currentUserIndex"));
   allUsers[currentUserIndex].isLogin = false;
   localStorage.setItem("allUsers", JSON.stringify(allUsers));
-  sessionStorage.removeItem("currentUser");
-  sessionStorage.removeItem("currentUserIndex");
+  localStorage.removeItem("currentUser");
+  localStorage.removeItem("currentUserIndex");
   Swal.fire({
     position: "top-center",
     icon: "success",
@@ -58,7 +58,7 @@ function logout() {
     timer: 1000,
   });
   setTimeout(() => {
-    window.location.replace("home.html");
+    window.location.replace("index.html");
   }, 1000);
 }
 
@@ -324,7 +324,7 @@ function productDetails(i) {
 
 function addToCart(event, i) {
   event.stopPropagation();
-  if (!sessionStorage.getItem("currentUser")) {
+  if (!localStorage.getItem("currentUser")) {
     Swal.fire({
       position: "top-center",
       icon: "warning",
