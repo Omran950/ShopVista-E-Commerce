@@ -1,0 +1,40 @@
+/* Buttons */
+.btn {
+  background-color: teal;
+  color: white;
+}
+.btn-danger {
+  background-color: #dc3545;
+  color: white;
+}
+.btn-outline-success {
+  background-color: white;
+  color: #157347;
+  border-color: #157347;
+}
+
+.btn:hover {
+  color: white;
+  background-color: rgb(0, 128, 128, 0.7);
+}
+.btn-danger:hover {
+  background-color: rgb(220, 53, 69, 0.8);
+}
+.container .row#row {
+  transition: 1s;
+  -webkit-transition: 1s;
+  -moz-transition: 1s;
+  -ms-transition: 1s;
+  -o-transition: 1s;
+}
+.container .row#row:hover {
+  transform: translate(-5px, -5px);
+  -webkit-transform: translate(-5px, -5px);
+  -moz-transform: translate(-5px, -5px);
+  -ms-transform: translate(-5px, -5px);
+  -o-transform: translate(-5px, -5px);
+}
+
+.container .row figure {
+  cursor: pointer;
+}

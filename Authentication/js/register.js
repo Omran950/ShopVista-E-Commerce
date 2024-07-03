@@ -202,7 +202,7 @@ signupBtn.addEventListener("click", function () {
     rePasswordValidation()
   ) {
     if (searchUserEmail()) {
-      // swal("", "SignUp Successfully", "success");
+      swal("", "SignUp Successfully", "success");
       allUsers.push(user);
       localStorage.setItem("allUsers", JSON.stringify(allUsers));
       clearInputs();

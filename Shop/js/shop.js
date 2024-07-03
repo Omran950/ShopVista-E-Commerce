@@ -8,7 +8,7 @@ if (!localStorage.getItem("currentUser")) {
     allProducts = [];
   }
   let currentUserIndex = 0;
-  let currentUser = "";
+  let currentUser = {};
   let allUsers = [];
   let modalHeader = document.getElementById("staticBackdropLabel");
   let modalBody = document.getElementById("modalBody");
@@ -117,7 +117,6 @@ if (!localStorage.getItem("currentUser")) {
   }
 
   function productDetails(i) {
-    console.log(allProducts[i]);
     modalHeader.innerHTML = `${allProducts[i].productName}`;
     modalBody.innerHTML = `<div class="col-md-5">
                     <figure class="overflow-hidden p-3">
@@ -265,11 +264,16 @@ if (!localStorage.getItem("currentUser")) {
         window.location.replace("Authentication/login.html");
       }, 1000);
     } else {
-      console.log(i);
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "Product has been added successfully",
+        showConfirmButton: false,
+        timer: 1500,
+      });
       allUsers = JSON.parse(localStorage.getItem("allUsers"));
       currentUser = JSON.parse(localStorage.getItem("currentUser"));
       currentUserIndex = JSON.parse(localStorage.getItem("currentUserIndex"));
-      console.log(allUsers[currentUserIndex].cart);
       allUsers[currentUserIndex].cart.push(allProducts[i]);
       currentUser = allUsers[currentUserIndex];
       localStorage.setItem("allUsers", JSON.stringify(allUsers));
