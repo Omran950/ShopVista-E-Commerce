@@ -245,7 +245,7 @@ function deleteAccount() {
     localStorage.removeItem("currentUserIndex");
     setTimeout(function () {
       window.location.replace("../../index.html");
-    }, 3000);
+    }, 1000);
     return Swal.fire({
       position: "top-center",
       icon: "success",
@@ -265,46 +265,20 @@ function deleteAccount() {
 }
 
 function clearAllButton() {
-  const swalWithBootstrapButtons = Swal.mixin({
-    customClass: {
-      confirmButton: "btn  btn-danger",
-      cancelButton: "btn btn-success",
-    },
-    buttonsStyling: true,
-  });
-  swalWithBootstrapButtons
-    .fire({
-      title: "Oops...",
-      text: "Are you sure ?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Clear All",
-      cancelButtonText: "cancel!",
-      reverseButtons: true,
-    })
-    .then((result) => {
-      if (result.isConfirmed) {
-        for (let i = 0; i < currentUser.cart.length; i++) {
-          for (let j = 0; j < allProducts.length; j++) {
-            if (currentUser.cart[i].productID == allProducts[j].productID) {
-              allProducts[j].stock += currentUser.cart[i].count;
-              localStorage.setItem("allProducts", JSON.stringify(allProducts));
-            }
-          }
-        }
-
-        currentUser.cart = [];
-        currentUser.totalCartPrice = 0;
-        allUsers[currentUserIndex].totalCartPrice = 0;
-        allUsers[currentUserIndex].cart = [];
-        localStorage.setItem("currentUser", JSON.stringify(currentUser));
-        localStorage.setItem("allUsers", JSON.stringify(allUsers));
-        displayCurrentUserCart();
-      } else if (result.dismiss === Swal.DismissReason.cancel) {
-        swalWithBootstrapButtons.fire({
-          title: "Cancelled",
-          icon: "error",
-        });
+  console.log("start");
+  for (let i = 0; i < currentUser.cart.length; i++) {
+    for (let j = 0; j < allProducts.length; j++) {
+      if (currentUser.cart[i].productID == allProducts[j].productID) {
+        allProducts[j].stock += currentUser.cart[i].count;
+        localStorage.setItem("allProducts", JSON.stringify(allProducts));
       }
-    });
+    }
+  }
+  console.log("cart empty");
+  currentUser.cart = [];
+  currentUser.totalCartPrice = 0;
+  allUsers[currentUserIndex].totalCartPrice = 0;
+  allUsers[currentUserIndex].cart = [];
+  localStorage.setItem("currentUser", JSON.stringify(currentUser));
+  localStorage.setItem("allUsers", JSON.stringify(allUsers));
 }

@@ -1,3 +1,4 @@
+let ticketReasonSelected = document.getElementById("ticket-reason");
 let ticketTitle = document.getElementById("ticket-title");
 let ticketName = document.getElementById("ticket-name");
 let ticketEmail = document.getElementById("ticket-email");
@@ -16,10 +17,18 @@ if (JSON.parse(localStorage.getItem("allTickets")) != null) {
 }
 
 document.getElementById("contact-right").addEventListener("click", function () {
-  document.getElementById("form").scrollIntoView({ behavior: "smooth" });
+  document.getElementById("contact-form").scrollIntoView({ behavior: "smooth" });
 });
 
+ticketReasonSelected.addEventListener("change", function() {
+  let ticketReason = ticketReasonSelected.value
+});
+  
 // regex
+function titleValidation() {
+  let titleRegex = /^[a-zA-Z0-9_ ]{3,30}$/;
+  return titleRegex.test(ticketTitle.value);
+}
 function nameValidation() {
   let nameRegex = /^[a-zA-Z_ ]{3,30}$/;
   return nameRegex.test(ticketName.value);
@@ -32,13 +41,17 @@ function mobileValidation() {
   let mobileRegex = /^01[0125][0-9]{8}$/;
   return mobileRegex.test(ticketMobile.value);
 }
+function messageValidation() {
+  let messageRegex = /^[a-zA-Z0-9_ ]{3,100}$/;
+  return messageRegex.test(ticketMessage.value);
+}
 document.addEventListener("DOMContentLoaded", function () {
   updateNav();
-  const dropdownItems = document.querySelectorAll(".dropdown-item");
-  const dropdownButton = document.getElementById("dropdownMenuButton1");
+  const dropdownItems = document.querySelectorAll('.dropdown-item');
+  const dropdownButton = document.getElementById('dropdownMenuButton1');
 
-  dropdownItems.forEach((item) => {
-    item.addEventListener("click", function (event) {
+  dropdownItems.forEach(item => {
+    item.addEventListener('click', function(event) {
       event.preventDefault();
       dropdownButton.textContent = this.textContent;
     });
@@ -46,6 +59,16 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // Event on inputs
+
+
+ticketTitle.addEventListener("keyup", function () {
+  if (titleValidation()) {
+    removeTitleAlert();
+  } else {
+    addTitleAlert();
+  }
+});
+
 ticketName.addEventListener("keyup", function () {
   if (nameValidation()) {
     removeNameAlert();
@@ -71,19 +94,14 @@ ticketMobile.addEventListener("keyup", function () {
 });
 
 ticketMessage.addEventListener("keyup", function () {
-  if (ticketMessage.value.length > 0) {
+  if (messageValidation()) {
     removeMessageAlert();
   } else {
     addMessageAlert();
   }
 });
-ticketTitle.addEventListener("keyup", function () {
-  if (ticketTitle.value.length > 0) {
-    removeTitleAlert();
-  } else {
-    addTitleAlert();
-  }
-});
+
+// add and remove Alerts
 function addTitleAlert() {
   ticketTitle.classList.add("is-invalid");
   ticketTitle.classList.remove("is-valid");
@@ -137,6 +155,7 @@ function removeMessageAlert() {
 
 // Clear Function
 function clearInputs() {
+  ticketReasonSelected.value = "";
   ticketTitle.value = "";
   ticketName.value = "";
   ticketEmail.value = "";
@@ -147,13 +166,14 @@ function clearInputs() {
 // Add Ticket Function
 submitTicket.addEventListener("click", function () {
   let ticket = {
+    reason: ticketReasonSelected.value,
     title: ticketTitle.value,
     name: ticketName.value,
     email: ticketEmail.value,
     mobile: ticketMobile.value,
     message: ticketMessage.value,
   };
-  if (nameValidation() && emailValidation() && mobileValidation()) {
+  if (titleValidation() && nameValidation() && emailValidation() && mobileValidation() && messageValidation()) {
     swal("", "Ticket Submitted", "success");
     allTickets.push(ticket);
     localStorage.setItem("allTickets", JSON.stringify(allTickets));
@@ -161,22 +181,16 @@ submitTicket.addEventListener("click", function () {
     setTimeout(() => {
       window.location.replace("contact.html");
     }, 1000);
-    ticketTitle.classList.remove("is-valid");
-    ticketName.classList.remove("is-valid");
-    ticketEmail.classList.remove("is-valid");
-    ticketMobile.classList.remove("is-valid");
-    ticketMessage.classList.remove("is-valid");
-    titleAlert.classList.add("d-none");
-    nameAlert.classList.add("d-none");
-    emailAlert.classList.add("d-none");
-    mobileAlert.classList.add("d-none");
-    messageAlert.classList.add("d-none");
+  } else if (!titleValidation()) {
+    addTitleAlert();
   } else if (!nameValidation()) {
     addNameAlert();
   } else if (!emailValidation()) {
     addEmailAlert();
   } else if (!mobileValidation()) {
     addMobileAlert();
+  } else if (!messageValidation()) {
+    addMessageAlert();
   }
 });
 

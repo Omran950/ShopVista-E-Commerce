@@ -3,17 +3,17 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 function updateNav() {
   let navUl = document.getElementById("navUl");
-
+  console.log("nav");
   if (!localStorage.getItem("currentUser")) {
     navUl.innerHTML = `
         <li class="nav-item  mx-1 ">
-          <a class="nav-link" aria-current="page" href="../index.html">Home</a>
+          <a class="nav-link " aria-current="page" href="../index.html">Home</a>
         </li>
         <li class="nav-item  mx-1 ">
-          <a class="nav-link active" href="about.html">About</a>
+          <a class="nav-link active" href="../About/about.html">About</a>
         </li>
         <li class="nav-item  mx-1 ">
-          <a class="nav-link" href="../Contact/contact.html">Contact</a>
+          <a class="nav-link " href="../Contact/contact.html">Contact</a>
         </li>
         <li class="nav-item  mx-1 ">
           <a class="nav-link" href="../Authentication/login.html">Login</a>
@@ -22,19 +22,34 @@ function updateNav() {
           <a class="nav-link" href="../Authentication/register.html">Register</a>
         </li>`;
   } else {
+    currentUser = JSON.parse(localStorage.getItem("currentUser"));
     navUl.innerHTML = `
         <li class="nav-item mx-1 ">
-          <a class="nav-link" aria-current="page" href="../index.html">Home</a>
+          <a class="nav-link " aria-current="page" href="../index.html">Home</a>
+        </li>
+        <li class="nav-item mx-1 ">
+          <a class="nav-link active" href="../About/about.html">About</a>
+        </li>
+        <li class="nav-item mx-1 ">
+          <a class="nav-link " href="../Contact/contact.html">Contact</a>
         </li>
         <li class="nav-item  mx-1 isUserCheck">
           <a class="nav-link" aria-current="page" href="../Shop/shop.html">Shop</a>
         </li>
-        <li class="nav-item mx-1 ">
-          <a class="nav-link active" href="about.html">About</a>
-        </li>
-        <li class="nav-item mx-1 ">
-          <a class="nav-link" href="../Contact/contact.html">Contact</a>
-        </li>
+              <li class="nav-item mx-1">
+                <a class="nav-link position-relative" href="../Cart/cart.html">
+                  <i class="fa-solid fa-cart-shopping fa-lg"></i>
+                  <span
+                    id="cart"
+                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                  >${currentUser.cart.length}</span>
+                </a>
+              </li>
+        <li class="nav-item mx-1">
+                <a class="nav-link" href="../Profile/profile.html">
+                  <i class="fa-solid fa-user"></i>
+                </a>
+              </li>
         <li class="nav-item  mx-1 isUserCheck">
           <button class="nav-link m-auto" onclick="logout()"><i class="fa-solid fa-arrow-right-to-bracket"></i>
   </button>
