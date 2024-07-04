@@ -88,6 +88,7 @@ if (localStorage.getItem("allProducts")) {
       seller: "shopVista",
       promotion: 10,
       featured: false,
+      productID: "b4529ffb-4ee3-4eeb-95e8-28ea880a78f8",
     },
     {
       productName: "Smartwatch",
@@ -101,6 +102,7 @@ if (localStorage.getItem("allProducts")) {
       seller: "shopVista",
       promotion: 0,
       featured: true,
+      productID: "681684d6-2801-46d6-9345-faa4d275e879",
     },
     {
       productName: "Bluetooth Speaker",
@@ -114,6 +116,7 @@ if (localStorage.getItem("allProducts")) {
       seller: "shopVista",
       promotion: 0,
       featured: true,
+      productID: "033cd9dc-e8ce-40ff-9505-b73586822c39",
     },
     {
       productName: "4K Monitor",
@@ -127,6 +130,7 @@ if (localStorage.getItem("allProducts")) {
       seller: "shopVista",
       promotion: 20,
       featured: false,
+      productID: "57aae2b4-15df-467d-8dab-c0e405513959",
     },
     {
       productName: "Gaming Mouse",
@@ -139,6 +143,7 @@ if (localStorage.getItem("allProducts")) {
       seller: "shopVista",
       promotion: 0,
       featured: true,
+      productID: "5dc49878-335c-4a45-89d7-7b78b7f8baed",
     },
     {
       productName: "Laptop Stand",
@@ -151,6 +156,7 @@ if (localStorage.getItem("allProducts")) {
       seller: "shopVista",
       promotion: 10,
       featured: false,
+      productID: "a00c25d0-68ee-483b-a801-9790906a17e7",
     },
     {
       productName: "Fitness Tracker",
@@ -164,6 +170,7 @@ if (localStorage.getItem("allProducts")) {
       seller: "shopVista",
       promotion: 15,
       featured: false,
+      productID: "1bd3887a-d163-43e8-b927-d4fec2153b39",
     },
     {
       productName: "Wireless Charger",
@@ -177,6 +184,7 @@ if (localStorage.getItem("allProducts")) {
       seller: "shopVista",
       promotion: 0,
       featured: true,
+      productID: "632ff54e-6cf6-45a9-96c4-9ac04a54c00e",
     },
     {
       productName: "Noise-Cancelling Earbuds",
@@ -190,6 +198,7 @@ if (localStorage.getItem("allProducts")) {
       seller: "shopVista",
       promotion: 0,
       featured: true,
+      productID: "a0baf02f-b761-4295-a5e9-2f2e07dc7701",
     },
     {
       productName: "Smart Light Bulb",
@@ -202,6 +211,7 @@ if (localStorage.getItem("allProducts")) {
       seller: "shopVista",
       promotion: 0,
       featured: true,
+      productID: "a72d1f69-06c5-4e67-b0c8-9e1bf6b9d53f",
     },
   ];
   localStorage.setItem("allProducts", JSON.stringify(allProducts));
@@ -357,7 +367,33 @@ function addToCart(event, i) {
     allUsers = JSON.parse(localStorage.getItem("allUsers"));
     currentUser = JSON.parse(localStorage.getItem("currentUser"));
     currentUserIndex = JSON.parse(localStorage.getItem("currentUserIndex"));
-    allUsers[currentUserIndex].cart.push(allProducts[i]);
+
+    // Chech product in cart
+    let checkCartProducts = false;
+    if (allUsers[currentUserIndex].cart.length == 0) {
+      allUsers[currentUserIndex].cart.push(allProducts[i]);
+      allUsers[currentUserIndex].cart[
+        allUsers[currentUserIndex].cart.length - 1
+      ].count = 1;
+    } else {
+      for (let j = 0; j < allUsers[currentUserIndex].cart.length; j++) {
+        if (
+          allProducts[i].productID ===
+          allUsers[currentUserIndex].cart[j].productID
+        ) {
+          allUsers[currentUserIndex].cart[j].count += 1;
+          checkCartProducts = true;
+          break;
+        }
+      }
+      if (!checkCartProducts) {
+        allUsers[currentUserIndex].cart.push(allProducts[i]);
+        allUsers[currentUserIndex].cart[
+          allUsers[currentUserIndex].cart.length - 1
+        ].count = 1;
+      }
+    }
+
     if (allProducts[i].featured) {
       allUsers[currentUserIndex].totalCartPrice += allProducts[i].productPrice;
     } else {
@@ -365,6 +401,7 @@ function addToCart(event, i) {
         allProducts[i].productPrice -
         allProducts[i].productPrice * (allProducts[i].promotion / 100);
       allUsers[currentUserIndex].totalCartPrice += priceAfterPromotion;
+      currentUser.totalCartPrice += priceAfterPromotion;
     }
     currentUser = allUsers[currentUserIndex];
     localStorage.setItem("allUsers", JSON.stringify(allUsers));

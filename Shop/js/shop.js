@@ -33,7 +33,7 @@ if (!localStorage.getItem("currentUser")) {
       timer: 1000,
     });
     setTimeout(() => {
-      window.location.replace("index.html");
+      window.location.replace("../index.html");
     }, 1000);
   }
 
@@ -282,7 +282,33 @@ if (!localStorage.getItem("currentUser")) {
       allUsers = JSON.parse(localStorage.getItem("allUsers"));
       currentUser = JSON.parse(localStorage.getItem("currentUser"));
       currentUserIndex = JSON.parse(localStorage.getItem("currentUserIndex"));
-      allUsers[currentUserIndex].cart.push(allProducts[i]);
+
+      // Chech product in cart
+      let checkCartProducts = false;
+      if (allUsers[currentUserIndex].cart.length == 0) {
+        allUsers[currentUserIndex].cart.push(allProducts[i]);
+        allUsers[currentUserIndex].cart[
+          allUsers[currentUserIndex].cart.length - 1
+        ].count = 1;
+      } else {
+        for (let j = 0; j < allUsers[currentUserIndex].cart.length; j++) {
+          if (
+            allProducts[i].productID ===
+            allUsers[currentUserIndex].cart[j].productID
+          ) {
+            allUsers[currentUserIndex].cart[j].count += 1;
+            checkCartProducts = true;
+            break;
+          }
+        }
+        if (!checkCartProducts) {
+          allUsers[currentUserIndex].cart.push(allProducts[i]);
+          allUsers[currentUserIndex].cart[
+            allUsers[currentUserIndex].cart.length - 1
+          ].count = 1;
+        }
+      }
+
       if (allProducts[i].featured) {
         allUsers[currentUserIndex].totalCartPrice +=
           allProducts[i].productPrice;
@@ -291,6 +317,7 @@ if (!localStorage.getItem("currentUser")) {
           allProducts[i].productPrice -
           allProducts[i].productPrice * (allProducts[i].promotion / 100);
         allUsers[currentUserIndex].totalCartPrice += priceAfterPromotion;
+        currentUser.totalCartPrice += priceAfterPromotion;
       }
       currentUser = allUsers[currentUserIndex];
       localStorage.setItem("allUsers", JSON.stringify(allUsers));

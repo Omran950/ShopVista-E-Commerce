@@ -89,9 +89,9 @@ if (!localStorage.getItem("currentUser")) {
               </div>
               <div class="col-3">
                 <div class="d-flex align-items-center justify-content-center gap-2">
-                  <button class="btn btn-outline-success py-1" onclick="removeProductCounter()">-</button>
-                  <p class="mb-0">1</p>
-                  <button class="btn btn-outline-success py-1"  onclick="addProductCounter()">+</button>
+                  <button class="btn btn-outline-success py-1" onclick="removeProductCounter(${i})">-</button>
+                  <p class="mb-0">${currentUser.cart[i].count}</p>
+                  <button class="btn btn-outline-success py-1"  onclick="addProductCounter(${i})">+</button>
                 </div>
               </div>
             </div>`;
@@ -233,7 +233,20 @@ if (!localStorage.getItem("currentUser")) {
       });
   }
 
-  function addProductCounter() {}
+  function addProductCounter(i) {
+    allUsers[currentUserIndex].cart[i].count += 1;
+    currentUser.cart[i].count += 1;
+    localStorage.setItem("allUsers", JSON.stringify(allUsers));
+    localStorage.setItem("currentUser", JSON.stringify(currentUser));
+    displayCurrentUserCart();
+  }
+  function removeProductCounter(i) {
+    allUsers[currentUserIndex].cart[i].count += 1;
+    currentUser.cart[i].count -= 1;
+    localStorage.setItem("allUsers", JSON.stringify(allUsers));
+    localStorage.setItem("currentUser", JSON.stringify(currentUser));
+    displayCurrentUserCart();
+  }
 
   displayCurrentUserCart();
 }
