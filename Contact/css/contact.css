@@ -1,0 +1,32 @@
+.contact-left {
+  flex: 2;
+}
+.contact-right {
+  flex: 1;
+  color: white;
+  text-align: center;
+  padding: 2rem;
+}
+.contact-right:hover {
+  cursor: pointer;
+}
+.contact-right a {
+  color: white;
+  text-decoration: underline;
+}
+
+.header-left {
+  color: #008080b3;
+}
+
+.dropdown-menu-button,
+.dropdown-menu,
+.dropdown-item {
+  width: 25%;
+  min-width: 250px;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}

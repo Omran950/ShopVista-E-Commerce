@@ -160,7 +160,6 @@ if (localStorage.getItem("allProducts")) {
 
 function updateNav() {
   let navUl = document.getElementById("navUl");
-  console.log("nav");
   if (!localStorage.getItem("currentUser")) {
     navUl.innerHTML = `
       <li class="nav-item  mx-1 ">
