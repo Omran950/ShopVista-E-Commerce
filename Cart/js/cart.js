@@ -67,42 +67,49 @@ if (!localStorage.getItem("currentUser")) {
               (currentUser.cart[i].promotion / 100);
           newPrice = `<p class="py-1" id="priceAfter"><span class="fw-bold text-">After Discount :</span> ${priceAfterPromotion} EGP</p>`;
         }
+        let disableMinus = currentUser.cart[i].count === 1 ? "disabled" : "";
+        let disablePlus =
+          allProducts.find(
+            (product) => product.productID === currentUser.cart[i].productID
+          ).stock === 0
+            ? "disabled"
+            : "";
         cartProducts += `<div id="row"
-              class="row py-5 mt-4 px-2 align-items-center rounded-3 shadow gy-3"
-            >
-              <div class="col-3">
-                <figure class="overflow-hidden" onclick="productDetails(${i})" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                  <img
-                    src="../images/Lenovo (2).jpg"
-                    alt="${currentUser.cart[i].productName}"
-                    class="w-75 d-block m-auto"
-                  />
-                </figure>
+            class="row py-5 mt-4 px-2 align-items-center rounded-3 shadow gy-3"
+          >
+            <div class="col-3">
+              <figure class="overflow-hidden" onclick="productDetails(${i})" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                <img
+                  src="../images/Lenovo (2).jpg"
+                  alt="${currentUser.cart[i].productName}"
+                  class="w-75 d-block m-auto"
+                />
+              </figure>
+            </div>
+            <div class="col-6">
+              <div>
+                <h3>${currentUser.cart[i].productName}</h3>
+                <p class="mb-1">Price : ${currentUser.cart[i].productPrice} EGP</p>
+                ${newPrice}
+                <button class="btn btn-danger py-1" onclick="removeProduct(${i})">
+                  <i class="fa-solid fa-trash-can me-1 text-white"></i> Remove
+                </button>
               </div>
-              <div class="col-6">
-                <div>
-                  <h3>${currentUser.cart[i].productName}</h3>
-                  <p class="mb-1">Price : ${currentUser.cart[i].productPrice} EGP</p>
-                  ${newPrice}
-                  <button class="btn btn-danger py-1" onclick="removeProduct(${i})">
-                    <i class="fa-solid fa-trash-can me-1 text-white"></i> Remove
-                  </button>
-                </div>
+            </div>
+            <div class="col-3">
+              <div class="d-flex align-items-center justify-content-center gap-2">
+                <button class="btn btn-outline-success py-1" ${disableMinus} onclick="removeProductCounter(${i})">-</button>
+                <p class="mb-0">${currentUser.cart[i].count}</p>
+                <button class="btn btn-outline-success py-1" ${disablePlus} onclick="addProductCounter(${i})">+</button>
               </div>
-              <div class="col-3">
-                <div class="d-flex align-items-center justify-content-center gap-2">
-                  <button class="btn btn-outline-success py-1" onclick="removeProductCounter(${i})">-</button>
-                  <p class="mb-0">${currentUser.cart[i].count}</p>
-                  <button class="btn btn-outline-success py-1"  onclick="addProductCounter(${i})">+</button>
-                </div>
-              </div>
-            </div>`;
+            </div>
+          </div>`;
       }
       cartProducts += `<div class="text-center py-3 my-4">
-        <button class="btn btn-danger" onclick="clearAllButton()">
-          <i class="fa-solid fa-trash-can me-1 text-white"></i>Clear Cart
-        </button>
-      </div>`;
+      <button class="btn btn-danger" onclick="clearAllButton()">
+        <i class="fa-solid fa-trash-can me-1 text-white"></i>Clear Cart
+      </button>
+    </div>`;
       cartBody.innerHTML = cartProducts;
     }
   }
@@ -170,6 +177,18 @@ if (!localStorage.getItem("currentUser")) {
       })
       .then((result) => {
         if (result.isConfirmed) {
+          for (let i = 0; i < currentUser.cart.length; i++) {
+            for (let j = 0; j < allProducts.length; j++) {
+              if (currentUser.cart[i].productID == allProducts[j].productID) {
+                allProducts[j].stock += currentUser.cart[i].count;
+                localStorage.setItem(
+                  "allProducts",
+                  JSON.stringify(allProducts)
+                );
+              }
+            }
+          }
+
           currentUser.cart = [];
           currentUser.totalCartPrice = 0;
           allUsers[currentUserIndex].totalCartPrice = 0;
@@ -206,6 +225,12 @@ if (!localStorage.getItem("currentUser")) {
       })
       .then((result) => {
         if (result.isConfirmed) {
+          for (let j = 0; j < allProducts.length; j++) {
+            if (currentUser.cart[i].productID == allProducts[j].productID) {
+              allProducts[j].stock += currentUser.cart[i].count;
+              localStorage.setItem("allProducts", JSON.stringify(allProducts));
+            }
+          }
           if (currentUser.cart[i].featured) {
             currentUser.totalCartPrice -=
               currentUser.cart[i].productPrice * currentUser.cart[i].count;
@@ -236,63 +261,80 @@ if (!localStorage.getItem("currentUser")) {
   }
 
   function addProductCounter(i) {
-    allUsers[currentUserIndex].cart[i].count += 1;
-    currentUser.cart[i].count += 1;
+    for (let j = 0; j < allProducts.length; j++) {
+      if (currentUser.cart[i].productID == allProducts[j].productID) {
+        if (allProducts[j].stock > 0) {
+          allProducts[j].stock -= 1;
+          localStorage.setItem("allProducts", JSON.stringify(allProducts));
+          allUsers[currentUserIndex].cart[i].count += 1;
+          currentUser.cart[i].count += 1;
+          if (currentUser.cart[i].featured) {
+            currentUser.totalCartPrice += currentUser.cart[i].productPrice;
+            allUsers[currentUserIndex].totalCartPrice +=
+              currentUser.cart[i].productPrice;
+          } else {
+            let priceAfterPromotion =
+              currentUser.cart[i].productPrice -
+              currentUser.cart[i].productPrice *
+                (currentUser.cart[i].promotion / 100);
+            currentUser.totalCartPrice += priceAfterPromotion;
+            allUsers[currentUserIndex].totalCartPrice += priceAfterPromotion;
+          }
 
-    if (currentUser.cart[i].featured) {
-      currentUser.totalCartPrice += currentUser.cart[i].productPrice;
-      allUsers[currentUserIndex].totalCartPrice +=
-        currentUser.cart[i].productPrice;
-    } else {
-      let priceAfterPromotion =
-        currentUser.cart[i].productPrice -
-        currentUser.cart[i].productPrice *
-          (currentUser.cart[i].promotion / 100);
-      currentUser.totalCartPrice += priceAfterPromotion;
-      allUsers[currentUserIndex].totalCartPrice += priceAfterPromotion;
+          localStorage.setItem("allUsers", JSON.stringify(allUsers));
+          localStorage.setItem("currentUser", JSON.stringify(currentUser));
+          displayCurrentUserCart();
+
+          Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: "Product has been added successfully",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          break;
+        }
+      }
     }
-
-    localStorage.setItem("allUsers", JSON.stringify(allUsers));
-    localStorage.setItem("currentUser", JSON.stringify(currentUser));
-    displayCurrentUserCart();
-
-    Swal.fire({
-      position: "top-end",
-      icon: "success",
-      title: "Product has been added successfully",
-      showConfirmButton: false,
-      timer: 1500,
-    });
   }
 
   function removeProductCounter(i) {
-    allUsers[currentUserIndex].cart[i].count += 1;
-    currentUser.cart[i].count -= 1;
+    for (let j = 0; j < allProducts.length; j++) {
+      if (currentUser.cart[i].productID == allProducts[j].productID) {
+        if (currentUser.cart[i].count > 1) {
+          allProducts[j].stock += 1;
+          localStorage.setItem("allProducts", JSON.stringify(allProducts));
+          allUsers[currentUserIndex].cart[i].count -= 1;
+          currentUser.cart[i].count -= 1;
 
-    if (currentUser.cart[i].featured) {
-      currentUser.totalCartPrice -= currentUser.cart[i].productPrice;
-      allUsers[currentUserIndex].totalCartPrice -=
-        currentUser.cart[i].productPrice;
-    } else {
-      let priceAfterPromotion =
-        currentUser.cart[i].productPrice -
-        currentUser.cart[i].productPrice *
-          (currentUser.cart[i].promotion / 100);
-      currentUser.totalCartPrice -= priceAfterPromotion;
-      allUsers[currentUserIndex].totalCartPrice -= priceAfterPromotion;
+          if (currentUser.cart[i].featured) {
+            currentUser.totalCartPrice -= currentUser.cart[i].productPrice;
+            allUsers[currentUserIndex].totalCartPrice -=
+              currentUser.cart[i].productPrice;
+          } else {
+            let priceAfterPromotion =
+              currentUser.cart[i].productPrice -
+              currentUser.cart[i].productPrice *
+                (currentUser.cart[i].promotion / 100);
+            currentUser.totalCartPrice -= priceAfterPromotion;
+            allUsers[currentUserIndex].totalCartPrice -= priceAfterPromotion;
+          }
+
+          localStorage.setItem("allUsers", JSON.stringify(allUsers));
+          localStorage.setItem("currentUser", JSON.stringify(currentUser));
+          displayCurrentUserCart();
+
+          Swal.fire({
+            position: "top-end",
+            icon: "error",
+            title: "Product has been removed successfully",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          break;
+        }
+      }
     }
-
-    localStorage.setItem("allUsers", JSON.stringify(allUsers));
-    localStorage.setItem("currentUser", JSON.stringify(currentUser));
-    displayCurrentUserCart();
-
-    Swal.fire({
-      position: "top-end",
-      icon: "error",
-      title: "Product has been removed successfully",
-      showConfirmButton: false,
-      timer: 1500,
-    });
   }
 
   displayCurrentUserCart();
