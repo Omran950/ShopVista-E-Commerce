@@ -117,6 +117,13 @@ if (!localStorage.getItem("currentUser")) {
   }
 
   function productDetails(i) {
+    let newPrice = "";
+    if (!allProducts[i].featured) {
+      priceAfterPromotion =
+        allProducts[i].productPrice -
+        allProducts[i].productPrice * (allProducts[i].promotion / 100);
+      newPrice = `<p class="my-2 py-2" id="priceAfter"><span class="fw-bold text-">After Discount :</span> ${priceAfterPromotion} EGP</p>`;
+    }
     modalHeader.innerHTML = `${allProducts[i].productName}`;
     modalBody.innerHTML = `<div class="col-md-5">
                     <figure class="overflow-hidden p-3">
@@ -136,6 +143,7 @@ if (!localStorage.getItem("currentUser")) {
                       <p class="my-2 py-2">
                         <span class="fw-bold">Price :</span> ${allProducts[i].productPrice} EGP
                       </p>
+                      ${newPrice}
                       <p class="my-2 py-2">
                         <span class="fw-bold">Stock :</span> ${allProducts[i].stock}
                       </p>
@@ -148,8 +156,8 @@ if (!localStorage.getItem("currentUser")) {
                       </p>
                     </div>
                   </div>`;
-    modalFooter.innerHTML = `<button class="btn w-50 text-capitalize m-auto d-block mt-3" onclick="addToCart(event, ${i})">Add to cart</button>;
-  `;
+
+    modalFooter.innerHTML = `<button class="btn w-50 text-capitalize m-auto d-block mt-3" onclick="addToCart(event, ${i})">Add to cart</button>`;
   }
 
   // Set the height of the select tag to match the height of search bar
@@ -275,6 +283,15 @@ if (!localStorage.getItem("currentUser")) {
       currentUser = JSON.parse(localStorage.getItem("currentUser"));
       currentUserIndex = JSON.parse(localStorage.getItem("currentUserIndex"));
       allUsers[currentUserIndex].cart.push(allProducts[i]);
+      if (allProducts[i].featured) {
+        allUsers[currentUserIndex].totalCartPrice +=
+          allProducts[i].productPrice;
+      } else {
+        let priceAfterPromotion =
+          allProducts[i].productPrice -
+          allProducts[i].productPrice * (allProducts[i].promotion / 100);
+        allUsers[currentUserIndex].totalCartPrice += priceAfterPromotion;
+      }
       currentUser = allUsers[currentUserIndex];
       localStorage.setItem("allUsers", JSON.stringify(allUsers));
       localStorage.setItem("currentUser", JSON.stringify(currentUser));

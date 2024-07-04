@@ -4,7 +4,12 @@ if (!localStorage.getItem("currentUser")) {
   let currentUserIndex = 0;
   let currentUser = {};
   let allUsers = [];
-
+  let allProducts;
+  if (localStorage.getItem("allProducts")) {
+    allProducts = JSON.parse(localStorage.getItem("allProducts"));
+  } else {
+    allProducts = [];
+  }
   if (localStorage.getItem("allUsers")) {
     allUsers = JSON.parse(localStorage.getItem("allUsers"));
   }
@@ -16,6 +21,7 @@ if (!localStorage.getItem("currentUser")) {
   let cartBody = document.getElementById("cartBody");
   let modalHeader = document.getElementById("staticBackdropLabel");
   let modalBody = document.getElementById("modalBody");
+  let totalPrice = document.getElementById("totalPrice");
 
   function logout() {
     let allUsers = JSON.parse(localStorage.getItem("allUsers"));
@@ -37,6 +43,7 @@ if (!localStorage.getItem("currentUser")) {
   }
 
   function displayCurrentUserCart() {
+    totalPrice.innerHTML = `Total cart price : ${currentUser.totalCartPrice} EGP`;
     if (currentUser.cart.length == 0) {
       cartBody.innerHTML = `<div class="my-5 py-5 text-center shadow rounded-3">
   <h2 class="fs-1 mt-5 pt-5 mb-3 pb-2 text-black">Cart Empty</h2>
@@ -47,10 +54,19 @@ if (!localStorage.getItem("currentUser")) {
   </button>
 </div>`;
     } else {
+      let newPrice = "";
       let cartProducts = "";
       for (let i = 0; i < currentUser.cart.length; i++) {
+        newPrice = "";
+        if (!currentUser.cart[i].featured) {
+          let priceAfterPromotion =
+            currentUser.cart[i].productPrice -
+            currentUser.cart[i].productPrice *
+              (currentUser.cart[i].promotion / 100);
+          newPrice = `<p class="py-1" id="priceAfter"><span class="fw-bold text-">After Discount :</span> ${priceAfterPromotion} EGP</p>`;
+        }
         cartProducts += `<div id="row"
-              class="row py-5 mt-4 px-3 align-items-center rounded-3 shadow gy-3"
+              class="row py-5 mt-4 px-2 align-items-center rounded-3 shadow gy-3"
             >
               <div class="col-3">
                 <figure class="overflow-hidden" onclick="productDetails(${i})" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
@@ -61,20 +77,21 @@ if (!localStorage.getItem("currentUser")) {
                   />
                 </figure>
               </div>
-              <div class="col-7">
+              <div class="col-6">
                 <div>
                   <h3>${currentUser.cart[i].productName}</h3>
-                  <p>Price : ${currentUser.cart[i].productPrice} EGP</p>
+                  <p class="mb-1">Price : ${currentUser.cart[i].productPrice} EGP</p>
+                  ${newPrice}
                   <button class="btn btn-danger py-1" onclick="removeProduct(${i})">
                     <i class="fa-solid fa-trash-can me-1 text-white"></i> Remove
                   </button>
                 </div>
               </div>
-              <div class="col-2">
+              <div class="col-3">
                 <div class="d-flex align-items-center justify-content-center gap-2">
-                  <button class="btn btn-outline-success py-1">+</button>
+                  <button class="btn btn-outline-success py-1" onclick="removeProductCounter()">-</button>
                   <p class="mb-0">1</p>
-                  <button class="btn btn-outline-success py-1">-</button>
+                  <button class="btn btn-outline-success py-1"  onclick="addProductCounter()">+</button>
                 </div>
               </div>
             </div>`;
@@ -89,6 +106,14 @@ if (!localStorage.getItem("currentUser")) {
   }
 
   function productDetails(i) {
+    let newPrice = "";
+    if (!currentUser.cart[i].featured) {
+      let priceAfterPromotion =
+        currentUser.cart[i].productPrice -
+        currentUser.cart[i].productPrice *
+          (currentUser.cart[i].promotion / 100);
+      newPrice = `<p class="my-2 py-2" id="priceAfter"><span class="fw-bold text-">After Discount :</span> ${priceAfterPromotion} EGP</p>`;
+    }
     modalHeader.innerHTML = `${currentUser.cart[i].productName}`;
     modalBody.innerHTML = `<div class="col-md-5">
                     <figure class="overflow-hidden p-3">
@@ -108,6 +133,7 @@ if (!localStorage.getItem("currentUser")) {
                       <p class="my-2 py-2">
                         <span class="fw-bold">Price :</span> ${currentUser.cart[i].productPrice} EGP
                       </p>
+                      ${newPrice}
                       <p class="my-2 py-2">
                         <span class="fw-bold">Stock :</span> ${currentUser.cart[i].stock}
                       </p>
@@ -143,6 +169,8 @@ if (!localStorage.getItem("currentUser")) {
       .then((result) => {
         if (result.isConfirmed) {
           currentUser.cart = [];
+          currentUser.totalCartPrice = 0;
+          allUsers[currentUserIndex].totalCartPrice = 0;
           allUsers[currentUserIndex].cart = [];
           localStorage.setItem("currentUser", JSON.stringify(currentUser));
           localStorage.setItem("allUsers", JSON.stringify(allUsers));
@@ -176,6 +204,21 @@ if (!localStorage.getItem("currentUser")) {
       })
       .then((result) => {
         if (result.isConfirmed) {
+          if (currentUser.cart[i].featured) {
+            currentUser.totalCartPrice -= currentUser.cart[i].productPrice;
+            allUsers[currentUserIndex].totalCartPrice -=
+              currentUser.cart[i].productPrice;
+            console.log("featured");
+          } else {
+            console.log("promotion");
+
+            let priceAfterPromotion =
+              currentUser.cart[i].productPrice -
+              currentUser.cart[i].productPrice *
+                (currentUser.cart[i].promotion / 100);
+            currentUser.totalCartPrice -= priceAfterPromotion;
+            allUsers[currentUserIndex].totalCartPrice -= priceAfterPromotion;
+          }
           currentUser.cart.splice(i, 1);
           allUsers[currentUserIndex].cart.splice(i, 1);
           localStorage.setItem("currentUser", JSON.stringify(currentUser));
@@ -189,6 +232,8 @@ if (!localStorage.getItem("currentUser")) {
         }
       });
   }
+
+  function addProductCounter() {}
 
   displayCurrentUserCart();
 }
