@@ -10,6 +10,14 @@ if (!localStorage.getItem("currentUser")) {
   let currentUserIndex = 0;
   let currentUser = {};
   let allUsers = [];
+  if (!localStorage.getItem("currentUser")) {
+    allUsers = JSON.parse(localStorage.getItem("allUsers"));
+    currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    currentUserIndex = JSON.parse(localStorage.getItem("currentUserIndex"));
+  }
+  allUsers = JSON.parse(localStorage.getItem("allUsers"));
+  currentUser = JSON.parse(localStorage.getItem("currentUser"));
+  currentUserIndex = JSON.parse(localStorage.getItem("currentUserIndex"));
   let modalHeader = document.getElementById("staticBackdropLabel");
   let modalBody = document.getElementById("modalBody");
   let modalFooter = document.getElementById("modalFooter");
@@ -17,6 +25,8 @@ if (!localStorage.getItem("currentUser")) {
   let productsContainer = document.getElementById("productsContainer");
   let floatingInputGroup1 = document.getElementById("floatingInputGroup1");
   let e = document.getElementById("selectCriteria");
+  let cart = document.getElementById("cart");
+  cart.innerHTML = currentUser.cart.length;
 
   function logout() {
     let allUsers = JSON.parse(localStorage.getItem("allUsers"));
@@ -279,9 +289,6 @@ if (!localStorage.getItem("currentUser")) {
         showConfirmButton: false,
         timer: 1500,
       });
-      allUsers = JSON.parse(localStorage.getItem("allUsers"));
-      currentUser = JSON.parse(localStorage.getItem("currentUser"));
-      currentUserIndex = JSON.parse(localStorage.getItem("currentUserIndex"));
 
       // Chech product in cart
       let checkCartProducts = false;
@@ -323,6 +330,7 @@ if (!localStorage.getItem("currentUser")) {
       localStorage.setItem("allUsers", JSON.stringify(allUsers));
       localStorage.setItem("currentUser", JSON.stringify(currentUser));
     }
+    cart.innerHTML = currentUser.cart.length;
   }
 
   displayAllProducts();

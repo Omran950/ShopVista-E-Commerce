@@ -12,7 +12,7 @@
   </head>
   <body>
     <!-- NvBar -->
-    <nav class="navbar navbar-expand-lg" id="navBar">
+    <nav class="navbar navbar-expand-lg fixed-top" id="navBar">
       <div class="container-fluid ms-4">
         <a class="navbar-brand" href="../index.html">
           <img
@@ -21,8 +21,8 @@
             style="width: 50px; height: 50px"
             class="rounded-circle me-2"
           />
-          ShopVista</a
-        >
+          ShopVista
+        </a>
         <button
           class="navbar-toggler"
           type="button"
@@ -36,25 +36,33 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav ms-auto me-5 mb-2 mb-lg-0 text-center">
-            <li class="nav-item">
+            <li class="nav-item mx-1">
               <a class="nav-link" href="../index.html">Home</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="../Shop/shop.html">Shop</a>
+            <li class="nav-item mx-1">
+              <a class="nav-link active" href="../Shop/shop.html">Shop</a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item mx-1">
               <a class="nav-link" href="../Orders/orders.html">Orders</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="../Profile/profile.html">Profile</a>
+            <li class="nav-item mx-1">
+              <a class="nav-link position-relative" href="../Cart/cart.html">
+                <i class="fa-solid fa-cart-shopping fa-lg"></i>
+                <span
+                  id="cart"
+                  class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                ></span>
+              </a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="../Cart/cart.html"
-                ><i class="fa-solid fa-cart-shopping"></i
-              ></a>
+            <li class="nav-item mx-1">
+              <a class="nav-link" href="../Profile/profile.html">
+                <i class="fa-solid fa-user"></i>
+              </a>
             </li>
-            <li class="nav-item">
-              <button class="nav-link m-auto" onclick="logout()">Logout</button>
+            <li class="nav-item mx-1">
+              <button class="nav-link m-auto" onclick="logout()">
+                <i class="fa-solid fa-arrow-right-to-bracket"></i>
+              </button>
             </li>
           </ul>
         </div>
@@ -98,39 +106,41 @@
     </div>
 
     <!-- Search Bar -->
-    <div
-      class="searchBar mt-5 d-flex justify-content-center flex-column flex-md-row gap-2"
-    >
-      <div class="input-group mb-3" id="searchBar">
-        <span class="input-group-text"
-          ><i class="fa-solid fa-magnifying-glass"></i
-        ></span>
-        <div class="form-floating">
-          <input
-            id="floatingInputGroup1"
-            type="text"
-            class="form-control"
-            onkeyup="searchProducts()"
-            placeholder="Search..."
-          />
-          <label for="c">Search Our Products</label>
-        </div>
-      </div>
-      <select
-        class="form-select"
-        id="selectCriteria"
-        aria-label="Default select example"
+    <div class="mt-5 pt-5">
+      <div
+        class="searchBar mt-5 d-flex justify-content-center flex-column flex-md-row gap-2"
       >
-        <option value="productName" disabled selected>
-          Select your Search Criteria
-        </option>
-        <option value="productName">Name</option>
-        <option value="category">Category</option>
-      </select>
+        <div class="input-group mb-3" id="searchBar">
+          <span class="input-group-text"
+            ><i class="fa-solid fa-magnifying-glass"></i
+          ></span>
+          <div class="form-floating">
+            <input
+              id="floatingInputGroup1"
+              type="text"
+              class="form-control"
+              onkeyup="searchProducts()"
+              placeholder="Search..."
+            />
+            <label for="c">Search Our Products</label>
+          </div>
+        </div>
+        <select
+          class="form-select"
+          id="selectCriteria"
+          aria-label="Default select example"
+        >
+          <option value="productName" disabled selected>
+            Select your Search Criteria
+          </option>
+          <option value="productName">Name</option>
+          <option value="category">Category</option>
+        </select>
+      </div>
     </div>
 
     <!-- Display all data -->
-    <div class="mt-5 mb-3">
+    <div class="mt-2 mb-3">
       <h2 class="text-center my-3 py-3" id="ourProductsHeader">Our Products</h2>
       <div class="container">
         <div class="row g-4 text-center" id="productsContainer"></div>
@@ -144,12 +154,14 @@
           <h2 class="fs-2">ShopVista</h2>
         </div>
 
-        <div>
-          <a href="index.html" class="mx-3">Home</a>
-          <a href="About/about.html" class="mx-3">About</a>
-          <a href="Contact/contact.html" class="mx-3">Contact</a>
-          <a href="#" class="mx-3">Privacy & Policy</a>
-          <a href="#" class="mx-3">Terms of Service</a>
+        <div
+          class="d-flex align-items-center justify-content-center gap-4 flex-column flex-sm-row"
+        >
+          <a href="index.html" class="">Home</a>
+          <a href="About/about.html" class="">About</a>
+          <a href="Contact/contact.html" class="">Contact</a>
+          <a href="#" class="">Privacy & Policy</a>
+          <a href="#" class="">Terms of Service</a>
         </div>
 
         <div

@@ -22,6 +22,7 @@ if (!localStorage.getItem("currentUser")) {
   let modalHeader = document.getElementById("staticBackdropLabel");
   let modalBody = document.getElementById("modalBody");
   let totalPrice = document.getElementById("totalPrice");
+  let cart = document.getElementById("cart");
 
   function logout() {
     let allUsers = JSON.parse(localStorage.getItem("allUsers"));
@@ -43,6 +44,7 @@ if (!localStorage.getItem("currentUser")) {
   }
 
   function displayCurrentUserCart() {
+    cart.innerHTML = currentUser.cart.length;
     totalPrice.innerHTML = `Total cart price : ${currentUser.totalCartPrice} EGP`;
     if (currentUser.cart.length == 0) {
       cartBody.innerHTML = `<div class="my-5 py-5 text-center shadow rounded-3">
@@ -205,19 +207,19 @@ if (!localStorage.getItem("currentUser")) {
       .then((result) => {
         if (result.isConfirmed) {
           if (currentUser.cart[i].featured) {
-            currentUser.totalCartPrice -= currentUser.cart[i].productPrice;
+            currentUser.totalCartPrice -=
+              currentUser.cart[i].productPrice * currentUser.cart[i].count;
             allUsers[currentUserIndex].totalCartPrice -=
-              currentUser.cart[i].productPrice;
-            console.log("featured");
+              currentUser.cart[i].productPrice * currentUser.cart[i].count;
           } else {
-            console.log("promotion");
-
             let priceAfterPromotion =
               currentUser.cart[i].productPrice -
               currentUser.cart[i].productPrice *
                 (currentUser.cart[i].promotion / 100);
-            currentUser.totalCartPrice -= priceAfterPromotion;
-            allUsers[currentUserIndex].totalCartPrice -= priceAfterPromotion;
+            currentUser.totalCartPrice -=
+              priceAfterPromotion * currentUser.cart[i].count;
+            allUsers[currentUserIndex].totalCartPrice -=
+              priceAfterPromotion * currentUser.cart[i].count;
           }
           currentUser.cart.splice(i, 1);
           allUsers[currentUserIndex].cart.splice(i, 1);
@@ -236,16 +238,61 @@ if (!localStorage.getItem("currentUser")) {
   function addProductCounter(i) {
     allUsers[currentUserIndex].cart[i].count += 1;
     currentUser.cart[i].count += 1;
+
+    if (currentUser.cart[i].featured) {
+      currentUser.totalCartPrice += currentUser.cart[i].productPrice;
+      allUsers[currentUserIndex].totalCartPrice +=
+        currentUser.cart[i].productPrice;
+    } else {
+      let priceAfterPromotion =
+        currentUser.cart[i].productPrice -
+        currentUser.cart[i].productPrice *
+          (currentUser.cart[i].promotion / 100);
+      currentUser.totalCartPrice += priceAfterPromotion;
+      allUsers[currentUserIndex].totalCartPrice += priceAfterPromotion;
+    }
+
     localStorage.setItem("allUsers", JSON.stringify(allUsers));
     localStorage.setItem("currentUser", JSON.stringify(currentUser));
     displayCurrentUserCart();
+
+    Swal.fire({
+      position: "top-end",
+      icon: "success",
+      title: "Product has been added successfully",
+      showConfirmButton: false,
+      timer: 1500,
+    });
   }
+
   function removeProductCounter(i) {
     allUsers[currentUserIndex].cart[i].count += 1;
     currentUser.cart[i].count -= 1;
+
+    if (currentUser.cart[i].featured) {
+      currentUser.totalCartPrice -= currentUser.cart[i].productPrice;
+      allUsers[currentUserIndex].totalCartPrice -=
+        currentUser.cart[i].productPrice;
+    } else {
+      let priceAfterPromotion =
+        currentUser.cart[i].productPrice -
+        currentUser.cart[i].productPrice *
+          (currentUser.cart[i].promotion / 100);
+      currentUser.totalCartPrice -= priceAfterPromotion;
+      allUsers[currentUserIndex].totalCartPrice -= priceAfterPromotion;
+    }
+
     localStorage.setItem("allUsers", JSON.stringify(allUsers));
     localStorage.setItem("currentUser", JSON.stringify(currentUser));
     displayCurrentUserCart();
+
+    Swal.fire({
+      position: "top-end",
+      icon: "error",
+      title: "Product has been removed successfully",
+      showConfirmButton: false,
+      timer: 1500,
+    });
   }
 
   displayCurrentUserCart();

@@ -12,37 +12,38 @@ function updateNav() {
 
   if (!localStorage.getItem("currentUser")) {
     navUl.innerHTML = `
-      <li class="nav-item">
+      <li class="nav-item  mx-1 ">
         <a class="nav-link active" aria-current="page" href="index.html">Home</a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item  mx-1 ">
         <a class="nav-link" href="About/about.html">About</a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item  mx-1 ">
         <a class="nav-link" href="Contact/contact.html">Contact</a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item  mx-1 ">
         <a class="nav-link" href="Authentication/login.html">Login</a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item  mx-1 ">
         <a class="nav-link" href="Authentication/register.html">Register</a>
       </li>`;
   } else {
     navUl.innerHTML = `
-      <li class="nav-item">
+      <li class="nav-item mx-1 ">
         <a class="nav-link active" aria-current="page" href="index.html">Home</a>
       </li>
-      <li class="nav-item isUserCheck">
-        <a class="nav-link active" aria-current="page" href="Shop/shop.html">Shop</a>
+      <li class="nav-item  mx-1 isUserCheck">
+        <a class="nav-link" aria-current="page" href="Shop/shop.html">Shop</a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item mx-1 ">
         <a class="nav-link" href="About/about.html">About</a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item mx-1 ">
         <a class="nav-link" href="Contact/contact.html">Contact</a>
       </li>
-      <li class="nav-item isUserCheck">
-        <button class="nav-link m-auto" onclick="logout()">Logout</button>
+      <li class="nav-item  mx-1 isUserCheck">
+        <button class="nav-link m-auto" onclick="logout()"><i class="fa-solid fa-arrow-right-to-bracket"></i>
+</button>
       </li>`;
   }
 }

@@ -24,23 +24,37 @@ a {
   color: white;
 }
 
-#navBar .nav-link {
-  color: inherit;
-}
+#navBar .nav-link,
 #navBar .navbar-brand {
-  color: inherit;
+  color: white;
 }
 
-#navBar li:hover {
+#navBar .nav-link.active,
+#navBar .nav-link.active i {
   color: teal;
   background-color: white;
   border-radius: 6px;
-  -webkit-border-radius: 6px;
-  -moz-border-radius: 6px;
-  -ms-border-radius: 6px;
-  -o-border-radius: 6px;
 }
 
+#navBar .nav-link:focus,
+#navBar .nav-link:active {
+  outline: none;
+  background-color: rgba(0, 0, 0, 0.1);
+  color: inherit;
+}
+
+#navBar .nav-link:hover {
+  color: teal;
+  background-color: white;
+  border-radius: 5px;
+}
+#navBar .navbar-toggler {
+  border-color: white;
+  color: white;
+}
+#navBar .navbar-toggler-icon {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='white' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+}
 /* Card */
 .container .row .card {
   transition: 0.5s;
@@ -119,4 +133,11 @@ a {
 /* carosel */
 .carousel-item img {
   max-height: 350px;
+}
+
+/* Cart style */
+#cart {
+  font-size: 0.75rem;
+  padding: 0.25em 0.5em;
+  transform: translate(-50%, -50%);
 }
