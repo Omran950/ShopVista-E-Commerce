@@ -51,7 +51,7 @@ if (localStorage.getItem("allProducts")) {
       productImage: "images/bluetooth_speaker.jpg",
       productDetails:
         "Portable Bluetooth speaker with deep bass and long battery life.",
-      category: "food",
+      category: "grocery",
       stock: 5,
       rating: 4,
       seller: "shopVista",
@@ -146,7 +146,7 @@ if (localStorage.getItem("allProducts")) {
       productPrice: 20,
       productImage: "images/smart_light_bulb.jpg",
       productDetails: "Energy-efficient smart light bulb with app control.",
-      category: "food",
+      category: "grocery",
       stock: 5,
       rating: 4.5,
       seller: "shopVista",
@@ -162,19 +162,19 @@ function updateNav() {
   let navUl = document.getElementById("navUl");
   if (!localStorage.getItem("currentUser")) {
     navUl.innerHTML = `
-      <li class="nav-item  mx-1 ">
+      <li class="nav-item  mx-1">
         <a class="nav-link active" aria-current="page" href="index.html">Home</a>
       </li>
-      <li class="nav-item  mx-1 ">
+      <li class="nav-item  mx-1">
         <a class="nav-link" href="About/about.html">About</a>
       </li>
-      <li class="nav-item  mx-1 ">
+      <li class="nav-item  mx-1">
         <a class="nav-link" href="Contact/contact.html">Contact</a>
       </li>
-      <li class="nav-item  mx-1 ">
+      <li class="nav-item  mx-1">
         <a class="nav-link" href="Authentication/login.html">Login</a>
       </li>
-      <li class="nav-item  mx-1 ">
+      <li class="nav-item  mx-1">
         <a class="nav-link" href="Authentication/register.html">Register</a>
       </li>`;
   } else {
@@ -207,7 +207,7 @@ function updateNav() {
               </a>
             </li>
       <li class="nav-item  mx-1 isUserCheck">
-        <button class="nav-link m-auto" onclick="logout()"><i class="fa-solid fa-arrow-right-to-bracket"></i>
+        <button class="nav-link  w-100" onclick="logout()"><i class="fa-solid fa-arrow-right-to-bracket"></i>
 </button>
       </li>`;
   }

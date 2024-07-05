@@ -50,8 +50,9 @@ function updateNav() {
                 </a>
               </li>
         <li class="nav-item  mx-1 isUserCheck">
-          <button class="nav-link m-auto" onclick="logout()"><i class="fa-solid fa-arrow-right-to-bracket"></i>
-  </button>
+              <button class="nav-link w-100" onclick="logout()">
+                <i class="fa-solid fa-arrow-right-to-bracket"></i>
+              </button>
         </li>`;
   }
 }

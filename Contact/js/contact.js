@@ -17,13 +17,15 @@ if (JSON.parse(localStorage.getItem("allTickets")) != null) {
 }
 
 document.getElementById("contact-right").addEventListener("click", function () {
-  document.getElementById("contact-form").scrollIntoView({ behavior: "smooth" });
+  document
+    .getElementById("contact-form")
+    .scrollIntoView({ behavior: "smooth" });
 });
 
-ticketReasonSelected.addEventListener("change", function() {
-  let ticketReason = ticketReasonSelected.value
+ticketReasonSelected.addEventListener("change", function () {
+  let ticketReason = ticketReasonSelected.value;
 });
-  
+
 // regex
 function titleValidation() {
   let titleRegex = /^[a-zA-Z0-9_ ]{3,30}$/;
@@ -47,11 +49,11 @@ function messageValidation() {
 }
 document.addEventListener("DOMContentLoaded", function () {
   updateNav();
-  const dropdownItems = document.querySelectorAll('.dropdown-item');
-  const dropdownButton = document.getElementById('dropdownMenuButton1');
+  const dropdownItems = document.querySelectorAll(".dropdown-item");
+  const dropdownButton = document.getElementById("dropdownMenuButton1");
 
-  dropdownItems.forEach(item => {
-    item.addEventListener('click', function(event) {
+  dropdownItems.forEach((item) => {
+    item.addEventListener("click", function (event) {
       event.preventDefault();
       dropdownButton.textContent = this.textContent;
     });
@@ -59,7 +61,6 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // Event on inputs
-
 
 ticketTitle.addEventListener("keyup", function () {
   if (titleValidation()) {
@@ -173,7 +174,13 @@ submitTicket.addEventListener("click", function () {
     mobile: ticketMobile.value,
     message: ticketMessage.value,
   };
-  if (titleValidation() && nameValidation() && emailValidation() && mobileValidation() && messageValidation()) {
+  if (
+    titleValidation() &&
+    nameValidation() &&
+    emailValidation() &&
+    mobileValidation() &&
+    messageValidation()
+  ) {
     swal("", "Ticket Submitted", "success");
     allTickets.push(ticket);
     localStorage.setItem("allTickets", JSON.stringify(allTickets));
@@ -262,7 +269,7 @@ function updateNav() {
                 </a>
               </li>
         <li class="nav-item  mx-1 isUserCheck">
-          <button class="nav-link m-auto" onclick="logout()"><i class="fa-solid fa-arrow-right-to-bracket"></i>
+          <button class="nav-link w-100" onclick="logout()"><i class="fa-solid fa-arrow-right-to-bracket"></i>
   </button>
         </li>`;
   }
