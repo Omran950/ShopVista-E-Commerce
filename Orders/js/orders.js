@@ -9,6 +9,7 @@ let currentUserIndex = 0;
 let ordersBody = document.getElementById("ordersBody");
 let modalHeader = document.getElementById("staticBackdropLabel");
 let modalBody = document.getElementById("modalBody");
+let cart = document.getElementById("cart");
 
 if (localStorage.getItem("currentUser")) {
   currentUser = JSON.parse(localStorage.getItem("currentUser", currentUser));
@@ -20,6 +21,7 @@ if (localStorage.getItem("currentUser")) {
 }
 
 function displayCurrentUserOrders() {
+  cart.innerHTML = currentUser.cart.length;
   let order = "";
   let product = {};
   let priceAfterPromotion = 0;

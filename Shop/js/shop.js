@@ -26,7 +26,6 @@ if (!localStorage.getItem("currentUser")) {
   let floatingInputGroup1 = document.getElementById("floatingInputGroup1");
   let e = document.getElementById("selectCriteria");
   let cart = document.getElementById("cart");
-  cart.innerHTML = currentUser.cart.length;
 
   function logout() {
     let allUsers = JSON.parse(localStorage.getItem("allUsers"));
@@ -166,6 +165,7 @@ if (!localStorage.getItem("currentUser")) {
   }
 
   function searchByCategory(cat, body) {
+    cart.innerHTML = currentUser.cart.length;
     let products = "";
     let productCategory = cat;
     let productsBody = body;
