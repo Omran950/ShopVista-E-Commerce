@@ -199,7 +199,6 @@ function updateUser() {
 
         localStorage.setItem("currentUser", updatedUserData);
       } else {
-        console.log(currentUser.password);
         return Swal.fire({
           position: "top-center",
           icon: "error",
@@ -265,7 +264,6 @@ function deleteAccount() {
 }
 
 function clearAllButton() {
-  console.log("start");
   for (let i = 0; i < currentUser.cart.length; i++) {
     for (let j = 0; j < allProducts.length; j++) {
       if (currentUser.cart[i].productID == allProducts[j].productID) {
@@ -274,7 +272,6 @@ function clearAllButton() {
       }
     }
   }
-  console.log("cart empty");
   currentUser.cart = [];
   currentUser.totalCartPrice = 0;
   allUsers[currentUserIndex].totalCartPrice = 0;

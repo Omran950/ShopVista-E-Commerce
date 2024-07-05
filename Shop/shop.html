@@ -105,48 +105,147 @@
       </div>
     </div>
 
-    <!-- Search Bar -->
+    <!-- Search by cat-->
     <div class="mt-5 pt-5">
-      <div
-        class="searchBar mt-5 d-flex justify-content-center flex-column flex-md-row gap-2"
-      >
-        <div class="input-group mb-3" id="searchBar">
-          <span class="input-group-text"
-            ><i class="fa-solid fa-magnifying-glass"></i
-          ></span>
-          <div class="form-floating">
-            <input
-              id="floatingInputGroup1"
-              type="text"
-              class="form-control"
-              onkeyup="searchProducts()"
-              placeholder="Search..."
-            />
-            <label for="c">Search Our Products</label>
-          </div>
-        </div>
-        <select
-          class="form-select"
-          id="selectCriteria"
-          aria-label="Default select example"
-        >
-          <option value="productName" disabled selected>
-            Select your Search Criteria
-          </option>
-          <option value="productName">Name</option>
-          <option value="category">Category</option>
-        </select>
-      </div>
-    </div>
-
-    <!-- Display all data -->
-    <div class="mt-2 mb-3">
-      <h2 class="text-center my-3 py-3" id="ourProductsHeader">Our Products</h2>
-      <div class="container">
+      <h2 class="fw-bold fs-1 text-center my-5">Categories</h2>
+      <ul class="nav nav-tabs justify-content-center" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link active fw-bold"
+            id="all-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#all-tab-pane"
+            type="button"
+            role="tab"
+            aria-controls="all-tab-pane"
+            aria-selected="true"
+            onclick="searchByCategory('all', 'row-all-tab-pane')"
+          >
+            All
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link fw-bold"
+            id="fashion-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#fashion-tab-pane"
+            type="button"
+            role="tab"
+            aria-controls="fashion-tab-pane"
+            aria-selected="false"
+            onclick="searchByCategory('fashion', 'row-fashion-tab-pane')"
+          >
+            Fashion
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link fw-bold"
+            id="sports-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#sports-tab-pane"
+            type="button"
+            role="tab"
+            aria-controls="sports-tab-pane"
+            aria-selected="false"
+            onclick="searchByCategory('sports', 'row-sports-tab-pane')"
+          >
+            Sports
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link fw-bold"
+            id="electronics-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#electronics-tab-pane"
+            type="button"
+            role="tab"
+            aria-controls="electronics-tab-pane"
+            aria-selected="false"
+            onclick="searchByCategory('electronics', 'row-electronics-tab-pane')"
+          >
+            Electronics
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link fw-bold"
+            id="food-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#food-tab-pane"
+            type="button"
+            role="tab"
+            aria-controls="food-tab-pane"
+            aria-selected="false"
+            onclick="searchByCategory('food', 'row-food-tab-pane')"
+          >
+            Food
+          </button>
+        </li>
+      </ul>
+      <div class="tab-content container py-4 my-4" id="myTabContent">
         <div
-          class="row g-4 text-center justify-content-center"
-          id="productsContainer"
-        ></div>
+          class="tab-pane fade show active"
+          id="all-tab-pane"
+          role="tabpanel"
+          aria-labelledby="all-tab"
+          tabindex="0"
+        >
+          <div
+            class="row g-4 justify-content-center"
+            id="row-all-tab-pane"
+          ></div>
+        </div>
+        <div
+          class="tab-pane fade"
+          id="fashion-tab-pane"
+          role="tabpanel"
+          aria-labelledby="fashion-tab"
+          tabindex="0"
+        >
+          <div
+            class="row g-4 justify-content-center"
+            id="row-fashion-tab-pane"
+          ></div>
+        </div>
+        <div
+          class="tab-pane fade"
+          id="sports-tab-pane"
+          role="tabpanel"
+          aria-labelledby="sports-tab"
+          tabindex="0"
+        >
+          <div
+            class="row g-4 justify-content-center"
+            id="row-sports-tab-pane"
+          ></div>
+        </div>
+        <div
+          class="tab-pane fade"
+          id="electronics-tab-pane"
+          role="tabpanel"
+          aria-labelledby="electronics-tab"
+          tabindex="0"
+        >
+          <div
+            class="row g-4 justify-content-center"
+            id="row-electronics-tab-pane"
+          ></div>
+        </div>
+        <div
+          class="tab-pane fade"
+          id="food-tab-pane"
+          role="tabpanel"
+          aria-labelledby="food-tab"
+          tabindex="0"
+        >
+          <div
+            class="row g-4 justify-content-center"
+            id="row-food-tab-pane"
+          ></div>
+        </div>
       </div>
     </div>
 
@@ -198,3 +297,47 @@
     <script src="js/shop.js"></script>
   </body>
 </html>
+<!-- Search Bar -->
+<!-- <div class="mt-5 pt-5">
+      <div
+        class="searchBar mt-5 d-flex justify-content-center flex-column flex-md-row gap-2"
+      >
+        <div class="input-group mb-3" id="searchBar">
+          <span class="input-group-text"
+            ><i class="fa-solid fa-magnifying-glass"></i
+          ></span>
+          <div class="form-floating">
+            <input
+              id="floatingInputGroup1"
+              type="text"
+              class="form-control"
+              onkeyup="searchProducts()"
+              placeholder="Search..."
+            />
+            <label for="c">Search Our Products</label>
+          </div>
+        </div>
+        <select
+          class="form-select"
+          id="selectCriteria"
+          aria-label="Default select example"
+        >
+          <option value="productName" disabled selected>
+            Select your Search Criteria
+          </option>
+          <option value="productName">Name</option>
+          <option value="category">Category</option>
+        </select>
+      </div>
+    </div> -->
+
+<!-- Display all data -->
+<!-- <div class="mt-2 mb-3">
+      <h2 class="text-center my-3 py-3" id="ourProductsHeader">Our Products</h2>
+      <div class="container">
+        <div
+          class="row g-4 text-center justify-content-center"
+          id="productsContainer"
+        ></div>
+      </div>
+    </div> -->

@@ -23,6 +23,7 @@ if (!localStorage.getItem("currentUser")) {
   let modalBody = document.getElementById("modalBody");
   let totalPrice = document.getElementById("totalPrice");
   let cart = document.getElementById("cart");
+  let confirmPaymentButton = document.getElementById("confirmPaymentButton");
 
   function logout() {
     let allUsers = JSON.parse(localStorage.getItem("allUsers"));
@@ -55,7 +56,9 @@ if (!localStorage.getItem("currentUser")) {
     ></a>
   </button>
 </div>`;
+      confirmPaymentButton.disabled = true;
     } else {
+      confirmPaymentButton.disabled = false;
       let newPrice = "";
       let cartProducts = "";
       for (let i = 0; i < currentUser.cart.length; i++) {

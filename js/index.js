@@ -37,7 +37,7 @@ if (localStorage.getItem("allProducts")) {
       productImage: "images/smartwatch.jpg",
       productDetails:
         "A sleek smartwatch with fitness tracking and notifications.",
-      category: "electric",
+      category: "electronics",
       stock: 5,
       rating: 4,
       seller: "shopVista",
@@ -65,7 +65,7 @@ if (localStorage.getItem("allProducts")) {
       productImage: "images/4k_monitor.jpg",
       productDetails:
         "Ultra HD 4K monitor with vibrant colors and sharp details.",
-      category: "electric",
+      category: "electronics",
       stock: 5,
       rating: 4.5,
       seller: "shopVista",
@@ -78,7 +78,7 @@ if (localStorage.getItem("allProducts")) {
       productPrice: 40,
       productImage: "images/gaming_mouse.jpg",
       productDetails: "Ergonomic gaming mouse with customizable buttons.",
-      category: "electric",
+      category: "electronics",
       stock: 5,
       rating: 4,
       seller: "shopVista",
@@ -91,7 +91,7 @@ if (localStorage.getItem("allProducts")) {
       productPrice: 300,
       productImage: "images/laptop_stand.jpg",
       productDetails: "Adjustable laptop stand for better ergonomics.",
-      category: "electric",
+      category: "electronics",
       stock: 5,
       rating: 4,
       seller: "shopVista",
@@ -119,7 +119,7 @@ if (localStorage.getItem("allProducts")) {
       productImage: "images/wireless_charger.jpg",
       productDetails:
         "Fast wireless charger compatible with all Qi-enabled devices.",
-      category: "electric",
+      category: "electronics",
       stock: 5,
       rating: 4,
       seller: "shopVista",
@@ -427,12 +427,6 @@ function addToCart(event, i) {
       currentUser = allUsers[currentUserIndex];
       localStorage.setItem("allUsers", JSON.stringify(allUsers));
       localStorage.setItem("currentUser", JSON.stringify(currentUser));
-    } else {
-      Swal.fire({
-        icon: "error",
-        title: "Sorry...",
-        text: "This product is out of stock",
-      });
       displayAllProducts();
     }
   }
