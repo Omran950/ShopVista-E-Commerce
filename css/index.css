@@ -64,6 +64,7 @@ a {
   -o-transition: 0.5s;
   border: teal 1px solid;
   cursor: pointer;
+  min-height: 450px;
 }
 
 .container .row .card:hover {

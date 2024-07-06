@@ -71,12 +71,12 @@ if (!localStorage.getItem("currentUser")) {
             ? "disabled"
             : "";
         cartProducts += `<div id="row"
-            class="row py-5 mt-4 px-2 align-items-center rounded-3 shadow gy-3"
+            class="row py-2 mt-2 px-2 align-items-center rounded-3 shadow gy-3"
           >
             <div class="col-3">
               <figure class="overflow-hidden" onclick="productDetails(${i})" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                 <img
-                  src="../images/Lenovo (2).jpg"
+                  src="${currentUser.cart[i].productImage}"
                   alt="${currentUser.cart[i].productName}"
                   class="w-75 d-block m-auto"
                 />
@@ -124,7 +124,7 @@ if (!localStorage.getItem("currentUser")) {
     modalBody.innerHTML = `<div class="col-md-5">
                     <figure class="overflow-hidden p-3">
                       <img
-                        src="../images/Lenovo (2).jpg"
+                        src="${currentUser.cart[i].productImage}"
                         alt="${currentUser.cart[i].productName}"
                         class="w-100 d-block"
                       />

@@ -85,7 +85,6 @@
             role="tab"
             aria-controls="myProducts-tab-pane"
             aria-selected="true"
-            onclick="searchByCategory('myProducts', 'row-myProducts-tab-pane')"
           >
             My Products
           </button>
@@ -93,16 +92,16 @@
         <li class="nav-item" role="presentation">
           <button
             class="nav-link fw-bold"
-            id="productsSold-tab"
+            id="soldProducts-tab"
             data-bs-toggle="tab"
-            data-bs-target="#productsSold-tab-pane"
+            data-bs-target="#soldProducts-tab-pane"
             type="button"
             role="tab"
-            aria-controls="productsSold-tab-pane"
+            aria-controls="soldProducts-tab-pane"
             aria-selected="false"
-            onclick="searchByCategory('productsSold', 'row-productsSold-tab-pane')"
+            onclick="getSoldProducts()"
           >
-            Products sold
+            Sold products
           </button>
         </li>
         <li class="nav-item" role="presentation">
@@ -115,7 +114,6 @@
             role="tab"
             aria-controls="salesAnalytics-tab-pane"
             aria-selected="false"
-            onclick="searchByCategory('salesAnalytics', 'row-salesAnalytics-tab-pane')"
           >
             Sales Analytics
           </button>
@@ -128,15 +126,23 @@
           role="tabpanel"
           aria-labelledby="myProducts-tab"
           tabindex="0"
-        ></div>
+        >
+          <div class="container">
+            <div class="row mt-5" id="myProductsDiv"></div>
+          </div>
+        </div>
 
         <div
           class="tab-pane fade"
-          id="productsSold-tab-pane"
+          id="soldProducts-tab-pane"
           role="tabpanel"
-          aria-labelledby="productsSold-tab"
+          aria-labelledby="soldProducts-tab"
           tabindex="0"
-        ></div>
+        >
+          <div class="container">
+            <div class="row mt-5" id="soldProductsDiv"></div>
+          </div>
+        </div>
 
         <div
           class="tab-pane fade"
@@ -144,7 +150,11 @@
           role="tabpanel"
           aria-labelledby="salesAnalytics-tab"
           tabindex="0"
-        ></div>
+        >
+          <div class="container">
+            <div class="row mt-5" id="salesAnalyticsDiv"></div>
+          </div>
+        </div>
       </div>
     </div>
     <!-- Footer -->

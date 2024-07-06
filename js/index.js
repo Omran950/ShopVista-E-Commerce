@@ -3,11 +3,27 @@ document.addEventListener("DOMContentLoaded", function () {
   displayAllProducts();
 });
 
-let allProducts = JSON.parse(localStorage.getItem("allProducts")) || [];
+let allUsers = JSON.parse(localStorage.getItem("allUsers")) || [
+  {
+    name: "admin",
+    email: "admin1122@shopvista.com",
+    address: "cairo",
+    password: "mM#2345432",
+    role: "admin",
+    isLogin: false,
+    cart: [],
+    orders: [],
+    totalCartPrice: 0,
+  },
+];
+
+if (!localStorage.getItem("allUsers")) {
+  localStorage.setItem("allUsers", JSON.stringify(allUsers));
+}
+
 let currentUserIndex =
   JSON.parse(localStorage.getItem("currentUserIndex")) || 0;
 let currentUser = JSON.parse(localStorage.getItem("currentUser")) || {};
-let allUsers = JSON.parse(localStorage.getItem("allUsers")) || [];
 let navUl = document.getElementById("navUl");
 let featuredProducts = document.getElementById("featured-products");
 let promotedProducts = document.getElementById("promoted-products");
@@ -20,151 +36,386 @@ if (localStorage.getItem("allProducts")) {
 } else {
   allProducts = [
     {
-      productName: "Wireless Headphones",
-      productPrice: 100,
-      productImage: "images/wireless_headphones.jpg",
+      productName: "Basketball",
+      productPrice: 3000,
+      productImage:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTkMdh5o49QiEQQ9Q1jhlgLafvEH6Yjv8BIpQ&s",
       productDetails:
-        "High-quality wireless headphones with noise cancellation.",
+        "Official size and weight basketball, suitable for professional games.",
       category: "sports",
-      stock: 5,
-      rating: 5,
+      stock: 15,
+      rating: 4.7,
       seller: "shopVista",
       promotion: 10,
       featured: false,
-      productID: "b4529ffb-4ee3-4eeb-95e8-28ea880a78f8",
-      sellerID: "momo@momo.com",
+      productID: "b1d1f69a-01c5-4e68-b1c8-9e1bf9m9d53f",
+      sellerID: "admin1122@shopvista.com",
     },
     {
-      productName: "Smartwatch",
-      productPrice: 200,
-      productImage: "images/smartwatch.jpg",
+      productName: "Football",
+      productPrice: 1500,
+      productImage:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQusE0-IE3FX-sgPeQ2jp0yAagulCmybuSbcQ&s",
       productDetails:
-        "A sleek smartwatch with fitness tracking and notifications.",
-      category: "electronics",
-      stock: 5,
-      rating: 4,
+        "Professional leather football, designed for optimal performance and durability.",
+      category: "sports",
+      stock: 20,
+      rating: 4.8,
       seller: "shopVista",
       promotion: 0,
       featured: true,
-      productID: "681684d6-2801-46d6-9345-faa4d275e879",
-      sellerID: "momo@momo.com",
+      productID: "b2d1f69b-02c5-4e69-b2c8-9e1bf9m9d53f",
+      sellerID: "admin1122@shopvista.com",
     },
     {
-      productName: "Bluetooth Speaker",
-      productPrice: 50,
-      productImage: "images/bluetooth_speaker.jpg",
+      productName: "Tennis Racket",
+      productPrice: 700,
+      productImage:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_vpAK8oJgZq88O2nRhz1uwVuTRuLmlgBdIQ&s",
       productDetails:
-        "Portable Bluetooth speaker with deep bass and long battery life.",
-      category: "grocery",
-      stock: 5,
-      rating: 4,
+        "Lightweight and durable tennis racket, ideal for recreational and competitive play.",
+      category: "sports",
+      stock: 8,
+      rating: 4.6,
       seller: "shopVista",
       promotion: 0,
       featured: true,
-      productID: "033cd9dc-e8ce-40ff-9505-b73586822c39",
-      sellerID: "mo@mo.com",
+      productID: "b3d1f69c-03c5-4e70-b3c8-9e1bf9m9d53f",
+      sellerID: "admin1122@shopvista.com",
     },
     {
-      productName: "4K Monitor",
-      productPrice: 300,
-      productImage: "images/4k_monitor.jpg",
+      productName: "Soccer Ball",
+      productPrice: 2000,
+      productImage:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXS6IlwealwypItTjBrVcGpMBYkEjKzjicNw&s",
       productDetails:
-        "Ultra HD 4K monitor with vibrant colors and sharp details.",
-      category: "electronics",
-      stock: 5,
+        "FIFA-approved soccer ball, crafted for superior performance and durability on the field.",
+      category: "sports",
+      stock: 12,
       rating: 4.5,
       seller: "shopVista",
-      promotion: 20,
-      featured: false,
-      productID: "57aae2b4-15df-467d-8dab-c0e405513959",
-      sellerID: "mo@mo.com",
-    },
-    {
-      productName: "Gaming Mouse",
-      productPrice: 40,
-      productImage: "images/gaming_mouse.jpg",
-      productDetails: "Ergonomic gaming mouse with customizable buttons.",
-      category: "electronics",
-      stock: 5,
-      rating: 4,
-      seller: "shopVista",
       promotion: 0,
       featured: true,
-      productID: "5dc49878-335c-4a45-89d7-7b78b7f8baed",
-      sellerID: "mo@mo.com",
+      productID: "b4d1f69d-04c5-4e71-b4c8-9e1bf9m9d53f",
+      sellerID: "admin1122@shopvista.com",
     },
     {
-      productName: "Laptop Stand",
-      productPrice: 300,
-      productImage: "images/laptop_stand.jpg",
-      productDetails: "Adjustable laptop stand for better ergonomics.",
-      category: "electronics",
-      stock: 5,
-      rating: 4,
-      seller: "shopVista",
-      promotion: 10,
-      featured: false,
-      productID: "a00c25d0-68ee-483b-a801-9790906a17e7",
-      sellerID: "mo@mo.com",
-    },
-    {
-      productName: "Fitness Tracker",
-      productPrice: 150,
-      productImage: "images/fitness_tracker.jpg",
+      productName: "Running Shoes",
+      productPrice: 7000,
+      productImage: "https://m.media-amazon.com/images/I/41vh2WVwHuL._AC_.jpg",
       productDetails:
-        "Water-resistant fitness tracker with heart rate monitor.",
+        "Comfortable and lightweight running shoes, designed to enhance performance and support during workouts.",
       category: "sports",
-      stock: 5,
-      rating: 3.5,
+      stock: 25,
+      rating: 4.7,
       seller: "shopVista",
       promotion: 15,
       featured: false,
-      productID: "1bd3887a-d163-43e8-b927-d4fec2153b39",
-      sellerID: "mo@mo.com",
+      productID: "b5d1f69e-05c5-4e72-b5c8-9e1bf9m9d53f",
+      sellerID: "admin1122@shopvista.com",
     },
     {
-      productName: "Wireless Charger",
-      productPrice: 25,
-      productImage: "images/wireless_charger.jpg",
+      productName: "Smartphone",
+      productPrice: 25000,
+      productImage:
+        "https://m.media-amazon.com/images/I/71SfoZu9a3L._AC_SL1500_.jpg",
       productDetails:
-        "Fast wireless charger compatible with all Qi-enabled devices.",
+        "Latest model smartphone with advanced features, offering cutting-edge technology and exceptional performance.",
       category: "electronics",
-      stock: 5,
-      rating: 4,
+      stock: 50,
+      rating: 4.9,
+      seller: "shopVista",
+      promotion: 15,
+      featured: false,
+      productID: "e1d1f69a-06c5-4e73-e1c8-9e1bf9m9d53f",
+      sellerID: "admin1122@shopvista.com",
+    },
+    {
+      productName: "Laptop",
+      productPrice: 25000,
+      productImage:
+        "https://images-cdn.ubuy.co.id/64c41e4771c5f52216163af1-hp-stream-14-laptop-intel-celeron.jpg",
+      productDetails:
+        "High-performance laptop with long battery life, perfect for work, study, and entertainment.",
+      category: "electronics",
+      stock: 30,
+      rating: 4.8,
       seller: "shopVista",
       promotion: 0,
       featured: true,
-      productID: "632ff54e-6cf6-45a9-96c4-9ac04a54c00e",
-      sellerID: "mo@mo.com",
+      productID: "e2d1f69b-07c5-4e74-e2c8-9e1bf9m9d53f",
+      sellerID: "admin1122@shopvista.com",
     },
     {
-      productName: "Noise-Cancelling Earbuds",
-      productPrice: 90,
-      productImage: "images/noise_cancelling_earbuds.jpg",
+      productName: "Smart TV",
+      productPrice: 8000,
+      productImage:
+        "https://i5.walmartimages.com/seo/VIZIO-24-Class-D-Series-FHD-LED-Smart-TV-D24f-J09_00fc72d4-adb7-4ab9-ae85-01e0f34034d0.be28d3a49f3357f156cfbd6187d3463d.jpeg",
       productDetails:
-        "Compact earbuds with superior noise-cancelling technology.",
+        "4K Ultra HD Smart TV with voice control, providing stunning picture quality and immersive entertainment experience.",
+      category: "electronics",
+      stock: 20,
+      rating: 4.7,
+      seller: "shopVista",
+      promotion: 5,
+      featured: false,
+      productID: "e3d1f69c-08c5-4e75-e3c8-9e1bf9m9d53f",
+      sellerID: "admin1122@shopvista.com",
+    },
+    {
+      productName: "Gaming Console",
+      productPrice: 15000,
+      productImage:
+        "https://btech.com/media/catalog/product/c/4/c49e30e23d92979b0096a65610891c652ba26d8b17593e430129e45672a9ef57.jpeg?width=500&height=500&store=en&image-type=image",
+      productDetails:
+        "Next-gen gaming console with 1TB storage, delivering immersive gaming experiences and high-speed performance.",
+      category: "electronics",
+      stock: 15,
+      rating: 4.9,
+      seller: "shopVista",
+      promotion: 20,
+      featured: false,
+      productID: "e4d1f69d-09c5-4e76-e4c8-9e1bf9m9d53f",
+      sellerID: "admin1122@shopvista.com",
+    },
+    {
+      productName: "Wireless Speaker",
+      productPrice: 1500,
+      productImage:
+        "https://cairosales.com/53476-large_default/sony-portable-wireless-speaker-with-microphone-black-xb23b.jpg",
+      productDetails:
+        "Portable wireless speaker with excellent sound quality, ideal for indoor and outdoor use.",
+      category: "electronics",
+      stock: 40,
+      rating: 4.8,
+      seller: "shopVista",
+      promotion: 10,
+      featured: false,
+      productID: "e5d1f69e-10c5-4e77-e5c8-9e1bf9m9d53f",
+      sellerID: "admin1122@shopvista.com",
+    },
+    {
+      productName: "Smart Watch",
+      productPrice: 4000,
+      productImage: "https://m.media-amazon.com/images/I/61ZjlBOp+rL.jpg",
+      productDetails:
+        "Wearable device with health tracking features, designed to monitor fitness metrics and provide smart notifications.",
+      category: "electronics",
+      stock: 35,
+      rating: 4.7,
+      seller: "shopVista",
+      promotion: 20,
+      featured: false,
+      productID: "e6d1f69f-11c5-4e78-e6c8-9e1bf9m9d53f",
+      sellerID: "admin1122@shopvista.com",
+    },
+    {
+      productName: "Organic Apples",
+      productPrice: 5,
+      productImage:
+        "https://i5.walmartimages.com/seo/Fresh-Gala-Apple-Each_f46d4fa7-6108-4450-a610-cc95a1ca28c5_3.38c2c5b2f003a0aafa618f3b4dc3cbbd.jpeg",
+      productDetails:
+        "Fresh and organic apples from local farms, known for their quality and nutritional benefits.",
+      category: "grocery",
+      stock: 100,
+      rating: 4.8,
+      seller: "shopVista",
+      promotion: 0,
+      featured: true,
+      productID: "g1d1f69a-12c5-4e79-g1c8-9e1bf9m9d53f",
+      sellerID: "admin1122@shopvista.com",
+    },
+    {
+      productName: "Whole Grain Bread",
+      productPrice: 12,
+      productImage:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTazPBjYM5w5AaMIofrYdPMzqx27oUFajfa5w&s",
+      productDetails:
+        "Healthy whole grain bread, baked fresh with nutritious ingredients for a wholesome diet.",
+      category: "grocery",
+      stock: 50,
+      rating: 4.7,
+      seller: "shopVista",
+      promotion: 0,
+      featured: true,
+      productID: "g2d1f69b-13c5-4e80-g2c8-9e1bf9m9d53f",
+      sellerID: "admin1122@shopvista.com",
+    },
+    {
+      productName: "Almond Milk",
+      productPrice: 50,
+      productImage:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTGtuYu4cmqWCFTdOWSVoQILfrDwTP-VZkfVg&s",
+      productDetails:
+        "Dairy-free and gluten-free almond milk, known for its smooth texture and nutritional benefits.",
+      category: "grocery",
+      stock: 60,
+      rating: 4.6,
+      seller: "shopVista",
+      promotion: 0,
+      featured: true,
+      productID: "g3d1f69c-14c5-4e81-g3c8-9e1bf9m9d53f",
+      sellerID: "admin1122@shopvista.com",
+    },
+    {
+      productName: "Organic Eggs",
+      productPrice: 100,
+      productImage:
+        "https://i5.walmartimages.com/seo/Happy-Egg-Co-Organic-Free-Range-Large-Brown-Eggs-18-Count_7dc09cb7-bbee-4bb9-8428-be614e5ff76b.acf5c10ed8baca38354350027aec22c8.jpeg",
+      productDetails:
+        "Cage-free and organic eggs, sourced locally for their freshness and high-quality.",
+      category: "grocery",
+      stock: 70,
+      rating: 4.9,
+      seller: "shopVista",
+      promotion: 0,
+      featured: true,
+      productID: "g4d1f69d-15c5-4e82-g4c8-9e1bf9m9d53f",
+      sellerID: "admin1122@shopvista.com",
+    },
+    {
+      productName: "Greek Yogurt",
+      productPrice: 20,
+      productImage:
+        "https://i5.walmartimages.com/seo/Great-Value-Greek-Vanilla-Nonfat-Yogurt-32-oz-Tub-Plastic-Container_674fcaa2-5368-4846-a795-304198b75733.1fd0fae92efa76b6977e0e3430a375fa.png",
+      productDetails:
+        "High-protein Greek yogurt, known for its creamy texture and nutritional value.",
+      category: "grocery",
+      stock: 40,
+      rating: 4.8,
+      seller: "shopVista",
+      promotion: 0,
+      featured: true,
+      productID: "g5d1f69e-16c5-4e83-g5c8-9e1bf9m9d53f",
+      sellerID: "admin1122@shopvista.com",
+    },
+    {
+      productName: "Avocado",
+      productPrice: 15,
+      productImage:
+        "https://www.fourwindsgrowers.com/cdn/shop/products/shutterstock_116205556bacon_b59ae0a5-6673-4d99-a9ba-ec6ded5ba99c_1024x1024.jpg?v=1569305453",
+      productDetails:
+        "Fresh and ripe avocados, perfect for salads, spreads, and healthy snacking.",
+      category: "grocery",
+      stock: 80,
+      rating: 4.7,
+      seller: "shopVista",
+      promotion: 0,
+      featured: true,
+      productID: "g6d1f69f-17c5-4e84-g6c8-9e1bf9m9d53f",
+      sellerID: "admin1122@shopvista.com",
+    },
+    {
+      productName: "Bananas",
+      productPrice: 12,
+      productImage:
+        "https://www.quicklly.com/upload_images/product/1522348874-organic-bananas.jpg",
+      productDetails:
+        "Fresh and organic bananas, packed with nutrients and ideal for a quick and healthy snack.",
+      category: "grocery",
+      stock: 90,
+      rating: 4.6,
+      seller: "shopVista",
+      promotion: 0,
+      featured: true,
+      productID: "g7d1f69g-18c5-4e85-g7c8-9e1bf9m9d53f",
+      sellerID: "admin1122@shopvista.com",
+    },
+    {
+      productName: "Organic Spinach",
+      productPrice: 30,
+      productImage:
+        "https://www.kroger.com/product/images/large/front/0001111091128",
+      productDetails:
+        "Fresh and organic spinach, rich in vitamins and minerals, perfect for salads and cooking.",
+      category: "grocery",
+      stock: 50,
+      rating: 4.8,
+      seller: "shopVista",
+      promotion: 0,
+      featured: true,
+      productID: "g8d1f69h-19c5-4e86-g8c8-9e1bf9m9d53f",
+      sellerID: "admin1122@shopvista.com",
+    },
+    {
+      productName: "Leather Jacket",
+      productPrice: 1500,
+      productImage:
+        "https://hips.hearstapps.com/hmg-prod/images/best-leather-jackets-64dce7321e652.jpg?crop=0.500xw:1.00xh;0.500xw,0&resize=640:*",
+      productDetails:
+        "Stylish and durable leather jacket, crafted for comfort and timeless fashion.",
+      category: "fashion",
+      stock: 10,
+      rating: 4.7,
+      seller: "shopVista",
+      promotion: 25,
+      featured: false,
+      productID: "f1d1f69a-20c5-4e87-f1c8-9e1bf9m9d53f",
+      sellerID: "admin1122@shopvista.com",
+    },
+    {
+      productName: "Sneakers",
+      productPrice: 8000,
+      productImage:
+        "https://target.scene7.com/is/image/Target/GUEST_bb901552-2436-4cb6-b805-ce34b1a41d55?wid=488&hei=488&fmt=pjpeg",
+      productDetails:
+        "Comfortable and trendy sneakers, designed for all-day wear with a modern aesthetic.",
+      category: "fashion",
+      stock: 20,
+      rating: 4.8,
+      seller: "shopVista",
+      promotion: 10,
+      featured: false,
+      productID: "f2d1f69b-21c5-4e88-f2c8-9e1bf9m9d53f",
+      sellerID: "admin1122@shopvista.com",
+    },
+    {
+      productName: "Designer Handbag",
+      productPrice: 2000,
+      productImage:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTC21nqGT7QLUwGzlyti1rumP5TFHVgBNOsvw&s",
+      productDetails:
+        "Elegant and high-quality designer handbag, crafted with attention to detail and style.",
       category: "fashion",
       stock: 5,
-      rating: 3,
+      rating: 4.9,
       seller: "shopVista",
       promotion: 0,
       featured: true,
-      productID: "a0baf02f-b761-4295-a5e9-2f2e07dc7701",
-      sellerID: "mo@mo.com",
+      productID: "f3d1f69c-22c5-4e89-f3c8-9e1bf9m9d53f",
+      sellerID: "admin1122@shopvista.com",
     },
     {
-      productName: "Smart Light Bulb",
-      productPrice: 20,
-      productImage: "images/smart_light_bulb.jpg",
-      productDetails: "Energy-efficient smart light bulb with app control.",
-      category: "grocery",
-      stock: 5,
-      rating: 4.5,
+      productName: "Wool Scarf",
+      productPrice: 500,
+      productImage:
+        "https://m.media-amazon.com/images/I/31LYpI-bKNS._AC_SY580_.jpg",
+      productDetails:
+        "Warm and cozy wool scarf, perfect for chilly weather with a stylish and comfortable design.",
+      category: "fashion",
+      stock: 30,
+      rating: 4.6,
       seller: "shopVista",
       promotion: 0,
       featured: true,
-      productID: "a72d1f69-06c5-4e67-b0c8-9e1bf6b9d53f",
-      sellerID: "mo@mo.com",
+      productID: "f4d1f69d-23c5-4e90-f4c8-9e1bf9m9d53f",
+      sellerID: "admin1122@shopvista.com",
+    },
+    {
+      productName: "Sunglasses",
+      productPrice: 800,
+      productImage:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQeGv_TPjNqnfIc-nLHZ5DPtJzQbwnOjfvl0g&s",
+      productDetails:
+        "Stylish and UV-protective sunglasses, designed to complement your look while shielding your eyes.",
+      category: "fashion",
+      stock: 25,
+      rating: 4.7,
+      seller: "shopVista",
+      promotion: 5,
+      featured: false,
+      productID: "f5d1f69e-24c5-4e91-f5c8-9e1bf9m9d53f",
+      sellerID: "admin1122@shopvista.com",
     },
   ];
   localStorage.setItem("allProducts", JSON.stringify(allProducts));
@@ -260,7 +511,7 @@ function displayAllProducts() {
               <div class="" onclick="productDetails(${i})" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                   <figure class="m-0 p-2">
                     <img
-                      src="images/Lenovo (2).jpg"
+                      src="${allProducts[i].productImage}"
                       alt="${allProducts[i].productName}"
                       class="d-block w-75 m-auto"
                       style="height: 200px"
@@ -296,7 +547,7 @@ function displayAllProducts() {
       data-bs-target="#staticBackdrop">
               <figure class="m-0 p-2">
                 <img
-                  src="images/Lenovo (2).jpg"
+                  src="${allProducts[i].productImage}"
                   alt="${allProducts[i].productName}"
                   class="d-block w-75 m-auto"
                   style="height: 200px"
@@ -313,9 +564,7 @@ function displayAllProducts() {
                 <p class="text-center" id="priceBefore">Price : <span class="text-decoration-line-through">${
                   allProducts[i].productPrice
                 } EGP</span></p>
-                <p class="text-center" id="priceAfter">${priceAfterPromotion.toPrecision(
-                  4
-                )} EGP</p>
+                <p class="text-center" id="priceAfter">${priceAfterPromotion} EGP</p>
                 </div>
               </div>
             </div>
@@ -344,7 +593,7 @@ function productDetails(i) {
   modalBody.innerHTML = `<div class="col-md-5">
                   <figure class="overflow-hidden p-3">
                     <img
-                      src="images/Lenovo (2).jpg"
+                      src="${allProducts[i].productImage}"
                       alt="${allProducts[i].productName}"
                       class="w-100 d-block"
                     />
@@ -372,8 +621,6 @@ function productDetails(i) {
                     </p>
                   </div>
                 </div>`;
-
-  // modalFooter.innerHTML = `<button class="btn w-50 text-capitalize m-auto d-block mt-3" onclick="addToCart(event, ${i})">Add to cart</button>`;
 }
 
 function addToCart(event, i) {

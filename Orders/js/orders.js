@@ -132,9 +132,9 @@ if (!localStorage.getItem("currentUser")) {
     modalHeader.innerHTML = `${product.productName}`;
     modalBody.innerHTML = `<div class="col-md-5">
                         <figure class="overflow-hidden p-3">
-                          <img src="../images/Lenovo (2).jpg" alt="${
-                            product.productName
-                          }" class="w-100 d-block" />
+                          <img src="${product.productImage}" alt="${
+      product.productName
+    }" class="w-100 d-block" />
                         </figure>
                       </div>
                       <div class="col-md-7">

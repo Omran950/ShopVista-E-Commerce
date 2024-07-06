@@ -49,7 +49,7 @@ if (!localStorage.getItem("currentUser")) {
     modalBody.innerHTML = `<div class="col-md-5">
                       <figure class="overflow-hidden p-3">
                         <img
-                          src="../images/Lenovo (2).jpg"
+                          src="${allProducts[i].productImage}"
                           alt="${allProducts[i].productName}"
                           class="w-100 d-block"
                         />
@@ -168,7 +168,7 @@ if (!localStorage.getItem("currentUser")) {
               <div class="" onclick="productDetails(${i})" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                   <figure class="m-0 p-2">
                     <img
-                      src="../images/Lenovo (2).jpg"
+                      src="${allProducts[i].productImage}"
                       alt="${allProducts[i].productName}"
                       class="d-block w-75 m-auto"
                       style="height: 200px"
@@ -202,7 +202,7 @@ if (!localStorage.getItem("currentUser")) {
       data-bs-target="#staticBackdrop">
               <figure class="m-0 p-2">
                 <img
-                  src="../images/Lenovo (2).jpg"
+                  src="${allProducts[i].productImage}"
                   alt="${allProducts[i].productName}"
                   class="d-block w-75 m-auto"
                   style="height: 200px"
@@ -219,9 +219,7 @@ if (!localStorage.getItem("currentUser")) {
                 <p class="text-center" id="priceBefore">Price : <span class="text-decoration-line-through">${
                   allProducts[i].productPrice
                 } EGP</span></p>
-                <p class="text-center" id="priceAfter">${priceAfterPromotion.toPrecision(
-                  4
-                )} EGP</p>
+                <p class="text-center" id="priceAfter">${priceAfterPromotion} EGP</p>
                 </div>
               </div>
             </div>
