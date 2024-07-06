@@ -3,10 +3,12 @@ document.addEventListener("DOMContentLoaded", function () {
   displayAllProducts();
 });
 
-let currentUserIndex = 0;
-let currentUser = {};
-let allUsers = [];
-let allProducts = [];
+let allProducts = JSON.parse(localStorage.getItem("allProducts")) || [];
+let currentUserIndex =
+  JSON.parse(localStorage.getItem("currentUserIndex")) || 0;
+let currentUser = JSON.parse(localStorage.getItem("currentUser")) || {};
+let allUsers = JSON.parse(localStorage.getItem("allUsers")) || [];
+let navUl = document.getElementById("navUl");
 let featuredProducts = document.getElementById("featured-products");
 let promotedProducts = document.getElementById("promoted-products");
 let modalHeader = document.getElementById("staticBackdropLabel");
@@ -30,6 +32,7 @@ if (localStorage.getItem("allProducts")) {
       promotion: 10,
       featured: false,
       productID: "b4529ffb-4ee3-4eeb-95e8-28ea880a78f8",
+      sellerID: "momo@momo.com",
     },
     {
       productName: "Smartwatch",
@@ -44,6 +47,7 @@ if (localStorage.getItem("allProducts")) {
       promotion: 0,
       featured: true,
       productID: "681684d6-2801-46d6-9345-faa4d275e879",
+      sellerID: "momo@momo.com",
     },
     {
       productName: "Bluetooth Speaker",
@@ -58,6 +62,7 @@ if (localStorage.getItem("allProducts")) {
       promotion: 0,
       featured: true,
       productID: "033cd9dc-e8ce-40ff-9505-b73586822c39",
+      sellerID: "mo@mo.com",
     },
     {
       productName: "4K Monitor",
@@ -72,6 +77,7 @@ if (localStorage.getItem("allProducts")) {
       promotion: 20,
       featured: false,
       productID: "57aae2b4-15df-467d-8dab-c0e405513959",
+      sellerID: "mo@mo.com",
     },
     {
       productName: "Gaming Mouse",
@@ -85,6 +91,7 @@ if (localStorage.getItem("allProducts")) {
       promotion: 0,
       featured: true,
       productID: "5dc49878-335c-4a45-89d7-7b78b7f8baed",
+      sellerID: "mo@mo.com",
     },
     {
       productName: "Laptop Stand",
@@ -98,6 +105,7 @@ if (localStorage.getItem("allProducts")) {
       promotion: 10,
       featured: false,
       productID: "a00c25d0-68ee-483b-a801-9790906a17e7",
+      sellerID: "mo@mo.com",
     },
     {
       productName: "Fitness Tracker",
@@ -112,6 +120,7 @@ if (localStorage.getItem("allProducts")) {
       promotion: 15,
       featured: false,
       productID: "1bd3887a-d163-43e8-b927-d4fec2153b39",
+      sellerID: "mo@mo.com",
     },
     {
       productName: "Wireless Charger",
@@ -126,6 +135,7 @@ if (localStorage.getItem("allProducts")) {
       promotion: 0,
       featured: true,
       productID: "632ff54e-6cf6-45a9-96c4-9ac04a54c00e",
+      sellerID: "mo@mo.com",
     },
     {
       productName: "Noise-Cancelling Earbuds",
@@ -140,6 +150,7 @@ if (localStorage.getItem("allProducts")) {
       promotion: 0,
       featured: true,
       productID: "a0baf02f-b761-4295-a5e9-2f2e07dc7701",
+      sellerID: "mo@mo.com",
     },
     {
       productName: "Smart Light Bulb",
@@ -153,13 +164,13 @@ if (localStorage.getItem("allProducts")) {
       promotion: 0,
       featured: true,
       productID: "a72d1f69-06c5-4e67-b0c8-9e1bf6b9d53f",
+      sellerID: "mo@mo.com",
     },
   ];
   localStorage.setItem("allProducts", JSON.stringify(allProducts));
 }
 
 function updateNav() {
-  let navUl = document.getElementById("navUl");
   if (!localStorage.getItem("currentUser")) {
     navUl.innerHTML = `
       <li class="nav-item  mx-1">
@@ -214,8 +225,6 @@ function updateNav() {
 }
 
 function logout() {
-  let allUsers = JSON.parse(localStorage.getItem("allUsers"));
-  currentUserIndex = JSON.parse(localStorage.getItem("currentUserIndex"));
   allUsers[currentUserIndex].isLogin = false;
   localStorage.setItem("allUsers", JSON.stringify(allUsers));
   localStorage.removeItem("currentUser");
@@ -232,7 +241,6 @@ function logout() {
   }, 1000);
 }
 
-// Collect Featured Products in one Array named FeaturedProducts
 function displayAllProducts() {
   let cardFeaturedProduct = "";
   let cardPromotionProduct = "";
@@ -317,6 +325,7 @@ function displayAllProducts() {
 }
 
 function productDetails(i) {
+  allProducts = JSON.parse(localStorage.getItem("allProducts"));
   let newPrice = "";
   if (!allProducts[i].featured) {
     priceAfterPromotion =
@@ -357,7 +366,7 @@ function productDetails(i) {
                   </div>
                 </div>`;
 
-  modalFooter.innerHTML = `<button class="btn w-50 text-capitalize m-auto d-block mt-3" onclick="addToCart(event, ${i})">Add to cart</button>`;
+  // modalFooter.innerHTML = `<button class="btn w-50 text-capitalize m-auto d-block mt-3" onclick="addToCart(event, ${i})">Add to cart</button>`;
 }
 
 function addToCart(event, i) {

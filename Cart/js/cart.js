@@ -1,23 +1,6 @@
 if (!localStorage.getItem("currentUser")) {
   window.location.replace("../index.html");
 } else {
-  let currentUserIndex = 0;
-  let currentUser = {};
-  let allUsers = [];
-  let allProducts;
-  if (localStorage.getItem("allProducts")) {
-    allProducts = JSON.parse(localStorage.getItem("allProducts"));
-  } else {
-    allProducts = [];
-  }
-  if (localStorage.getItem("allUsers")) {
-    allUsers = JSON.parse(localStorage.getItem("allUsers"));
-  }
-
-  if (localStorage.getItem("currentUser")) {
-    currentUser = JSON.parse(localStorage.getItem("currentUser"));
-    currentUserIndex = JSON.parse(localStorage.getItem("currentUserIndex"));
-  }
   let cartBody = document.getElementById("cartBody");
   let modalHeader = document.getElementById("staticBackdropLabel");
   let modalBody = document.getElementById("modalBody");
@@ -25,9 +8,13 @@ if (!localStorage.getItem("currentUser")) {
   let cart = document.getElementById("cart");
   let confirmPaymentButton = document.getElementById("confirmPaymentButton");
 
+  let allProducts = JSON.parse(localStorage.getItem("allProducts")) || [];
+  let currentUserIndex =
+    JSON.parse(localStorage.getItem("currentUserIndex")) || 0;
+  let currentUser = JSON.parse(localStorage.getItem("currentUser")) || {};
+  let allUsers = JSON.parse(localStorage.getItem("allUsers")) || [];
+
   function logout() {
-    let allUsers = JSON.parse(localStorage.getItem("allUsers"));
-    currentUserIndex = JSON.parse(localStorage.getItem("currentUserIndex"));
     allUsers[currentUserIndex].isLogin = false;
     localStorage.setItem("allUsers", JSON.stringify(allUsers));
     localStorage.removeItem("currentUser");
@@ -118,6 +105,7 @@ if (!localStorage.getItem("currentUser")) {
   }
 
   function productDetails(i) {
+    allProducts = JSON.parse(localStorage.getItem("allProducts"));
     let newPrice = "";
     if (!currentUser.cart[i].featured) {
       let priceAfterPromotion =
@@ -147,7 +135,7 @@ if (!localStorage.getItem("currentUser")) {
                       </p>
                       ${newPrice}
                       <p class="my-2 py-2">
-                        <span class="fw-bold">Stock :</span> ${currentUser.cart[i].stock}
+                        <span class="fw-bold">Cart Amount :</span> ${currentUser.cart[i].count}
                       </p>
                       <p class="my-2 py-2">
                         <span class="fw-bold">Seller :</span> ${currentUser.cart[i].seller}

@@ -1,34 +1,18 @@
 if (!localStorage.getItem("currentUser")) {
   window.location.replace("../index.html");
 } else {
-  let allProducts;
-  if (localStorage.getItem("allProducts")) {
-    allProducts = JSON.parse(localStorage.getItem("allProducts"));
-  } else {
-    allProducts = [];
-  }
-  let currentUserIndex = 0;
-  let currentUser = {};
-  let allUsers = [];
-  if (!localStorage.getItem("currentUser")) {
-    allUsers = JSON.parse(localStorage.getItem("allUsers"));
-    currentUser = JSON.parse(localStorage.getItem("currentUser"));
-    currentUserIndex = JSON.parse(localStorage.getItem("currentUserIndex"));
-  }
-  allUsers = JSON.parse(localStorage.getItem("allUsers"));
-  currentUser = JSON.parse(localStorage.getItem("currentUser"));
-  currentUserIndex = JSON.parse(localStorage.getItem("currentUserIndex"));
+  let allProducts = JSON.parse(localStorage.getItem("allProducts")) || [];
+  let currentUserIndex =
+    JSON.parse(localStorage.getItem("currentUserIndex")) || 0;
+  let currentUser = JSON.parse(localStorage.getItem("currentUser")) || {};
+  let allUsers = JSON.parse(localStorage.getItem("allUsers")) || [];
+
   let modalHeader = document.getElementById("staticBackdropLabel");
   let modalBody = document.getElementById("modalBody");
   let modalFooter = document.getElementById("modalFooter");
-  let ourProductsHeader = document.getElementById("ourProductsHeader");
-  let productsContainer = document.getElementById("productsContainer");
-  let floatingInputGroup1 = document.getElementById("floatingInputGroup1");
-  let e = document.getElementById("selectCriteria");
   let cart = document.getElementById("cart");
 
   function logout() {
-    let allUsers = JSON.parse(localStorage.getItem("allUsers"));
     currentUserIndex = JSON.parse(localStorage.getItem("currentUserIndex"));
     allUsers[currentUserIndex].isLogin = false;
     localStorage.setItem("allUsers", JSON.stringify(allUsers));
@@ -47,6 +31,8 @@ if (!localStorage.getItem("currentUser")) {
   }
 
   function productDetails(i) {
+    allProducts = JSON.parse(localStorage.getItem("allProducts"));
+
     let newPrice = "";
     if (!allProducts[i].featured) {
       priceAfterPromotion =
@@ -87,8 +73,9 @@ if (!localStorage.getItem("currentUser")) {
                     </div>
                   </div>`;
 
-    modalFooter.innerHTML = `<button class="btn w-50 text-capitalize m-auto d-block mt-3" onclick="addToCart(event, ${i})">Add to cart</button>`;
+    // modalFooter.innerHTML = `<button class="btn w-50 text-capitalize m-auto d-block mt-3" onclick="addToCart(event, ${i})">Add to cart</button>`;
   }
+
   function addToCart(event, i, cat, body) {
     let productCategory = cat;
     let productsBody = body;
@@ -105,7 +92,7 @@ if (!localStorage.getItem("currentUser")) {
         window.location.replace("Authentication/login.html");
       }, 1000);
     } else {
-      if (allProducts[i].stock >= 1) {
+      if (allProducts[i].stock > 0) {
         Swal.fire({
           position: "top-end",
           icon: "success",

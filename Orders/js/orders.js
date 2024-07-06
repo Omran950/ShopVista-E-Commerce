@@ -2,23 +2,15 @@ if (!localStorage.getItem("currentUser")) {
   window.location.replace("../index.html");
 }
 
-let allUsers = [];
-let allProducts = [];
-let currentUser = {};
-let currentUserIndex = 0;
+let allProducts = JSON.parse(localStorage.getItem("allProducts")) || [];
+let currentUserIndex =
+  JSON.parse(localStorage.getItem("currentUserIndex")) || 0;
+let currentUser = JSON.parse(localStorage.getItem("currentUser")) || {};
+let allUsers = JSON.parse(localStorage.getItem("allUsers")) || [];
 let ordersBody = document.getElementById("ordersBody");
 let modalHeader = document.getElementById("staticBackdropLabel");
 let modalBody = document.getElementById("modalBody");
 let cart = document.getElementById("cart");
-
-if (localStorage.getItem("currentUser")) {
-  currentUser = JSON.parse(localStorage.getItem("currentUser", currentUser));
-  allProducts = JSON.parse(localStorage.getItem("allProducts", allProducts));
-  allUsers = JSON.parse(localStorage.getItem("allUsers", allUsers));
-  currentUserIndex = JSON.parse(
-    localStorage.getItem("currentUserIndex", currentUserIndex)
-  );
-}
 
 function displayCurrentUserOrders() {
   cart.innerHTML = currentUser.cart.length;
@@ -85,7 +77,7 @@ function displayCurrentUserOrders() {
                   product.productName
                 }</h3>
                 ${priceText}
-                <p class="m-0">Count : ${product.count}</p>
+                <p class="m-0">Quantity purchased : ${product.count}</p>
                 <p class="m-0">Total Price : ${totalPrice.toFixed(2)} EGP</p>
               </div>
             </div>
@@ -101,8 +93,6 @@ function displayCurrentUserOrders() {
 }
 
 function logout() {
-  let allUsers = JSON.parse(localStorage.getItem("allUsers"));
-  currentUserIndex = JSON.parse(localStorage.getItem("currentUserIndex"));
   allUsers[currentUserIndex].isLogin = false;
   localStorage.setItem("allUsers", JSON.stringify(allUsers));
   localStorage.removeItem("currentUser");
@@ -120,6 +110,7 @@ function logout() {
 }
 
 function productDetails(i, j) {
+  allProducts = JSON.parse(localStorage.getItem("allProducts"));
   let product = currentUser.orders[i].cart[j];
   let priceAfterPromotion = product.productPrice;
   let promotionText = "";
@@ -155,9 +146,16 @@ function productDetails(i, j) {
                             2
                           )} EGP
                         </p>
+                        <p class="my-2 py-2">
+                          <span class="fw-bold">Total Price :</span> ${
+                            priceAfterPromotion * product.count.toFixed(2)
+                          } EGP
+                        </p>
                         ${promotionText}
                         <p class="my-2 py-2">
-                          <span class="fw-bold">Stock :</span> ${product.stock}
+                          <span class="fw-bold">Quantity purchased :</span> ${
+                            product.count
+                          }
                         </p>
                         <p class="my-2 py-2">
                           <span class="fw-bold">Seller :</span> ${

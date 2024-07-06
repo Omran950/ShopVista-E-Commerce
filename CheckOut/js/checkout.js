@@ -17,9 +17,13 @@ let emailAlert = document.getElementById("email-alert");
 let addressAlert = document.getElementById("address-alert");
 let phoneAlert = document.getElementById("phone-checkout-alert");
 let checkoutBtn = document.getElementById("checkout-btn");
-let currentUser = JSON.parse(localStorage.getItem("currentUser"));
-let allUsers = JSON.parse(localStorage.getItem("allUsers"));
-let currentUserIndex = localStorage.getItem("currentUserIndex");
+
+let allProducts = JSON.parse(localStorage.getItem("allProducts")) || [];
+let currentUserIndex =
+  JSON.parse(localStorage.getItem("currentUserIndex")) || 0;
+let currentUser = JSON.parse(localStorage.getItem("currentUser")) || {};
+let allUsers = JSON.parse(localStorage.getItem("allUsers")) || [];
+
 let orderDetails = {};
 let cart = document.getElementById("cart");
 cart.innerHTML = currentUser.cart.length;

@@ -1,8 +1,15 @@
 document.addEventListener("DOMContentLoaded", function () {
   updateNav();
 });
+
+let allProducts = JSON.parse(localStorage.getItem("allProducts")) || [];
+let currentUserIndex =
+  JSON.parse(localStorage.getItem("currentUserIndex")) || 0;
+let currentUser = JSON.parse(localStorage.getItem("currentUser")) || {};
+let allUsers = JSON.parse(localStorage.getItem("allUsers")) || [];
+let navUl = document.getElementById("navUl");
+
 function updateNav() {
-  let navUl = document.getElementById("navUl");
   if (!localStorage.getItem("currentUser")) {
     navUl.innerHTML = `
         <li class="nav-item  mx-1 ">
@@ -58,8 +65,6 @@ function updateNav() {
 }
 
 function logout() {
-  let allUsers = JSON.parse(localStorage.getItem("allUsers"));
-  currentUserIndex = JSON.parse(localStorage.getItem("currentUserIndex"));
   allUsers[currentUserIndex].isLogin = false;
   localStorage.setItem("allUsers", JSON.stringify(allUsers));
   localStorage.removeItem("currentUser");

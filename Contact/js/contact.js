@@ -10,11 +10,14 @@ let nameAlert = document.getElementById("name-alert");
 let emailAlert = document.getElementById("email-alert");
 let mobileAlert = document.getElementById("mobile-alert");
 let messageAlert = document.getElementById("message-alert");
+let navUl = document.getElementById("navUl");
 
-let allTickets = [];
-if (JSON.parse(localStorage.getItem("allTickets")) != null) {
-  allTickets = JSON.parse(localStorage.getItem("allTickets"));
-}
+let allProducts = JSON.parse(localStorage.getItem("allProducts")) || [];
+let currentUserIndex =
+  JSON.parse(localStorage.getItem("currentUserIndex")) || 0;
+let currentUser = JSON.parse(localStorage.getItem("currentUser")) || {};
+let allUsers = JSON.parse(localStorage.getItem("allUsers")) || [];
+let allTickets = JSON.parse(localStorage.getItem("allTickets")) || [];
 
 document.getElementById("contact-right").addEventListener("click", function () {
   document
@@ -61,7 +64,6 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // Event on inputs
-
 ticketTitle.addEventListener("keyup", function () {
   if (titleValidation()) {
     removeTitleAlert();
@@ -202,8 +204,6 @@ submitTicket.addEventListener("click", function () {
 });
 
 function logout() {
-  let allUsers = JSON.parse(localStorage.getItem("allUsers"));
-  currentUserIndex = JSON.parse(localStorage.getItem("currentUserIndex"));
   allUsers[currentUserIndex].isLogin = false;
   localStorage.setItem("allUsers", JSON.stringify(allUsers));
   localStorage.removeItem("currentUser");
@@ -221,7 +221,6 @@ function logout() {
 }
 
 function updateNav() {
-  let navUl = document.getElementById("navUl");
   if (!localStorage.getItem("currentUser")) {
     navUl.innerHTML = `
         <li class="nav-item  mx-1 ">

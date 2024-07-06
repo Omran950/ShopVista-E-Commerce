@@ -3,15 +3,12 @@ if (!localStorage.getItem("currentUser")) {
   window.location.replace("../index.html");
 }
 
-let allProducts = [];
-if (localStorage.getItem("allProducts")) {
-  allProducts = JSON.parse(localStorage.getItem("allProducts"));
-}
+let allProducts = JSON.parse(localStorage.getItem("allProducts")) || [];
+let currentUserIndex =
+  JSON.parse(localStorage.getItem("currentUserIndex")) || 0;
+let currentUser = JSON.parse(localStorage.getItem("currentUser")) || {};
+let allUsers = JSON.parse(localStorage.getItem("allUsers")) || [];
 
-let currentUser = JSON.parse(localStorage.getItem("currentUser"));
-let allUsers = JSON.parse(localStorage.getItem("allUsers"));
-let currentUserIndex = localStorage.getItem("currentUserIndex");
-currentUserIndex = parseInt(currentUserIndex, 10);
 let currentUserEmail = document.getElementById("sign-email");
 let currentUserName = document.getElementById("sign-name");
 let currentUserAddress = document.getElementById("sign-address");
@@ -49,8 +46,6 @@ newPasswordIcon.addEventListener("click", function (e) {
 });
 
 function logout() {
-  let allUsers = JSON.parse(localStorage.getItem("allUsers"));
-  currentUserIndex = JSON.parse(localStorage.getItem("currentUserIndex"));
   allUsers[currentUserIndex].isLogin = false;
   localStorage.setItem("allUsers", JSON.stringify(allUsers));
   localStorage.removeItem("currentUser");
@@ -67,6 +62,7 @@ function logout() {
   }, 1000);
 }
 
+// Regex
 function nameValidation() {
   let nameRegex = /^[a-zA-Z0-9_-]{3,16}$/;
   return nameRegex.test(currentUserName.value);
@@ -84,6 +80,7 @@ function newPasswordValidation() {
   return passwordRegex.test(newUserPassword.value);
 }
 
+// Alerts
 function addNameAlert() {
   currentUserName.classList.add("is-invalid");
   currentUserName.classList.remove("is-valid");
@@ -125,6 +122,7 @@ function removeNewPasswordAlert() {
   newPasswordAlert.classList.add("d-none");
 }
 
+//INputs keyUp event
 currentUserName.addEventListener("keyup", function () {
   if (nameValidation()) {
     removeNameAlert();
