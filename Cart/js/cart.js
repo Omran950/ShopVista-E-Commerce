@@ -1,18 +1,24 @@
 if (!localStorage.getItem("currentUser")) {
   window.location.replace("../index.html");
 } else {
+  let allProducts = JSON.parse(localStorage.getItem("allProducts")) || [];
+  let currentUserIndex =
+    JSON.parse(localStorage.getItem("currentUserIndex")) || 0;
+  let currentUser = JSON.parse(localStorage.getItem("currentUser")) || {};
+  let allUsers = JSON.parse(localStorage.getItem("allUsers")) || [];
+
+  if (currentUser.role === "seller") {
+    let sellerDashboard = document.getElementById("sellerDashboard");
+    sellerDashboard.innerHTML = `<a class="nav-link" aria-current="page" href="../Seller/seller.html">Dashboard</a>
+    `;
+  }
+
   let cartBody = document.getElementById("cartBody");
   let modalHeader = document.getElementById("staticBackdropLabel");
   let modalBody = document.getElementById("modalBody");
   let totalPrice = document.getElementById("totalPrice");
   let cart = document.getElementById("cart");
   let confirmPaymentButton = document.getElementById("confirmPaymentButton");
-
-  let allProducts = JSON.parse(localStorage.getItem("allProducts")) || [];
-  let currentUserIndex =
-    JSON.parse(localStorage.getItem("currentUserIndex")) || 0;
-  let currentUser = JSON.parse(localStorage.getItem("currentUser")) || {};
-  let allUsers = JSON.parse(localStorage.getItem("allUsers")) || [];
 
   function logout() {
     allUsers[currentUserIndex].isLogin = false;

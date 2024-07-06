@@ -7,9 +7,14 @@ if (!localStorage.getItem("currentUser")) {
   let currentUser = JSON.parse(localStorage.getItem("currentUser")) || {};
   let allUsers = JSON.parse(localStorage.getItem("allUsers")) || [];
 
+  if (currentUser.role === "seller") {
+    let sellerDashboard = document.getElementById("sellerDashboard");
+    sellerDashboard.innerHTML = `<a class="nav-link" aria-current="page" href="../Seller/seller.html">Dashboard</a>
+    `;
+  }
+
   let modalHeader = document.getElementById("staticBackdropLabel");
   let modalBody = document.getElementById("modalBody");
-  let modalFooter = document.getElementById("modalFooter");
   let cart = document.getElementById("cart");
 
   function logout() {
@@ -42,38 +47,36 @@ if (!localStorage.getItem("currentUser")) {
     }
     modalHeader.innerHTML = `${allProducts[i].productName}`;
     modalBody.innerHTML = `<div class="col-md-5">
-                    <figure class="overflow-hidden p-3">
-                      <img
-                        src="../images/Lenovo (2).jpg"
-                        alt="${allProducts[i].productName}"
-                        class="w-100 d-block"
-                      />
-                    </figure>
-                  </div>
-                  <div class="col-md-7">
-                    <div>
-                      <p class="fw-bold my-2 py-2 fs-4">${allProducts[i].productDetails}</p>
-                      <p class="my-2 py-2">
-                        <span class="fw-bold">Category :</span> ${allProducts[i].category}
-                      </p>
-                      <p class="my-2 py-2">
-                        <span class="fw-bold">Price :</span> ${allProducts[i].productPrice} EGP
-                      </p>
-                      ${newPrice}
-                      <p class="my-2 py-2">
-                        <span class="fw-bold">Stock :</span> ${allProducts[i].stock}
-                      </p>
-                      <p class="my-2 py-2">
-                        <span class="fw-bold">Seller :</span> ${allProducts[i].seller}
-                      </p>
-                      <p class="my-2 py-2">
-                        <span class="fw-bold">Rating :</span> ${allProducts[i].rating}
-                        <i class="fa-solid fa-star"></i>
-                      </p>
+                      <figure class="overflow-hidden p-3">
+                        <img
+                          src="../images/Lenovo (2).jpg"
+                          alt="${allProducts[i].productName}"
+                          class="w-100 d-block"
+                        />
+                      </figure>
                     </div>
-                  </div>`;
-
-    // modalFooter.innerHTML = `<button class="btn w-50 text-capitalize m-auto d-block mt-3" onclick="addToCart(event, ${i})">Add to cart</button>`;
+                    <div class="col-md-7">
+                      <div>
+                        <p class="fw-bold my-2 py-2 fs-4">${allProducts[i].productDetails}</p>
+                        <p class="my-2 py-2">
+                          <span class="fw-bold">Category :</span> ${allProducts[i].category}
+                        </p>
+                        <p class="my-2 py-2">
+                          <span class="fw-bold">Price :</span> ${allProducts[i].productPrice} EGP
+                        </p>
+                        ${newPrice}
+                        <p class="my-2 py-2">
+                          <span class="fw-bold">Stock :</span> ${allProducts[i].stock}
+                        </p>
+                        <p class="my-2 py-2">
+                          <span class="fw-bold">Seller :</span> ${allProducts[i].seller}
+                        </p>
+                        <p class="my-2 py-2">
+                          <span class="fw-bold">Rating :</span> ${allProducts[i].rating}
+                          <i class="fa-solid fa-star"></i>
+                        </p>
+                      </div>
+                    </div>`;
   }
 
   function addToCart(event, i, cat, body) {
@@ -161,70 +164,70 @@ if (!localStorage.getItem("currentUser")) {
         if (allProducts[i].stock > 0) {
           if (allProducts[i].featured) {
             products += `<div class="col-sm-6 col-md-4 col-lg-3">
-            <div class="card rounded-3  overflow-hidden">
-            <div class="" onclick="productDetails(${i})" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                <figure class="m-0 p-2">
-                  <img
-                    src="../images/Lenovo (2).jpg"
-                    alt="${allProducts[i].productName}"
-                    class="d-block w-75 m-auto"
-                    style="height: 200px"
-                  />
-                </figure>
-                <div class="text px-2 py-3">
-                  <h6  class="text-center fw-bolder">${
-                    allProducts[i].productName
-                  }</h6>
-                  <p class="">${allProducts[i].productDetails.substring(
-                    0,
-                    50
-                  )}${
+              <div class="card rounded-3  overflow-hidden">
+              <div class="" onclick="productDetails(${i})" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                  <figure class="m-0 p-2">
+                    <img
+                      src="../images/Lenovo (2).jpg"
+                      alt="${allProducts[i].productName}"
+                      class="d-block w-75 m-auto"
+                      style="height: 200px"
+                    />
+                  </figure>
+                  <div class="text px-2 py-3">
+                    <h6  class="text-center fw-bolder">${
+                      allProducts[i].productName
+                    }</h6>
+                    <p class="">${allProducts[i].productDetails.substring(
+                      0,
+                      50
+                    )}${
               allProducts[i].productDetails.length > 50 ? "..." : ""
             }</p>
-                  <p class="text-center" id='price'>Price : ${
-                    allProducts[i].productPrice
-                  } EGP</p>
+                    <p class="text-center" id='price'>Price : ${
+                      allProducts[i].productPrice
+                    } EGP</p>
+                  </div>
                 </div>
-              </div>
-          <button class="btn w-75 text-capitalize m-auto d-block my-3" onclick="addToCart(event, ${i}, '${productCategory}', '${productsBody}')">Add to cart</button>
-              </div>
-            </div>`;
+            <button class="btn w-75 text-capitalize m-auto d-block my-3" onclick="addToCart(event, ${i}, '${productCategory}', '${productsBody}')">Add to cart</button>
+                </div>
+              </div>`;
           } else {
             priceAfterPromotion =
               allProducts[i].productPrice -
               allProducts[i].productPrice * (allProducts[i].promotion / 100);
             products += `<div class="col-sm-6 col-md-4 col-lg-3">
-          <div class="card rounded-3 overflow-hidden">
-    <div class="" onclick="productDetails(${i})" data-bs-toggle="modal"
-    data-bs-target="#staticBackdrop">
-            <figure class="m-0 p-2">
-              <img
-                src="../images/Lenovo (2).jpg"
-                alt="${allProducts[i].productName}"
-                class="d-block w-75 m-auto"
-                style="height: 200px"
-              />
-            </figure>
-            <div class="text px-2 py-3">
-              <h6 class="text-center fw-bolder">${
-                allProducts[i].productName
-              }</h6>
-              <p class="">${allProducts[i].productDetails.substring(0, 50)}${
+            <div class="card rounded-3 overflow-hidden">
+      <div class="" onclick="productDetails(${i})" data-bs-toggle="modal"
+      data-bs-target="#staticBackdrop">
+              <figure class="m-0 p-2">
+                <img
+                  src="../images/Lenovo (2).jpg"
+                  alt="${allProducts[i].productName}"
+                  class="d-block w-75 m-auto"
+                  style="height: 200px"
+                />
+              </figure>
+              <div class="text px-2 py-3">
+                <h6 class="text-center fw-bolder">${
+                  allProducts[i].productName
+                }</h6>
+                <p class="">${allProducts[i].productDetails.substring(0, 50)}${
               allProducts[i].productDetails.length > 50 ? "..." : ""
             }</p>
-              <div class="d-flex justify-content-around">
-              <p class="text-center" id="priceBefore">Price : <span class="text-decoration-line-through">${
-                allProducts[i].productPrice
-              } EGP</span></p>
-              <p class="text-center" id="priceAfter">${priceAfterPromotion.toPrecision(
-                4
-              )} EGP</p>
+                <div class="d-flex justify-content-around">
+                <p class="text-center" id="priceBefore">Price : <span class="text-decoration-line-through">${
+                  allProducts[i].productPrice
+                } EGP</span></p>
+                <p class="text-center" id="priceAfter">${priceAfterPromotion.toPrecision(
+                  4
+                )} EGP</p>
+                </div>
               </div>
             </div>
-          </div>
-          <button class="btn w-75 text-capitalize m-auto d-block my-3" onclick="addToCart(event, ${i}, '${productCategory}', '${productsBody}')">Add to cart</button>
-          </div>
-        </div>`;
+            <button class="btn w-75 text-capitalize m-auto d-block my-3" onclick="addToCart(event, ${i}, '${productCategory}', '${productsBody}')">Add to cart</button>
+            </div>
+          </div>`;
           }
         }
       }

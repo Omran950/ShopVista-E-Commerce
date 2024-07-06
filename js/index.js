@@ -189,8 +189,15 @@ function updateNav() {
         <a class="nav-link" href="Authentication/register.html">Register</a>
       </li>`;
   } else {
+    let sellerDashboard = ``;
     currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    if (currentUser.role === "seller") {
+      sellerDashboard = `<li class="nav-item mx-1 ">
+        <a class="nav-link" aria-current="page" href="Seller/seller.html">Dashboard</a>
+      </li>`;
+    }
     navUl.innerHTML = `
+    ${sellerDashboard}
       <li class="nav-item mx-1 ">
         <a class="nav-link active" aria-current="page" href="index.html">Home</a>
       </li>
