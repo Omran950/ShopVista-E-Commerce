@@ -19,14 +19,14 @@ if (!localStorage.getItem("currentUser")) {
   let cart = document.getElementById("cart");
 
   function displayCurrentUserOrders() {
-    cart.innerHTML = currentUser.cart.length;
+    cart.innerHTML = allUsers[currentUserIndex].cart.length;
     let order = "";
     let product = {};
     let priceAfterPromotion = 0;
     let priceText = "";
     let totalPrice = 0;
     let notes = ``;
-    if (currentUser.orders.length == 0) {
+    if (allUsers[currentUserIndex].orders.length == 0) {
       ordersBody.innerHTML = `<div class="my-5 py-5 text-center shadow rounded-3">
           <h2 class="fs31 mt-3 pt-3 mb-3 pb-2 text-black">No orders found for your account.</h2>
           <button class="btn mb-5">
@@ -34,9 +34,9 @@ if (!localStorage.getItem("currentUser")) {
           </button>
         </div>`;
     } else {
-      for (let i = 0; i < currentUser.orders.length; i++) {
-        if (currentUser.orders[i].shippingDetails.notes) {
-          notes = `<p class="m-0">Notes : <span class="text-success fw-bold">${currentUser.orders[i].shippingDetails.notes}</span></p>`;
+      for (let i = 0; i < allUsers[currentUserIndex].orders.length; i++) {
+        if (allUsers[currentUserIndex].orders[i].shippingDetails.notes) {
+          notes = `<p class="m-0">Notes : <span class="text-success fw-bold">${allUsers[currentUserIndex].orders[i].shippingDetails.notes}</span></p>`;
         }
         order += `<div class="row gy-2 my-3 rounded-3 shadow p-3">
               <div class="col">
@@ -44,21 +44,27 @@ if (!localStorage.getItem("currentUser")) {
                   <h3 class="py-1 my-1">Order ${i + 1}</h3>
                   <p class="my-1">Phone number :
                     <span class="text-success fw-bold">${
-                      currentUser.orders[i].shippingDetails.phone
+                      allUsers[currentUserIndex].orders[i].shippingDetails.phone
                     }</span></p>
                     <p class="my-1">
                     This order is delivered to address : 
                     <span class="text-success fw-bold">${
-                      currentUser.orders[i].shippingDetails.address
+                      allUsers[currentUserIndex].orders[i].shippingDetails
+                        .address
                     }</span></p>
                   <p class="my-1">Payment Method : <span class="text-success fw-bold">Visa</span></p>
                   <p class="my-1">Order Total Price :<span class="text-success fw-bold"> ${
-                    currentUser.orders[i].shippingDetails.totalCartPrice
+                    allUsers[currentUserIndex].orders[i].shippingDetails
+                      .totalCartPrice
                   } EGP</span></p>
                   ${notes}
               <div class="row align-items-center g-4 mt-1">`;
-        for (let j = 0; j < currentUser.orders[i].cart.length; j++) {
-          product = currentUser.orders[i].cart[j];
+        for (
+          let j = 0;
+          j < allUsers[currentUserIndex].orders[i].cart.length;
+          j++
+        ) {
+          product = allUsers[currentUserIndex].orders[i].cart[j];
           priceAfterPromotion = product.productPrice;
           priceText = `<p class="m-0">Price : ${priceAfterPromotion} EGP</p>`;
           totalPrice = product.productPrice * product.count;
@@ -74,9 +80,11 @@ if (!localStorage.getItem("currentUser")) {
           totalPrice = priceAfterPromotion * product.count;
 
           order += `<div class="col-md-3">
-              <div class="text-center shadow rounded-3 p-3 card border-0" onclick="productDetails(${i},${j})" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+              <div class="text-center shadow rounded-3 p-3 card-order border-0" onclick="productDetails(${i},${j})" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                 <figure class="overflow-hidden">
-                  <img src="../images/Lenovo (2).jpg" alt="name" style="width: 100px; height: 100px" />
+                  <img src="${
+                    product.productImage
+                  }" alt="name" style="width: 100px; height: 100px" />
                 </figure>
                 <div>
                   <h3 class="text-success fw-bold m-0 fs-4">${
@@ -117,7 +125,7 @@ if (!localStorage.getItem("currentUser")) {
 
   function productDetails(i, j) {
     allProducts = JSON.parse(localStorage.getItem("allProducts"));
-    let product = currentUser.orders[i].cart[j];
+    let product = allUsers[currentUserIndex].orders[i].cart[j];
     let priceAfterPromotion = product.productPrice;
     let promotionText = "";
 

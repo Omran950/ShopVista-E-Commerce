@@ -106,7 +106,6 @@ if (!localStorage.getItem("currentUser")) {
         allProducts[i].stock--;
         localStorage.setItem("allProducts", JSON.stringify(allProducts));
         allUsers = JSON.parse(localStorage.getItem("allUsers"));
-        currentUser = JSON.parse(localStorage.getItem("currentUser"));
         currentUserIndex = JSON.parse(localStorage.getItem("currentUserIndex"));
 
         // Check product in cart
@@ -143,27 +142,29 @@ if (!localStorage.getItem("currentUser")) {
             allProducts[i].productPrice -
             allProducts[i].productPrice * (allProducts[i].promotion / 100);
           allUsers[currentUserIndex].totalCartPrice += priceAfterPromotion;
-          currentUser.totalCartPrice += priceAfterPromotion;
         }
-        currentUser = allUsers[currentUserIndex];
         localStorage.setItem("allUsers", JSON.stringify(allUsers));
-        localStorage.setItem("currentUser", JSON.stringify(currentUser));
+        localStorage.setItem(
+          "currentUser",
+          JSON.stringify(allUsers[currentUserIndex])
+        );
         searchByCategory(productCategory, productsBody);
       }
     }
-    cart.innerHTML = currentUser.cart.length;
+    cart.innerHTML = allUsers[currentUserIndex].cart.length;
   }
 
   function searchByCategory(cat, body) {
-    cart.innerHTML = currentUser.cart.length;
+    cart.innerHTML = allUsers[currentUserIndex].cart.length;
     let products = "";
     let productCategory = cat;
     let productsBody = body;
     for (let i = 0; i < allProducts.length; i++) {
       if (allProducts[i].category == cat || cat == "all") {
-        if (allProducts[i].stock > 0) {
-          if (allProducts[i].featured) {
-            products += `<div class="col-sm-6 col-md-4 col-lg-3">
+        if (!allProducts[i].pending) {
+          if (allProducts[i].stock > 0) {
+            if (allProducts[i].featured) {
+              products += `<div class="col-sm-6 col-md-4 col-lg-3">
               <div class="card rounded-3  overflow-hidden">
               <div class="" onclick="productDetails(${i})" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                   <figure class="m-0 p-2">
@@ -180,10 +181,10 @@ if (!localStorage.getItem("currentUser")) {
                     }</h6>
                     <p class="">${allProducts[i].productDetails.substring(
                       0,
-                      50
+                      40
                     )}${
-              allProducts[i].productDetails.length > 50 ? "..." : ""
-            }</p>
+                allProducts[i].productDetails.length > 50 ? "..." : ""
+              }</p>
                     <p class="text-center" id='price'>Price : ${
                       allProducts[i].productPrice
                     } EGP</p>
@@ -192,11 +193,11 @@ if (!localStorage.getItem("currentUser")) {
             <button class="btn w-75 text-capitalize m-auto d-block my-3" onclick="addToCart(event, ${i}, '${productCategory}', '${productsBody}')">Add to cart</button>
                 </div>
               </div>`;
-          } else {
-            priceAfterPromotion =
-              allProducts[i].productPrice -
-              allProducts[i].productPrice * (allProducts[i].promotion / 100);
-            products += `<div class="col-sm-6 col-md-4 col-lg-3">
+            } else {
+              priceAfterPromotion =
+                allProducts[i].productPrice -
+                allProducts[i].productPrice * (allProducts[i].promotion / 100);
+              products += `<div class="col-sm-6 col-md-4 col-lg-3">
             <div class="card rounded-3 overflow-hidden">
       <div class="" onclick="productDetails(${i})" data-bs-toggle="modal"
       data-bs-target="#staticBackdrop">
@@ -212,9 +213,9 @@ if (!localStorage.getItem("currentUser")) {
                 <h6 class="text-center fw-bolder">${
                   allProducts[i].productName
                 }</h6>
-                <p class="">${allProducts[i].productDetails.substring(0, 50)}${
-              allProducts[i].productDetails.length > 50 ? "..." : ""
-            }</p>
+                <p class="">${allProducts[i].productDetails.substring(0, 40)}${
+                allProducts[i].productDetails.length > 50 ? "..." : ""
+              }</p>
                 <div class="d-flex justify-content-around">
                 <p class="text-center" id="priceBefore">Price : <span class="text-decoration-line-through">${
                   allProducts[i].productPrice
@@ -226,6 +227,7 @@ if (!localStorage.getItem("currentUser")) {
             <button class="btn w-75 text-capitalize m-auto d-block my-3" onclick="addToCart(event, ${i}, '${productCategory}', '${productsBody}')">Add to cart</button>
             </div>
           </div>`;
+            }
           }
         }
       }

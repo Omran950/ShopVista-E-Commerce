@@ -38,9 +38,9 @@ if (!localStorage.getItem("currentUser")) {
   }
 
   function displayCurrentUserCart() {
-    cart.innerHTML = currentUser.cart.length;
-    totalPrice.innerHTML = `Total cart price : ${currentUser.totalCartPrice} EGP`;
-    if (currentUser.cart.length == 0) {
+    cart.innerHTML = allUsers[currentUserIndex].cart.length;
+    totalPrice.innerHTML = `Total cart price : ${allUsers[currentUserIndex].totalCartPrice} EGP`;
+    if (allUsers[currentUserIndex].cart.length == 0) {
       cartBody.innerHTML = `<div class="my-5 py-5 text-center shadow rounded-3">
   <h2 class="fs-1 mt-5 pt-5 mb-3 pb-2 text-black">Cart Empty</h2>
   <button class="btn mb-5">
@@ -54,19 +54,21 @@ if (!localStorage.getItem("currentUser")) {
       confirmPaymentButton.disabled = false;
       let newPrice = "";
       let cartProducts = "";
-      for (let i = 0; i < currentUser.cart.length; i++) {
+      for (let i = 0; i < allUsers[currentUserIndex].cart.length; i++) {
         newPrice = "";
-        if (!currentUser.cart[i].featured) {
+        if (!allUsers[currentUserIndex].cart[i].featured) {
           let priceAfterPromotion =
-            currentUser.cart[i].productPrice -
-            currentUser.cart[i].productPrice *
-              (currentUser.cart[i].promotion / 100);
+            allUsers[currentUserIndex].cart[i].productPrice -
+            allUsers[currentUserIndex].cart[i].productPrice *
+              (allUsers[currentUserIndex].cart[i].promotion / 100);
           newPrice = `<p class="py-1" id="priceAfter"><span class="fw-bold text-">After Discount :</span> ${priceAfterPromotion} EGP</p>`;
         }
-        let disableMinus = currentUser.cart[i].count === 1 ? "disabled" : "";
+        let disableMinus =
+          allUsers[currentUserIndex].cart[i].count === 1 ? "disabled" : "";
         let disablePlus =
           allProducts.find(
-            (product) => product.productID === currentUser.cart[i].productID
+            (product) =>
+              product.productID === allUsers[currentUserIndex].cart[i].productID
           ).stock === 0
             ? "disabled"
             : "";
@@ -76,16 +78,16 @@ if (!localStorage.getItem("currentUser")) {
             <div class="col-3">
               <figure class="overflow-hidden" onclick="productDetails(${i})" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                 <img
-                  src="${currentUser.cart[i].productImage}"
-                  alt="${currentUser.cart[i].productName}"
+                  src="${allUsers[currentUserIndex].cart[i].productImage}"
+                  alt="${allUsers[currentUserIndex].cart[i].productName}"
                   class="w-75 d-block m-auto"
                 />
               </figure>
             </div>
             <div class="col-6">
               <div>
-                <h3>${currentUser.cart[i].productName}</h3>
-                <p class="mb-1">Price : ${currentUser.cart[i].productPrice} EGP</p>
+                <h3>${allUsers[currentUserIndex].cart[i].productName}</h3>
+                <p class="mb-1">Price : ${allUsers[currentUserIndex].cart[i].productPrice} EGP</p>
                 ${newPrice}
                 <button class="btn btn-danger py-1" onclick="removeProduct(${i})">
                   <i class="fa-solid fa-trash-can me-1 text-white"></i> Remove
@@ -95,7 +97,7 @@ if (!localStorage.getItem("currentUser")) {
             <div class="col-3">
               <div class="d-flex align-items-center justify-content-center gap-2">
                 <button class="btn btn-outline-success py-1" ${disableMinus} onclick="removeProductCounter(${i})">-</button>
-                <p class="mb-0">${currentUser.cart[i].count}</p>
+                <p class="mb-0">${allUsers[currentUserIndex].cart[i].count}</p>
                 <button class="btn btn-outline-success py-1" ${disablePlus} onclick="addProductCounter(${i})">+</button>
               </div>
             </div>
@@ -113,41 +115,41 @@ if (!localStorage.getItem("currentUser")) {
   function productDetails(i) {
     allProducts = JSON.parse(localStorage.getItem("allProducts"));
     let newPrice = "";
-    if (!currentUser.cart[i].featured) {
+    if (!allUsers[currentUserIndex].cart[i].featured) {
       let priceAfterPromotion =
-        currentUser.cart[i].productPrice -
-        currentUser.cart[i].productPrice *
-          (currentUser.cart[i].promotion / 100);
+        allUsers[currentUserIndex].cart[i].productPrice -
+        allUsers[currentUserIndex].cart[i].productPrice *
+          (allUsers[currentUserIndex].cart[i].promotion / 100);
       newPrice = `<p class="my-2 py-2" id="priceAfter"><span class="fw-bold text-">After Discount :</span> ${priceAfterPromotion} EGP</p>`;
     }
-    modalHeader.innerHTML = `${currentUser.cart[i].productName}`;
+    modalHeader.innerHTML = `${allUsers[currentUserIndex].cart[i].productName}`;
     modalBody.innerHTML = `<div class="col-md-5">
                     <figure class="overflow-hidden p-3">
                       <img
-                        src="${currentUser.cart[i].productImage}"
-                        alt="${currentUser.cart[i].productName}"
+                        src="${allUsers[currentUserIndex].cart[i].productImage}"
+                        alt="${allUsers[currentUserIndex].cart[i].productName}"
                         class="w-100 d-block"
                       />
                     </figure>
                   </div>
                   <div class="col-md-7">
                     <div>
-                      <p class="fw-bold my-2 py-2 fs-4">${currentUser.cart[i].productDetails}</p>
+                      <p class="fw-bold my-2 py-2 fs-4">${allUsers[currentUserIndex].cart[i].productDetails}</p>
                       <p class="my-2 py-2">
-                        <span class="fw-bold">Category :</span> ${currentUser.cart[i].category}
+                        <span class="fw-bold">Category :</span> ${allUsers[currentUserIndex].cart[i].category}
                       </p>
                       <p class="my-2 py-2">
-                        <span class="fw-bold">Price :</span> ${currentUser.cart[i].productPrice} EGP
+                        <span class="fw-bold">Price :</span> ${allUsers[currentUserIndex].cart[i].productPrice} EGP
                       </p>
                       ${newPrice}
                       <p class="my-2 py-2">
-                        <span class="fw-bold">Cart Amount :</span> ${currentUser.cart[i].count}
+                        <span class="fw-bold">Cart Amount :</span> ${allUsers[currentUserIndex].cart[i].count}
                       </p>
                       <p class="my-2 py-2">
-                        <span class="fw-bold">Seller :</span> ${currentUser.cart[i].seller}
+                        <span class="fw-bold">Seller :</span> ${allUsers[currentUserIndex].cart[i].seller}
                       </p>
                       <p class="my-2 py-2">
-                        <span class="fw-bold">Rating :</span> ${currentUser.cart[i].rating}
+                        <span class="fw-bold">Rating :</span> ${allUsers[currentUserIndex].cart[i].rating}
                         <i class="fa-solid fa-star"></i>
                       </p>
                     </div>
@@ -174,10 +176,14 @@ if (!localStorage.getItem("currentUser")) {
       })
       .then((result) => {
         if (result.isConfirmed) {
-          for (let i = 0; i < currentUser.cart.length; i++) {
+          for (let i = 0; i < allUsers[currentUserIndex].cart.length; i++) {
             for (let j = 0; j < allProducts.length; j++) {
-              if (currentUser.cart[i].productID == allProducts[j].productID) {
-                allProducts[j].stock += currentUser.cart[i].count;
+              if (
+                allUsers[currentUserIndex].cart[i].productID ==
+                allProducts[j].productID
+              ) {
+                allProducts[j].stock +=
+                  allUsers[currentUserIndex].cart[i].count;
                 localStorage.setItem(
                   "allProducts",
                   JSON.stringify(allProducts)
@@ -186,11 +192,10 @@ if (!localStorage.getItem("currentUser")) {
             }
           }
 
-          currentUser.cart = [];
-          currentUser.totalCartPrice = 0;
+          allUsers[currentUserIndex].cart = [];
+          allUsers[currentUserIndex].totalCartPrice = 0;
           allUsers[currentUserIndex].totalCartPrice = 0;
           allUsers[currentUserIndex].cart = [];
-          localStorage.setItem("currentUser", JSON.stringify(currentUser));
           localStorage.setItem("allUsers", JSON.stringify(allUsers));
           displayCurrentUserCart();
         } else if (result.dismiss === Swal.DismissReason.cancel) {
@@ -223,30 +228,36 @@ if (!localStorage.getItem("currentUser")) {
       .then((result) => {
         if (result.isConfirmed) {
           for (let j = 0; j < allProducts.length; j++) {
-            if (currentUser.cart[i].productID == allProducts[j].productID) {
-              allProducts[j].stock += currentUser.cart[i].count;
+            if (
+              allUsers[currentUserIndex].cart[i].productID ==
+              allProducts[j].productID
+            ) {
+              allProducts[j].stock += allUsers[currentUserIndex].cart[i].count;
               localStorage.setItem("allProducts", JSON.stringify(allProducts));
+              localStorage.setItem(
+                "currentUser",
+                JSON.stringify(allProducts[currentUserIndex])
+              );
             }
           }
-          if (currentUser.cart[i].featured) {
-            currentUser.totalCartPrice -=
-              currentUser.cart[i].productPrice * currentUser.cart[i].count;
+          if (allUsers[currentUserIndex].cart[i].featured) {
             allUsers[currentUserIndex].totalCartPrice -=
-              currentUser.cart[i].productPrice * currentUser.cart[i].count;
+              allUsers[currentUserIndex].cart[i].productPrice *
+              allUsers[currentUserIndex].cart[i].count;
           } else {
             let priceAfterPromotion =
-              currentUser.cart[i].productPrice -
-              currentUser.cart[i].productPrice *
-                (currentUser.cart[i].promotion / 100);
-            currentUser.totalCartPrice -=
-              priceAfterPromotion * currentUser.cart[i].count;
+              allUsers[currentUserIndex].cart[i].productPrice -
+              allUsers[currentUserIndex].cart[i].productPrice *
+                (allUsers[currentUserIndex].cart[i].promotion / 100);
             allUsers[currentUserIndex].totalCartPrice -=
-              priceAfterPromotion * currentUser.cart[i].count;
+              priceAfterPromotion * allUsers[currentUserIndex].cart[i].count;
           }
-          currentUser.cart.splice(i, 1);
           allUsers[currentUserIndex].cart.splice(i, 1);
-          localStorage.setItem("currentUser", JSON.stringify(currentUser));
           localStorage.setItem("allUsers", JSON.stringify(allUsers));
+          localStorage.setItem(
+            "currentUser",
+            JSON.stringify(allUsers[currentUserIndex])
+          );
           displayCurrentUserCart();
         } else if (result.dismiss === Swal.DismissReason.cancel) {
           swalWithBootstrapButtons.fire({
@@ -259,27 +270,29 @@ if (!localStorage.getItem("currentUser")) {
 
   function addProductCounter(i) {
     for (let j = 0; j < allProducts.length; j++) {
-      if (currentUser.cart[i].productID == allProducts[j].productID) {
+      if (
+        allUsers[currentUserIndex].cart[i].productID == allProducts[j].productID
+      ) {
         if (allProducts[j].stock > 0) {
           allProducts[j].stock -= 1;
           localStorage.setItem("allProducts", JSON.stringify(allProducts));
           allUsers[currentUserIndex].cart[i].count += 1;
-          currentUser.cart[i].count += 1;
-          if (currentUser.cart[i].featured) {
-            currentUser.totalCartPrice += currentUser.cart[i].productPrice;
+          if (allUsers[currentUserIndex].cart[i].featured) {
             allUsers[currentUserIndex].totalCartPrice +=
-              currentUser.cart[i].productPrice;
+              allUsers[currentUserIndex].cart[i].productPrice;
           } else {
             let priceAfterPromotion =
-              currentUser.cart[i].productPrice -
-              currentUser.cart[i].productPrice *
-                (currentUser.cart[i].promotion / 100);
-            currentUser.totalCartPrice += priceAfterPromotion;
+              allUsers[currentUserIndex].cart[i].productPrice -
+              allUsers[currentUserIndex].cart[i].productPrice *
+                (allUsers[currentUserIndex].cart[i].promotion / 100);
             allUsers[currentUserIndex].totalCartPrice += priceAfterPromotion;
           }
 
           localStorage.setItem("allUsers", JSON.stringify(allUsers));
-          localStorage.setItem("currentUser", JSON.stringify(currentUser));
+          localStorage.setItem(
+            "currentUser",
+            JSON.stringify(allUsers[currentUserIndex])
+          );
           displayCurrentUserCart();
 
           Swal.fire({
@@ -297,28 +310,30 @@ if (!localStorage.getItem("currentUser")) {
 
   function removeProductCounter(i) {
     for (let j = 0; j < allProducts.length; j++) {
-      if (currentUser.cart[i].productID == allProducts[j].productID) {
-        if (currentUser.cart[i].count > 1) {
+      if (
+        allUsers[currentUserIndex].cart[i].productID == allProducts[j].productID
+      ) {
+        if (allUsers[currentUserIndex].cart[i].count > 1) {
           allProducts[j].stock += 1;
           localStorage.setItem("allProducts", JSON.stringify(allProducts));
           allUsers[currentUserIndex].cart[i].count -= 1;
-          currentUser.cart[i].count -= 1;
 
-          if (currentUser.cart[i].featured) {
-            currentUser.totalCartPrice -= currentUser.cart[i].productPrice;
+          if (allUsers[currentUserIndex].cart[i].featured) {
             allUsers[currentUserIndex].totalCartPrice -=
-              currentUser.cart[i].productPrice;
+              allUsers[currentUserIndex].cart[i].productPrice;
           } else {
             let priceAfterPromotion =
-              currentUser.cart[i].productPrice -
-              currentUser.cart[i].productPrice *
-                (currentUser.cart[i].promotion / 100);
-            currentUser.totalCartPrice -= priceAfterPromotion;
+              allUsers[currentUserIndex].cart[i].productPrice -
+              allUsers[currentUserIndex].cart[i].productPrice *
+                (allUsers[currentUserIndex].cart[i].promotion / 100);
             allUsers[currentUserIndex].totalCartPrice -= priceAfterPromotion;
           }
 
           localStorage.setItem("allUsers", JSON.stringify(allUsers));
-          localStorage.setItem("currentUser", JSON.stringify(currentUser));
+          localStorage.setItem(
+            "currentUser",
+            JSON.stringify(allUsers[currentUserIndex])
+          );
           displayCurrentUserCart();
 
           Swal.fire({

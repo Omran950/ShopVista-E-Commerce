@@ -16,6 +16,7 @@ if (!localStorage.getItem("currentUser")) {
     let myProductsDiv = document.getElementById("myProductsDiv");
     let soldProductsDiv = document.getElementById("soldProductsDiv");
     let salesAnalyticsDiv = document.getElementById("salesAnalyticsDiv");
+    let tbody = document.getElementById("tbody");
 
     function getSoldProducts() {
       cart.innerHTML = currentUser.cart.length;
@@ -24,18 +25,26 @@ if (!localStorage.getItem("currentUser")) {
         for (let j = 0; j < allUsers[i].orders.length; j++) {
           for (let k = 0; k < allUsers[i].orders[j].cart.length; k++) {
             if (allUsers[i].orders[j].cart[k].sellerID == currentUser.email) {
-              console.log(
-                allUsers[i].orders[j].cart[k].productName,
-                allUsers[i].orders[j].cart[k].sellerID,
-                allUsers[i]
-              );
-              product += `<div class="col"><div class="p-2 my-2 rounded-3 shadow"></div></div>`;
+              product += `<tr class="text-center fs-6">
+                <td>${allUsers[i].orders[j].cart[k].productName}</td>
+                <td><img src="${allUsers[i].orders[j].cart[k].productImage}" alt="${allUsers[i].orders[j].cart[k].productName}" class="table-img" style="width: 50px;"></td>
+                <td>${allUsers[i].orders[j].cart[k].category}</td>
+                <td>${allUsers[i].orders[j].cart[k].productPrice} EGP</td>
+                <td>${allUsers[i].orders[j].cart[k].promotion}%</td>
+                <td>${allUsers[i].orders[j].cart[k].count}</td>
+                <td>${allUsers[i].name}</td>
+                <td>${allUsers[i].email}</td>
+                <td>${allUsers[i].orders[j].shippingDetails.phone}</td>
+                <td>${allUsers[i].orders[j].shippingDetails.address}</td>
+              </tr>`;
             }
           }
         }
       }
-      soldProductsDiv.innerHTML = `<img src="../images/no-products.jpg" alt="no-products" class="w-50 m-auto d-block" />`;
-      soldProductsDiv.innerHTML = product;
+      if (product === ``) {
+        product = `<tr><td colspan="10" rowspan="3" class="text-center py-5"><h2 class="fs-1 fw-bolder py-5">No products found</h2></td></tr>`;
+      }
+      tbody.innerHTML = product;
     }
 
     function logout() {
@@ -312,6 +321,9 @@ function displayProducts() {
             </tr>
         `;
   }
+  if (trs == "") {
+    trs = `<tr><td colspan="10" rowspan="3" class="text-center py-5"><h2 class="fs-1 fw-bolder py-5">No products found</h2></td></tr>`;
+  }
   tableBody.innerHTML = trs;
 }
 
@@ -350,19 +362,19 @@ function deleteRow(productID) {
           allIndex = j;
         }
       }
-      if (allUsers[i].cart[cartProductIndex].featured) {
-        allUsers[i].totalCartPrice -=
-          allUsers[i].cart[cartProductIndex].count *
-          allUsers[i].cart[cartProductIndex].productPrice;
-      } else {
-        let priceAfterPromotion =
-          allProducts[i].cart[cartProductIndex].productPrice -
-          allProducts[i].cart[cartProductIndex].productPrice *
-            (allProducts[i].promotion / 100);
+      // if (allUsers[i].cart[cartProductIndex].featured) {
+      //   allUsers[i].totalCartPrice -=
+      //     allUsers[i].cart[cartProductIndex].count *
+      //     allUsers[i].cart[cartProductIndex].productPrice;
+      // } else {
+      //   let priceAfterPromotion =
+      //     allProducts[i].cart[cartProductIndex].productPrice -
+      //     allProducts[i].cart[cartProductIndex].productPrice *
+      //       (allProducts[i].promotion / 100);
 
-        allUsers[i].totalCartPrice -=
-          allUsers[i].cart[cartProductIndex].count * priceAfterPromotion;
-      }
+      //   allUsers[i].totalCartPrice -=
+      //     allUsers[i].cart[cartProductIndex].count * priceAfterPromotion;
+      // }
       allUsers[i].cart.splice(cartProductIndex, 1);
     }
   }
