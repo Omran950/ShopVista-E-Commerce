@@ -11,7 +11,7 @@ if (!localStorage.getItem("currentUser")) {
     window.location.replace("../index.html");
   } else {
     let cart = document.getElementById("cart");
-    cart.innerHTML = currentUser.cart.length;
+    cart.innerHTML = allUsers[currentUserIndex].cart.length;
 
     let myProductsDiv = document.getElementById("myProductsDiv");
     let soldProductsDiv = document.getElementById("soldProductsDiv");
@@ -82,14 +82,15 @@ let promotionAlert = document.getElementById("promotion-alert");
 let detailsAlert = document.getElementById("details-alert");
 
 let currentUser = JSON.parse(localStorage.getItem("currentUser"));
-
+let currentUserIndex =
+  JSON.parse(localStorage.getItem("currentUserIndex")) || 0;
 let allUsers = JSON.parse(localStorage.getItem("allUsers"));
 
 let allProducts = [];
 if (localStorage.getItem("allProducts")) {
   allProducts = JSON.parse(localStorage.getItem("allProducts"));
 }
-let productIdToEdit = null;
+let existingProduct = null;
 
 categorySelected.addEventListener("change", function () {
   let category = categorySelected.value;
@@ -245,7 +246,9 @@ function generateUUID() {
 }
 
 function generateRandomRating() {
-  return Math.floor(Math.random() * 6);
+  const ratings = [1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5];
+  const randomIndex = Math.floor(Math.random() * ratings.length);
+  return ratings[randomIndex];
 }
 
 addProduct.addEventListener("click", function () {
@@ -266,7 +269,8 @@ addProduct.addEventListener("click", function () {
     sellerID: currentUser.email,
     promotion: Number(promotion.value),
     featured: featured,
-    productID: productIdToEdit || generateUUID(),
+    productID: existingProduct || generateUUID(),
+    pending: false,
   };
   if (
     productNameValidation() &&
@@ -274,9 +278,27 @@ addProduct.addEventListener("click", function () {
     productImageValidation() &&
     productDetailsValidation()
   ) {
-    if (productIdToEdit) {
-      let index = allProducts.findIndex((p) => p.productID === productIdToEdit);
+    if (existingProduct) {
+      let index = allProducts.findIndex((p) => p.productID === existingProduct);
+      product.rating = allProducts[index].rating;
       allProducts[index] = product;
+      allUsers.forEach((user) => {
+        user.cart.forEach((cartProduct) => {
+          if (cartProduct.productID === existingProduct) {
+            cartProduct.productName = product.productName;
+            cartProduct.productPrice = product.productPrice;
+            cartProduct.productImage = product.productImage;
+            cartProduct.productDetails = product.productDetails;
+            cartProduct.category = product.category;
+            cartProduct.stock = product.stock;
+            cartProduct.promotion = product.promotion;
+            cartProduct.featured = product.featured;
+          }
+          recalcTotalCartPrice(user);
+        });
+      });
+      localStorage.setItem("allUsers", JSON.stringify(allUsers));
+
       swal("", "Product Updated", "success");
     } else {
       allProducts.push(product);
@@ -284,11 +306,8 @@ addProduct.addEventListener("click", function () {
     }
     localStorage.setItem("allProducts", JSON.stringify(allProducts));
     clearInputs();
-    productIdToEdit = null;
+    existingProduct = null;
     displayProducts();
-    setTimeout(() => {
-      window.location.replace("seller.html");
-    }, 1000);
   } else if (!productNameValidation()) {
     addProductNameAlert();
   } else if (!productPriceValidation()) {
@@ -303,9 +322,16 @@ addProduct.addEventListener("click", function () {
 let tableBody = document.getElementById("productsTableBody");
 
 function displayProducts() {
-  trs = "";
+  let trs = "";
   for (let i = 0; i < allProducts.length; i++) {
-    trs += `
+    let state = "";
+    if (allProducts[i].pending == true) {
+      state = "Pending";
+    } else {
+      state = "Approved";
+    }
+    if (allProducts[i].sellerID === currentUser.email) {
+      trs += `
             <tr class="text-center">
                 <td>${allProducts[i].productName}</td>
                 <td>${allProducts[i].productPrice}</td>
@@ -314,14 +340,16 @@ function displayProducts() {
                 <td>${allProducts[i].category}</td>
                 <td>${allProducts[i].stock}</td>
                 <td>${allProducts[i].promotion}%</td>
+                <td>${state}</td>
                 <td class="text-center">
-                    <button type="button" class="btn btn-sm update-btn" data-product-id="${allProducts[i].productID}">Update</button>
-                     <td class="text-center">
- <button type="button" class="btn btn-sm delete-btn" data-product-id="${allProducts[i].productID}">Delete</button></td>
-            </tr>
+                    <button type="button" class="btn btn-sm update-btn" data-product-id="${allProducts[i].productID}">Update</button></td>
+                <td class="text-center">
+                    <button type="button" class="btn btn-sm delete-btn" data-product-id="${allProducts[i].productID}">Delete</button></td>
+        </tr>
         `;
+    }
   }
-  if (trs == "") {
+  if (trs == ``) {
     trs = `<tr><td colspan="10" rowspan="3" class="text-center py-5"><h2 class="fs-1 fw-bolder py-5">No products found</h2></td></tr>`;
   }
   tableBody.innerHTML = trs;
@@ -329,10 +357,21 @@ function displayProducts() {
 
 displayProducts();
 
+function recalcTotalCartPrice(user) {
+  user.totalCartPrice = user.cart.reduce((total, cartProduct) => {
+    let priceAfterPromotion = cartProduct.featured
+      ? cartProduct.productPrice
+      : cartProduct.productPrice -
+        cartProduct.productPrice * (cartProduct.promotion / 100);
+    return total + cartProduct.count * priceAfterPromotion;
+  }, 0);
+}
+
 document.addEventListener("click", function (event) {
   if (event.target.classList.contains("update-btn")) {
     let productID = event.target.getAttribute("data-product-id");
     updateRow(productID);
+    document.getElementById("add-product").innerHTML = "Save changes";
   } else if (event.target.classList.contains("delete-btn")) {
     let productID = event.target.getAttribute("data-product-id");
     deleteRow(productID);
@@ -341,6 +380,7 @@ document.addEventListener("click", function (event) {
 
 function updateRow(productID) {
   let productToUpdate = allProducts.find((p) => p.productID === productID);
+
   if (productToUpdate) {
     productName.value = productToUpdate.productName;
     productPrice.value = productToUpdate.productPrice;
@@ -349,41 +389,39 @@ function updateRow(productID) {
     categorySelected.value = productToUpdate.category;
     stock.value = productToUpdate.stock;
     promotion.value = productToUpdate.promotion;
-    productIdToEdit = productID;
+    existingProduct = productID;
   }
 }
 
 function deleteRow(productID) {
-  let cartProductIndex = 0;
-  for (let i = 0; i < allUsers.length; i++) {
-    if (allUsers[i].cart.length > 0) {
-      for (let j = 0; j < allUsers[i].cart.length; j++) {
-        if (allUsers[i].cart[j].productID == productID) {
-          allIndex = j;
-        }
-      }
-      // if (allUsers[i].cart[cartProductIndex].featured) {
-      //   allUsers[i].totalCartPrice -=
-      //     allUsers[i].cart[cartProductIndex].count *
-      //     allUsers[i].cart[cartProductIndex].productPrice;
-      // } else {
-      //   let priceAfterPromotion =
-      //     allProducts[i].cart[cartProductIndex].productPrice -
-      //     allProducts[i].cart[cartProductIndex].productPrice *
-      //       (allProducts[i].promotion / 100);
+  allUsers.forEach((user) => {
+    let productIndex = user.cart.findIndex(
+      (cartProduct) => cartProduct.productID === productID
+    );
 
-      //   allUsers[i].totalCartPrice -=
-      //     allUsers[i].cart[cartProductIndex].count * priceAfterPromotion;
-      // }
-      allUsers[i].cart.splice(cartProductIndex, 1);
+    if (productIndex !== -1) {
+      let cartProduct = user.cart[productIndex];
+      let priceAfterPromotion = cartProduct.featured
+        ? cartProduct.productPrice
+        : cartProduct.productPrice -
+          cartProduct.productPrice * (cartProduct.promotion / 100);
+
+      user.totalCartPrice -= cartProduct.count * priceAfterPromotion;
+
+      user.cart.splice(productIndex, 1);
+      cart.innerHTML = allUsers[currentUserIndex].cart.length;
+
+      recalcTotalCartPrice(user);
     }
-  }
+  });
+
   localStorage.setItem("allUsers", JSON.stringify(allUsers));
-  allProducts.splice(
-    allProducts.findIndex((p) => p.productID === productID),
-    1
+
+  allProducts = allProducts.filter(
+    (product) => product.productID !== productID
   );
   localStorage.setItem("allProducts", JSON.stringify(allProducts));
+
   displayProducts();
 }
 
