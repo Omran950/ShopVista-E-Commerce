@@ -49,7 +49,7 @@ if (localStorage.getItem("allProducts")) {
       promotion: 10,
       featured: false,
       productID: "b1d1f69a-01c5-4e68-b1c8-9e1bf9m9d53f",
-      sellerID: "admin1122@shopvista.com",
+      sellerID: "shopVista",
       pending: false,
     },
     {
@@ -66,7 +66,7 @@ if (localStorage.getItem("allProducts")) {
       promotion: 0,
       featured: true,
       productID: "b2d1f69b-02c5-4e69-b2c8-9e1bf9m9d53f",
-      sellerID: "admin1122@shopvista.com",
+      sellerID: "shopVista",
       pending: false,
     },
     {
@@ -83,7 +83,7 @@ if (localStorage.getItem("allProducts")) {
       promotion: 0,
       featured: true,
       productID: "b3d1f69c-03c5-4e70-b3c8-9e1bf9m9d53f",
-      sellerID: "admin1122@shopvista.com",
+      sellerID: "shopVista",
       pending: false,
     },
     {
@@ -100,7 +100,7 @@ if (localStorage.getItem("allProducts")) {
       promotion: 0,
       featured: true,
       productID: "b4d1f69d-04c5-4e71-b4c8-9e1bf9m9d53f",
-      sellerID: "admin1122@shopvista.com",
+      sellerID: "shopVista",
       pending: false,
     },
     {
@@ -116,7 +116,7 @@ if (localStorage.getItem("allProducts")) {
       promotion: 15,
       featured: false,
       productID: "b5d1f69e-05c5-4e72-b5c8-9e1bf9m9d53f",
-      sellerID: "admin1122@shopvista.com",
+      sellerID: "shopVista",
       pending: false,
     },
     {
@@ -133,7 +133,7 @@ if (localStorage.getItem("allProducts")) {
       promotion: 15,
       featured: false,
       productID: "e1d1f69a-06c5-4e73-e1c8-9e1bf9m9d53f",
-      sellerID: "admin1122@shopvista.com",
+      sellerID: "shopVista",
       pending: false,
     },
     {
@@ -150,7 +150,7 @@ if (localStorage.getItem("allProducts")) {
       promotion: 0,
       featured: true,
       productID: "e2d1f69b-07c5-4e74-e2c8-9e1bf9m9d53f",
-      sellerID: "admin1122@shopvista.com",
+      sellerID: "shopVista",
       pending: false,
     },
     {
@@ -167,7 +167,7 @@ if (localStorage.getItem("allProducts")) {
       promotion: 5,
       featured: false,
       productID: "e3d1f69c-08c5-4e75-e3c8-9e1bf9m9d53f",
-      sellerID: "admin1122@shopvista.com",
+      sellerID: "shopVista",
       pending: false,
     },
     {
@@ -184,7 +184,7 @@ if (localStorage.getItem("allProducts")) {
       promotion: 20,
       featured: false,
       productID: "e4d1f69d-09c5-4e76-e4c8-9e1bf9m9d53f",
-      sellerID: "admin1122@shopvista.com",
+      sellerID: "shopVista",
       pending: false,
     },
     {
@@ -201,7 +201,7 @@ if (localStorage.getItem("allProducts")) {
       promotion: 10,
       featured: false,
       productID: "e5d1f69e-10c5-4e77-e5c8-9e1bf9m9d53f",
-      sellerID: "admin1122@shopvista.com",
+      sellerID: "shopVista",
       pending: false,
     },
     {
@@ -217,7 +217,7 @@ if (localStorage.getItem("allProducts")) {
       promotion: 20,
       featured: false,
       productID: "e6d1f69f-11c5-4e78-e6c8-9e1bf9m9d53f",
-      sellerID: "admin1122@shopvista.com",
+      sellerID: "shopVista",
       pending: false,
     },
     {
@@ -234,7 +234,7 @@ if (localStorage.getItem("allProducts")) {
       promotion: 0,
       featured: true,
       productID: "g1d1f69a-12c5-4e79-g1c8-9e1bf9m9d53f",
-      sellerID: "admin1122@shopvista.com",
+      sellerID: "shopVista",
       pending: false,
     },
     {
@@ -251,7 +251,7 @@ if (localStorage.getItem("allProducts")) {
       promotion: 0,
       featured: true,
       productID: "g2d1f69b-13c5-4e80-g2c8-9e1bf9m9d53f",
-      sellerID: "admin1122@shopvista.com",
+      sellerID: "shopVista",
       pending: false,
     },
     {
@@ -268,7 +268,7 @@ if (localStorage.getItem("allProducts")) {
       promotion: 0,
       featured: true,
       productID: "g3d1f69c-14c5-4e81-g3c8-9e1bf9m9d53f",
-      sellerID: "admin1122@shopvista.com",
+      sellerID: "shopVista",
       pending: false,
     },
     {
@@ -285,7 +285,7 @@ if (localStorage.getItem("allProducts")) {
       promotion: 0,
       featured: true,
       productID: "g4d1f69d-15c5-4e82-g4c8-9e1bf9m9d53f",
-      sellerID: "admin1122@shopvista.com",
+      sellerID: "shopVista",
       pending: false,
     },
     {
@@ -302,7 +302,7 @@ if (localStorage.getItem("allProducts")) {
       promotion: 0,
       featured: true,
       productID: "g5d1f69e-16c5-4e83-g5c8-9e1bf9m9d53f",
-      sellerID: "admin1122@shopvista.com",
+      sellerID: "shopVista",
       pending: false,
     },
     {
@@ -319,7 +319,7 @@ if (localStorage.getItem("allProducts")) {
       promotion: 0,
       featured: true,
       productID: "g6d1f69f-17c5-4e84-g6c8-9e1bf9m9d53f",
-      sellerID: "admin1122@shopvista.com",
+      sellerID: "shopVista",
       pending: false,
     },
     {
@@ -336,7 +336,7 @@ if (localStorage.getItem("allProducts")) {
       promotion: 0,
       featured: true,
       productID: "g7d1f69g-18c5-4e85-g7c8-9e1bf9m9d53f",
-      sellerID: "admin1122@shopvista.com",
+      sellerID: "shopVista",
       pending: false,
     },
     {
@@ -353,7 +353,7 @@ if (localStorage.getItem("allProducts")) {
       promotion: 0,
       featured: true,
       productID: "g8d1f69h-19c5-4e86-g8c8-9e1bf9m9d53f",
-      sellerID: "admin1122@shopvista.com",
+      sellerID: "shopVista",
       pending: false,
     },
     {
@@ -370,7 +370,7 @@ if (localStorage.getItem("allProducts")) {
       promotion: 25,
       featured: false,
       productID: "f1d1f69a-20c5-4e87-f1c8-9e1bf9m9d53f",
-      sellerID: "admin1122@shopvista.com",
+      sellerID: "shopVista",
       pending: false,
     },
     {
@@ -387,7 +387,7 @@ if (localStorage.getItem("allProducts")) {
       promotion: 10,
       featured: false,
       productID: "f2d1f69b-21c5-4e88-f2c8-9e1bf9m9d53f",
-      sellerID: "admin1122@shopvista.com",
+      sellerID: "shopVista",
       pending: false,
     },
     {
@@ -404,7 +404,7 @@ if (localStorage.getItem("allProducts")) {
       promotion: 0,
       featured: true,
       productID: "f3d1f69c-22c5-4e89-f3c8-9e1bf9m9d53f",
-      sellerID: "admin1122@shopvista.com",
+      sellerID: "shopVista",
       pending: false,
     },
     {
@@ -421,7 +421,7 @@ if (localStorage.getItem("allProducts")) {
       promotion: 0,
       featured: true,
       productID: "f4d1f69d-23c5-4e90-f4c8-9e1bf9m9d53f",
-      sellerID: "admin1122@shopvista.com",
+      sellerID: "shopVista",
       pending: false,
     },
     {
@@ -438,7 +438,7 @@ if (localStorage.getItem("allProducts")) {
       promotion: 5,
       featured: false,
       productID: "f5d1f69e-24c5-4e91-f5c8-9e1bf9m9d53f",
-      sellerID: "admin1122@shopvista.com",
+      sellerID: "shopVista",
       pending: false,
     },
   ];
@@ -713,7 +713,10 @@ function addToCart(event, i) {
         allUsers[currentUserIndex].totalCartPrice += priceAfterPromotion;
       }
       localStorage.setItem("allUsers", JSON.stringify(allUsers));
-      localStorage.setItem("currentUser", JSON.stringify(allUsers[currentUserIndex]));
+      localStorage.setItem(
+        "currentUser",
+        JSON.stringify(allUsers[currentUserIndex])
+      );
       displayAllProducts();
     }
   }

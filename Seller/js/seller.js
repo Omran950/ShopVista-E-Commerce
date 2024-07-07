@@ -82,8 +82,7 @@ let promotionAlert = document.getElementById("promotion-alert");
 let detailsAlert = document.getElementById("details-alert");
 
 let currentUser = JSON.parse(localStorage.getItem("currentUser"));
-let currentUserIndex =
-  JSON.parse(localStorage.getItem("currentUserIndex")) || 0;
+
 let allUsers = JSON.parse(localStorage.getItem("allUsers"));
 
 let allProducts = [];
@@ -108,6 +107,9 @@ function productImageValidation() {
   let imageRegex =
     /((http[s]?|ftp):\/\/)?([^:/\s]+)(:([^/\s]*))?((\/\w+)*\/)([\w\-\.]+[^#?\s]+)(\?([^#\s]*))?(#(\w*))?/;
   return imageRegex.test(productImage.value);
+}
+function categoryValidation() {
+  return categorySelected.value !== "";
 }
 function promotionValidation() {
   let promotionRegex = /^(100|[1-9]?[0-9])$/;
@@ -205,6 +207,15 @@ function removeProductImageAlert() {
   imageAlert.classList.add("d-none");
 }
 
+function addCategoryAlert() {
+  categorySelected.classList.add("is-invalid");
+  categorySelected.classList.remove("is-valid");
+}
+function removeCategoryAlert() {
+  categorySelected.classList.remove("is-invalid");
+  categorySelected.classList.add("is-valid");
+}
+
 function addPromotionAlert() {
   promotion.classList.add("is-invalid");
   promotion.classList.remove("is-valid");
@@ -246,17 +257,15 @@ function generateUUID() {
 }
 
 function generateRandomRating() {
-  const ratings = [1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5];
-  const randomIndex = Math.floor(Math.random() * ratings.length);
-  return ratings[randomIndex];
+  return Math.floor(Math.random() * 6);
 }
 
 addProduct.addEventListener("click", function () {
-  if (promotion.value == 0 || promotion.value == "") {
-    featured = true;
-  } else {
-    featured = false;
+  if (!categoryValidation()) {
+    addCategoryAlert();
+    return;
   }
+  let featured = promotion.value == 0 || promotion.value == "";
   let product = {
     productName: productName.value,
     productPrice: Number(productPrice.value),
@@ -270,13 +279,14 @@ addProduct.addEventListener("click", function () {
     promotion: Number(promotion.value),
     featured: featured,
     productID: existingProduct || generateUUID(),
-    pending: false,
+    pending: true,
   };
   if (
     productNameValidation() &&
     productPriceValidation() &&
     productImageValidation() &&
-    productDetailsValidation()
+    productDetailsValidation() &&
+    categoryValidation()
   ) {
     if (existingProduct) {
       let index = allProducts.findIndex((p) => p.productID === existingProduct);
@@ -298,11 +308,22 @@ addProduct.addEventListener("click", function () {
         });
       });
       localStorage.setItem("allUsers", JSON.stringify(allUsers));
-
-      swal("", "Product Updated", "success");
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Product Updated",
+        showConfirmButton: false,
+        timer: 1000,
+      });
     } else {
       allProducts.push(product);
-      swal("", "Product Added", "success");
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Product Added",
+        showConfirmButton: false,
+        timer: 1000,
+      });
     }
     localStorage.setItem("allProducts", JSON.stringify(allProducts));
     clearInputs();
@@ -310,12 +331,49 @@ addProduct.addEventListener("click", function () {
     displayProducts();
   } else if (!productNameValidation()) {
     addProductNameAlert();
+    Swal.fire({
+      position: "center",
+      icon: "error",
+      title: "Please fill all the fields",
+      showConfirmButton: false,
+      timer: 1000,
+    });
   } else if (!productPriceValidation()) {
     addProductPriceAlert();
+    Swal.fire({
+      position: "center",
+      icon: "error",
+      title: "Please fill all the fields",
+      showConfirmButton: false,
+      timer: 1000,
+    });
   } else if (!productImageValidation()) {
     addProductImageAlert();
+    Swal.fire({
+      position: "center",
+      icon: "error",
+      title: "Please fill all the fields",
+      showConfirmButton: false,
+      timer: 1000,
+    });
   } else if (!productDetailsValidation()) {
     addProductDetailsAlert();
+    Swal.fire({
+      position: "center",
+      icon: "error",
+      title: "Please fill all the fields",
+      showConfirmButton: false,
+      timer: 1000,
+    });
+  } else if (!categoryValidation()) {
+    addCategoryAlert();
+    Swal.fire({
+      position: "center",
+      icon: "error",
+      title: "Please fill all the fields",
+      showConfirmButton: false,
+      timer: 1000,
+    });
   }
 });
 
@@ -348,11 +406,8 @@ function displayProducts() {
         </tr>
         `;
     }
+    tableBody.innerHTML = trs;
   }
-  if (trs == ``) {
-    trs = `<tr><td colspan="10" rowspan="3" class="text-center py-5"><h2 class="fs-1 fw-bolder py-5">No products found</h2></td></tr>`;
-  }
-  tableBody.innerHTML = trs;
 }
 
 displayProducts();
@@ -409,7 +464,6 @@ function deleteRow(productID) {
       user.totalCartPrice -= cartProduct.count * priceAfterPromotion;
 
       user.cart.splice(productIndex, 1);
-      cart.innerHTML = allUsers[currentUserIndex].cart.length;
 
       recalcTotalCartPrice(user);
     }
