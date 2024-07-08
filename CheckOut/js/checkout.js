@@ -29,8 +29,6 @@ if (!localStorage.getItem("currentUser")) {
   let addressAlert = document.getElementById("address-alert");
   let phoneAlert = document.getElementById("phone-checkout-alert");
   let checkoutBtn = document.getElementById("checkout-btn");
-
-  let orderDetails = {};
   let cart = document.getElementById("cart");
   cart.innerHTML = currentUser.cart.length;
 
@@ -212,7 +210,7 @@ if (!localStorage.getItem("currentUser")) {
       visaExpDateValidation() &&
       visaCVCValidation()
     ) {
-      if (currentUser.cart.length == 0) {
+      if (allUsers[currentUserIndex].cart.length == 0) {
         return Swal.fire({
           position: "top-center",
           icon: "error",
@@ -238,7 +236,7 @@ if (!localStorage.getItem("currentUser")) {
         totalCartPrice: totalCartPrice,
       };
       userOrder.shippingDetails = shippingDetails;
-      userOrder.cart = currentUser.cart;
+      userOrder.cart = allUsers[currentUserIndex].cart;
 
       currentUser.orders.push(userOrder);
       allUsers[currentUserIndex].orders.push(userOrder);
