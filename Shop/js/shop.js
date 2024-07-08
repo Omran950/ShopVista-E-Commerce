@@ -173,7 +173,7 @@ if (!localStorage.getItem("currentUser")) {
                   }</h6>
                   <p class="">${allProducts[i].productDetails.substring(
                     0,
-                    40
+                    20
                   )}${
             allProducts[i].productDetails.length > 50 ? "..." : ""
           }</p>

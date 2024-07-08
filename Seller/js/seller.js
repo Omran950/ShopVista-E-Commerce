@@ -58,7 +58,6 @@ function getSoldProducts() {
 }
 
 function logout() {
-  currentUserIndex = JSON.parse(localStorage.getItem("currentUserIndex"));
   allUsers[currentUserIndex].isLogin = false;
   localStorage.setItem("allUsers", JSON.stringify(allUsers));
   localStorage.removeItem("currentUser");
@@ -280,7 +279,7 @@ addProduct.addEventListener("click", function () {
     promotion: Number(promotion.value),
     featured: featured,
     productID: existingProduct || generateUUID(),
-    pending: false,
+    pending: true,
   };
   if (
     productNameValidation() &&

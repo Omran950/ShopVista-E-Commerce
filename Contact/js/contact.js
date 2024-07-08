@@ -166,6 +166,11 @@ function clearInputs() {
   ticketMessage.value = "";
 }
 
+function generateTicketID() {
+  const timestamp = Date.now().toString(36);
+  const randomNum = Math.random().toString(36).substring(2, 8);
+  return `${timestamp}-${randomNum}`;
+}
 // Add Ticket Function
 submitTicket.addEventListener("click", function () {
   let ticket = {
@@ -175,6 +180,8 @@ submitTicket.addEventListener("click", function () {
     email: ticketEmail.value,
     mobile: ticketMobile.value,
     message: ticketMessage.value,
+    pending: true,
+    ticketID: generateTicketID(),
   };
   if (
     titleValidation() &&
@@ -216,7 +223,7 @@ function logout() {
     timer: 1000,
   });
   setTimeout(() => {
-    window.location.replace("index.html");
+    window.location.replace("../index.html");
   }, 1000);
 }
 

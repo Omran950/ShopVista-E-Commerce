@@ -52,7 +52,10 @@ if (!localStorage.getItem("currentUser")) {
                       allUsers[currentUserIndex].orders[i].shippingDetails
                         .address
                     }</span></p>
-                  <p class="my-1">Payment Method : <span class="text-success fw-bold">Visa</span></p>
+                  <p class="my-1">Payment Method : <span class="text-success fw-bold">${
+                    allUsers[currentUserIndex].orders[i].shippingDetails
+                      .paymentMethod
+                  }</span></p>
                   <p class="my-1">Order Total Price :<span class="text-success fw-bold"> ${
                     allUsers[currentUserIndex].orders[i].shippingDetails
                       .totalCartPrice

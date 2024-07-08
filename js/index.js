@@ -548,7 +548,7 @@ function displayAllProducts() {
                     }</h6>
                     <p class="">${allProducts[i].productDetails.substring(
                       0,
-                      40
+                      20
                     )}${
             allProducts[i].productDetails.length > 50 ? "..." : ""
           }</p>
@@ -583,7 +583,7 @@ function displayAllProducts() {
                   allProducts[i].productName
                 }</h6>
                 <p class="">${allProducts[i].productDetails.substring(0, 40)}${
-            allProducts[i].productDetails.length > 50 ? "..." : ""
+            allProducts[i].productDetails.length > 20 ? "..." : ""
           }</p>
                 <div class="d-flex justify-content-around">
                 <p class="text-center" id="priceBefore">Price : <span class="text-decoration-line-through">${
