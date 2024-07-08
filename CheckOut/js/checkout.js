@@ -30,6 +30,7 @@ if (!localStorage.getItem("currentUser")) {
   let phoneAlert = document.getElementById("phone-checkout-alert");
   let checkoutBtn = document.getElementById("checkout-btn");
   let cart = document.getElementById("cart");
+  let paymentMethodSelect = document.getElementById("payment-method");
   cart.innerHTML = currentUser.cart.length;
 
   // Validation for inputs
@@ -200,69 +201,147 @@ if (!localStorage.getItem("currentUser")) {
     }
   });
 
-  checkoutBtn.addEventListener("click", function () {
-    if (
-      nameValidation() &&
-      emailValidation() &&
-      addressValidation() &&
-      phoneValidation() &&
-      visaNumberValidation() &&
-      visaExpDateValidation() &&
-      visaCVCValidation()
-    ) {
-      if (allUsers[currentUserIndex].cart.length == 0) {
-        return Swal.fire({
+  document.addEventListener("DOMContentLoaded", function () {
+    const paymentMethodSelect = document.getElementById("payment-method");
+    const visaInputs = document.getElementById("visa-inputs");
+
+    paymentMethodSelect.addEventListener("change", function () {
+      if (paymentMethodSelect.value == "VISA") {
+        visaInputs.classList.remove("d-none");
+      } else {
+        visaInputs.classList.add("d-none");
+      }
+    });
+  });
+
+  if (paymentMethodSelect.value == "Cash") {
+    checkoutBtn.addEventListener("click", function () {
+      if (
+        nameValidation() &&
+        emailValidation() &&
+        addressValidation() &&
+        phoneValidation()
+      ) {
+        if (currentUser.cart.length == 0) {
+          return Swal.fire({
+            position: "top-center",
+            icon: "error",
+            title: "Your cart is empty",
+            showConfirmButton: false,
+            timer: 1000,
+          });
+        }
+        Swal.fire({
+          position: "top-center",
+          icon: "success",
+          title: "Purchase is complete",
+          showConfirmButton: false,
+          timer: 1000,
+        });
+        let userOrder = {};
+        let totalCartPrice = parseInt(currentUser.totalCartPrice, 10);
+
+        let shippingDetails = {
+          phone: phoneCheckout.value,
+          address: signAddress.value,
+          notes: notesShipping.value,
+          totalCartPrice: totalCartPrice,
+          paymentMethod: paymentMethodSelect.value,
+        };
+        userOrder.shippingDetails = shippingDetails;
+        userOrder.cart = currentUser.cart;
+
+        currentUser.orders.push(userOrder);
+        allUsers[currentUserIndex].orders.push(userOrder);
+        localStorage.setItem("currentUser", JSON.stringify(currentUser));
+        localStorage.setItem("allUsers", JSON.stringify(allUsers));
+
+        currentUser.cart = [];
+        currentUser.totalCartPrice = 0;
+        allUsers[currentUserIndex].cart = [];
+        allUsers[currentUserIndex].totalCartPrice = 0;
+        localStorage.setItem("currentUser", JSON.stringify(currentUser));
+        localStorage.setItem("allUsers", JSON.stringify(allUsers));
+
+        setTimeout(function () {
+          location.replace("../Shop/shop.html");
+        }, 1000);
+      } else {
+        Swal.fire({
           position: "top-center",
           icon: "error",
-          title: "Your cart is empty",
+          title: "Please validate your data",
           showConfirmButton: false,
           timer: 1000,
         });
       }
-      Swal.fire({
-        position: "top-center",
-        icon: "success",
-        title: "Purchase is complete",
-        showConfirmButton: false,
-        timer: 1000,
-      });
-      let userOrder = {};
-      let totalCartPrice = parseInt(currentUser.totalCartPrice, 10);
+    });
+  } else if (paymentMethodSelect.value == "VISA") {
+    checkoutBtn.addEventListener("click", function () {
+      if (
+        nameValidation() &&
+        emailValidation() &&
+        addressValidation() &&
+        phoneValidation() &&
+        visaNumberValidation() &&
+        visaExpDateValidation() &&
+        visaCVCValidation()
+      ) {
+        if (currentUser.cart.length == 0) {
+          return Swal.fire({
+            position: "top-center",
+            icon: "error",
+            title: "Your cart is empty",
+            showConfirmButton: false,
+            timer: 1000,
+          });
+        }
+        Swal.fire({
+          position: "top-center",
+          icon: "success",
+          title: "Purchase is complete",
+          showConfirmButton: false,
+          timer: 1000,
+        });
+        let userOrder = {};
+        let totalCartPrice = parseInt(currentUser.totalCartPrice, 10);
 
-      let shippingDetails = {
-        phone: phoneCheckout.value,
-        address: signAddress.value,
-        notes: notesShipping.value,
-        totalCartPrice: totalCartPrice,
-      };
-      userOrder.shippingDetails = shippingDetails;
-      userOrder.cart = allUsers[currentUserIndex].cart;
+        let shippingDetails = {
+          phone: phoneCheckout.value,
+          address: signAddress.value,
+          notes: notesShipping.value,
+          totalCartPrice: totalCartPrice,
+          paymentMethod: "VISA",
+        };
+        userOrder.shippingDetails = shippingDetails;
+        userOrder.cart = currentUser.cart;
 
-      currentUser.orders.push(userOrder);
-      allUsers[currentUserIndex].orders.push(userOrder);
-      localStorage.setItem("currentUser", JSON.stringify(currentUser));
-      localStorage.setItem("allUsers", JSON.stringify(allUsers));
+        currentUser.orders.push(userOrder);
+        allUsers[currentUserIndex].orders.push(userOrder);
+        localStorage.setItem("currentUser", JSON.stringify(currentUser));
+        localStorage.setItem("allUsers", JSON.stringify(allUsers));
 
-      currentUser.cart = [];
-      currentUser.totalCartPrice = 0;
-      allUsers[currentUserIndex].cart = [];
-      allUsers[currentUserIndex].totalCartPrice = 0;
-      localStorage.setItem("currentUser", JSON.stringify(currentUser));
-      localStorage.setItem("allUsers", JSON.stringify(allUsers));
+        currentUser.cart = [];
+        currentUser.totalCartPrice = 0;
+        allUsers[currentUserIndex].cart = [];
+        allUsers[currentUserIndex].totalCartPrice = 0;
+        localStorage.setItem("currentUser", JSON.stringify(currentUser));
+        localStorage.setItem("allUsers", JSON.stringify(allUsers));
 
-      setTimeout(function () {
-        location.replace("../Shop/shop.html");
-      }, 1000);
-    } else {
-      Swal.fire({
-        position: "top-center",
-        icon: "error",
-        title: "Please validate your data",
-        showConfirmButton: false,
-        timer: 1000,
-      });
-    }
-  });
+        setTimeout(function () {
+          location.replace("../Shop/shop.html");
+        }, 1000);
+      } else {
+        Swal.fire({
+          position: "top-center",
+          icon: "error",
+          title: "Please validate your data",
+          showConfirmButton: false,
+          timer: 1000,
+        });
+      }
+    });
+  }
 
   //Logout
   function logout() {

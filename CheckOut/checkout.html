@@ -179,62 +179,74 @@
             </div>
 
             <h4 class="mb-4">Payment Information</h4>
-            <div class="input-group mb-3">
-              <span class="input-group-text"
-                ><i class="fa-brands fa-cc-visa"></i
-              ></span>
-              <div class="form-floating">
-                <input
-                  id="visa-number"
-                  type="text"
-                  class="form-control"
-                  id="floatingInputGroup1"
-                  placeholder="Visa"
-                />
-                <label for="floatingInputGroup1">Visa Number</label>
-              </div>
+            <div class="mb-3">
+              <label for="payment-method" class="form-label"
+                >Payment Method</label
+              >
+              <select class="form-select" id="payment-method">
+                <option value="Cash" selected>Cash</option>
+                <option value="VISA">VISA</option>
+              </select>
             </div>
-            <p id="visaNumber-alert" class="text-danger mb-3 d-none">
-              Invalid Visa Number
-            </p>
 
-            <div class="input-group mb-3">
-              <span class="input-group-text"
-                ><i class="fas fa-calendar-alt"></i
-              ></span>
-              <div class="form-floating">
-                <input
-                  id="visa-exp-date"
-                  type="text"
-                  class="form-control"
-                  id="floatingInputGroup1"
-                  placeholder="Visa"
-                />
-                <label for="floatingInputGroup1">MM / YY</label>
+            <div id="visa-inputs" class="d-none">
+              <div class="input-group mb-3">
+                <span class="input-group-text"
+                  ><i class="fa-brands fa-cc-visa"></i
+                ></span>
+                <div class="form-floating">
+                  <input
+                    id="visa-number"
+                    type="text"
+                    class="form-control"
+                    id="floatingInputGroup1"
+                    placeholder="Visa"
+                  />
+                  <label for="floatingInputGroup1">Visa Number</label>
+                </div>
               </div>
-            </div>
-            <p id="visaDate-alert" class="text-danger mb-3 d-none">
-              Invalid Expiry Date
-            </p>
+              <p id="visaNumber-alert" class="text-danger mb-3 d-none">
+                Invalid Visa Number
+              </p>
 
-            <div class="input-group mb-3">
-              <span class="input-group-text"
-                ><i class="fas fa-credit-card"></i
-              ></span>
-              <div class="form-floating">
-                <input
-                  id="visa-cvc"
-                  type="email"
-                  class="form-control"
-                  id="floatingInputGroup1"
-                  placeholder="Visa"
-                />
-                <label for="floatingInputGroup1">CVC</label>
+              <div class="input-group mb-3">
+                <span class="input-group-text"
+                  ><i class="fas fa-calendar-alt"></i
+                ></span>
+                <div class="form-floating">
+                  <input
+                    id="visa-exp-date"
+                    type="text"
+                    class="form-control"
+                    id="floatingInputGroup1"
+                    placeholder="MM / YY"
+                  />
+                  <label for="floatingInputGroup1">MM / YY</label>
+                </div>
               </div>
+              <p id="visaDate-alert" class="text-danger mb-3 d-none">
+                Invalid Expiry Date
+              </p>
+
+              <div class="input-group mb-3">
+                <span class="input-group-text"
+                  ><i class="fas fa-credit-card"></i
+                ></span>
+                <div class="form-floating">
+                  <input
+                    id="visa-cvc"
+                    type="text"
+                    class="form-control"
+                    id="floatingInputGroup1"
+                    placeholder="CVC"
+                  />
+                  <label for="floatingInputGroup1">CVC</label>
+                </div>
+              </div>
+              <p id="visaCVC-alert" class="text-danger mb-3 d-none">
+                Invalid CVC
+              </p>
             </div>
-            <p id="visaCVC-alert" class="text-danger mb-3 d-none">
-              Invaild CVC
-            </p>
 
             <button
               id="checkout-btn"
