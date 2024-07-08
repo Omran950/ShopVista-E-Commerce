@@ -1,15 +1,9 @@
-if (!localStorage.getItem("currentUser")) {
-  window.location.replace("../index.html");
-}
 let allProducts = JSON.parse(localStorage.getItem("allProducts")) || [];
 let currentUserIndex =
   JSON.parse(localStorage.getItem("currentUserIndex")) || 0;
 let currentUser = JSON.parse(localStorage.getItem("currentUser")) || {};
 let allUsers = JSON.parse(localStorage.getItem("allUsers")) || [];
 
-if (currentUser.role === "customer") {
-  window.location.replace("../index.html");
-}
 let cart = document.getElementById("cart");
 let tbody = document.getElementById("tbody");
 let productName = document.getElementById("product-name");

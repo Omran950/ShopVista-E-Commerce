@@ -9,6 +9,14 @@
     <link rel="stylesheet" href="../css/bootstrap.min.css" />
     <link rel="stylesheet" href="../css/index.css" />
     <link rel="stylesheet" href="css/about.css" />
+    <script>
+      if (localStorage.getItem("currentUser")) {
+        let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+        if (currentUser.role == "admin") {
+          window.location.replace("../Admin/admin.html");
+        }
+      }
+    </script>
   </head>
   <body>
     <!-- Nav Bar -->

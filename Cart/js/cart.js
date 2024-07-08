@@ -1,47 +1,44 @@
-if (!localStorage.getItem("currentUser")) {
-  window.location.replace("../index.html");
-} else {
-  let allProducts = JSON.parse(localStorage.getItem("allProducts")) || [];
-  let currentUserIndex =
-    JSON.parse(localStorage.getItem("currentUserIndex")) || 0;
-  let currentUser = JSON.parse(localStorage.getItem("currentUser")) || {};
-  let allUsers = JSON.parse(localStorage.getItem("allUsers")) || [];
+let allProducts = JSON.parse(localStorage.getItem("allProducts")) || [];
+let currentUserIndex =
+  JSON.parse(localStorage.getItem("currentUserIndex")) || 0;
+let currentUser = JSON.parse(localStorage.getItem("currentUser")) || {};
+let allUsers = JSON.parse(localStorage.getItem("allUsers")) || [];
 
-  if (currentUser.role === "seller") {
-    let sellerDashboard = document.getElementById("sellerDashboard");
-    sellerDashboard.innerHTML = `<a class="nav-link" aria-current="page" href="../Seller/seller.html">Dashboard</a>
+if (currentUser.role === "seller") {
+  let sellerDashboard = document.getElementById("sellerDashboard");
+  sellerDashboard.innerHTML = `<a class="nav-link" aria-current="page" href="../Seller/seller.html">Dashboard</a>
     `;
-  }
+}
 
-  let cartBody = document.getElementById("cartBody");
-  let modalHeader = document.getElementById("staticBackdropLabel");
-  let modalBody = document.getElementById("modalBody");
-  let totalPrice = document.getElementById("totalPrice");
-  let cart = document.getElementById("cart");
-  let confirmPaymentButton = document.getElementById("confirmPaymentButton");
+let cartBody = document.getElementById("cartBody");
+let modalHeader = document.getElementById("staticBackdropLabel");
+let modalBody = document.getElementById("modalBody");
+let totalPrice = document.getElementById("totalPrice");
+let cart = document.getElementById("cart");
+let confirmPaymentButton = document.getElementById("confirmPaymentButton");
 
-  function logout() {
-    allUsers[currentUserIndex].isLogin = false;
-    localStorage.setItem("allUsers", JSON.stringify(allUsers));
-    localStorage.removeItem("currentUser");
-    localStorage.removeItem("currentUserIndex");
-    Swal.fire({
-      position: "top-center",
-      icon: "success",
-      title: "Logged Out Successfully",
-      showConfirmButton: false,
-      timer: 1000,
-    });
-    setTimeout(() => {
-      window.location.replace("../index.html");
-    }, 1000);
-  }
+function logout() {
+  allUsers[currentUserIndex].isLogin = false;
+  localStorage.setItem("allUsers", JSON.stringify(allUsers));
+  localStorage.removeItem("currentUser");
+  localStorage.removeItem("currentUserIndex");
+  Swal.fire({
+    position: "top-center",
+    icon: "success",
+    title: "Logged Out Successfully",
+    showConfirmButton: false,
+    timer: 1000,
+  });
+  setTimeout(() => {
+    window.location.replace("../index.html");
+  }, 1000);
+}
 
-  function displayCurrentUserCart() {
-    cart.innerHTML = allUsers[currentUserIndex].cart.length;
-    totalPrice.innerHTML = `Total cart price : ${allUsers[currentUserIndex].totalCartPrice} EGP`;
-    if (allUsers[currentUserIndex].cart.length == 0) {
-      cartBody.innerHTML = `<div class="my-5 py-5 text-center shadow rounded-3">
+function displayCurrentUserCart() {
+  cart.innerHTML = allUsers[currentUserIndex].cart.length;
+  totalPrice.innerHTML = `Total cart price : ${allUsers[currentUserIndex].totalCartPrice} EGP`;
+  if (allUsers[currentUserIndex].cart.length == 0) {
+    cartBody.innerHTML = `<div class="my-5 py-5 text-center shadow rounded-3">
   <h2 class="fs-1 mt-5 pt-5 mb-3 pb-2 text-black">Cart Empty</h2>
   <button class="btn mb-5">
     <a href="../Shop/shop.html"
@@ -49,30 +46,30 @@ if (!localStorage.getItem("currentUser")) {
     ></a>
   </button>
 </div>`;
-      confirmPaymentButton.disabled = true;
-    } else {
-      confirmPaymentButton.disabled = false;
-      let newPrice = "";
-      let cartProducts = "";
-      for (let i = 0; i < allUsers[currentUserIndex].cart.length; i++) {
-        newPrice = "";
-        if (!allUsers[currentUserIndex].cart[i].featured) {
-          let priceAfterPromotion =
-            allUsers[currentUserIndex].cart[i].productPrice -
-            allUsers[currentUserIndex].cart[i].productPrice *
-              (allUsers[currentUserIndex].cart[i].promotion / 100);
-          newPrice = `<p class="py-1" id="priceAfter"><span class="fw-bold text-">After Discount :</span> ${priceAfterPromotion} EGP</p>`;
-        }
-        let disableMinus =
-          allUsers[currentUserIndex].cart[i].count === 1 ? "disabled" : "";
-        let disablePlus =
-          allProducts.find(
-            (product) =>
-              product.productID === allUsers[currentUserIndex].cart[i].productID
-          ).stock === 0
-            ? "disabled"
-            : "";
-        cartProducts += `<div id="row"
+    confirmPaymentButton.disabled = true;
+  } else {
+    confirmPaymentButton.disabled = false;
+    let newPrice = "";
+    let cartProducts = "";
+    for (let i = 0; i < allUsers[currentUserIndex].cart.length; i++) {
+      newPrice = "";
+      if (!allUsers[currentUserIndex].cart[i].featured) {
+        let priceAfterPromotion =
+          allUsers[currentUserIndex].cart[i].productPrice -
+          allUsers[currentUserIndex].cart[i].productPrice *
+            (allUsers[currentUserIndex].cart[i].promotion / 100);
+        newPrice = `<p class="py-1" id="priceAfter"><span class="fw-bold text-">After Discount :</span> ${priceAfterPromotion} EGP</p>`;
+      }
+      let disableMinus =
+        allUsers[currentUserIndex].cart[i].count === 1 ? "disabled" : "";
+      let disablePlus =
+        allProducts.find(
+          (product) =>
+            product.productID === allUsers[currentUserIndex].cart[i].productID
+        ).stock === 0
+          ? "disabled"
+          : "";
+      cartProducts += `<div id="row"
             class="row py-2 mt-2 px-2 align-items-center rounded-3 shadow gy-3"
           >
             <div class="col-3">
@@ -102,28 +99,28 @@ if (!localStorage.getItem("currentUser")) {
               </div>
             </div>
           </div>`;
-      }
-      cartProducts += `<div class="text-center py-3 my-4">
+    }
+    cartProducts += `<div class="text-center py-3 my-4">
       <button class="btn btn-danger" onclick="clearAllButton()">
         <i class="fa-solid fa-trash-can me-1 text-white"></i>Clear Cart
       </button>
     </div>`;
-      cartBody.innerHTML = cartProducts;
-    }
+    cartBody.innerHTML = cartProducts;
   }
+}
 
-  function productDetails(i) {
-    allProducts = JSON.parse(localStorage.getItem("allProducts"));
-    let newPrice = "";
-    if (!allUsers[currentUserIndex].cart[i].featured) {
-      let priceAfterPromotion =
-        allUsers[currentUserIndex].cart[i].productPrice -
-        allUsers[currentUserIndex].cart[i].productPrice *
-          (allUsers[currentUserIndex].cart[i].promotion / 100);
-      newPrice = `<p class="my-2 py-2" id="priceAfter"><span class="fw-bold text-">After Discount :</span> ${priceAfterPromotion} EGP</p>`;
-    }
-    modalHeader.innerHTML = `${allUsers[currentUserIndex].cart[i].productName}`;
-    modalBody.innerHTML = `<div class="col-md-5">
+function productDetails(i) {
+  allProducts = JSON.parse(localStorage.getItem("allProducts"));
+  let newPrice = "";
+  if (!allUsers[currentUserIndex].cart[i].featured) {
+    let priceAfterPromotion =
+      allUsers[currentUserIndex].cart[i].productPrice -
+      allUsers[currentUserIndex].cart[i].productPrice *
+        (allUsers[currentUserIndex].cart[i].promotion / 100);
+    newPrice = `<p class="my-2 py-2" id="priceAfter"><span class="fw-bold text-">After Discount :</span> ${priceAfterPromotion} EGP</p>`;
+  }
+  modalHeader.innerHTML = `${allUsers[currentUserIndex].cart[i].productName}`;
+  modalBody.innerHTML = `<div class="col-md-5">
                     <figure class="overflow-hidden p-3">
                       <img
                         src="${allUsers[currentUserIndex].cart[i].productImage}"
@@ -154,79 +151,29 @@ if (!localStorage.getItem("currentUser")) {
                       </p>
                     </div>
                   </div>`;
-  }
+}
 
-  function clearAllButton() {
-    const swalWithBootstrapButtons = Swal.mixin({
-      customClass: {
-        confirmButton: "btn  btn-danger",
-        cancelButton: "btn btn-success",
-      },
-      buttonsStyling: true,
-    });
-    swalWithBootstrapButtons
-      .fire({
-        title: "Oops...",
-        text: "Are you sure ?",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: "Clear All",
-        cancelButtonText: "cancel!",
-        reverseButtons: true,
-      })
-      .then((result) => {
-        if (result.isConfirmed) {
-          for (let i = 0; i < allUsers[currentUserIndex].cart.length; i++) {
-            for (let j = 0; j < allProducts.length; j++) {
-              if (
-                allUsers[currentUserIndex].cart[i].productID ==
-                allProducts[j].productID
-              ) {
-                allProducts[j].stock +=
-                  allUsers[currentUserIndex].cart[i].count;
-                localStorage.setItem(
-                  "allProducts",
-                  JSON.stringify(allProducts)
-                );
-              }
-            }
-          }
-
-          allUsers[currentUserIndex].cart = [];
-          allUsers[currentUserIndex].totalCartPrice = 0;
-          allUsers[currentUserIndex].totalCartPrice = 0;
-          allUsers[currentUserIndex].cart = [];
-          localStorage.setItem("allUsers", JSON.stringify(allUsers));
-          displayCurrentUserCart();
-        } else if (result.dismiss === Swal.DismissReason.cancel) {
-          swalWithBootstrapButtons.fire({
-            title: "Cancelled",
-            icon: "error",
-          });
-        }
-      });
-  }
-
-  function removeProduct(i) {
-    const swalWithBootstrapButtons = Swal.mixin({
-      customClass: {
-        confirmButton: "btn  btn-danger",
-        cancelButton: "btn btn-success",
-      },
-      buttonsStyling: true,
-    });
-    swalWithBootstrapButtons
-      .fire({
-        title: "Oops...",
-        text: "Are you sure ?",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: "Remove Product",
-        cancelButtonText: "cancel!",
-        reverseButtons: true,
-      })
-      .then((result) => {
-        if (result.isConfirmed) {
+function clearAllButton() {
+  const swalWithBootstrapButtons = Swal.mixin({
+    customClass: {
+      confirmButton: "btn  btn-danger",
+      cancelButton: "btn btn-success",
+    },
+    buttonsStyling: true,
+  });
+  swalWithBootstrapButtons
+    .fire({
+      title: "Oops...",
+      text: "Are you sure ?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Clear All",
+      cancelButtonText: "cancel!",
+      reverseButtons: true,
+    })
+    .then((result) => {
+      if (result.isConfirmed) {
+        for (let i = 0; i < allUsers[currentUserIndex].cart.length; i++) {
           for (let j = 0; j < allProducts.length; j++) {
             if (
               allUsers[currentUserIndex].cart[i].productID ==
@@ -234,120 +181,165 @@ if (!localStorage.getItem("currentUser")) {
             ) {
               allProducts[j].stock += allUsers[currentUserIndex].cart[i].count;
               localStorage.setItem("allProducts", JSON.stringify(allProducts));
-              localStorage.setItem(
-                "currentUser",
-                JSON.stringify(allProducts[currentUserIndex])
-              );
             }
           }
-          if (allUsers[currentUserIndex].cart[i].featured) {
-            allUsers[currentUserIndex].totalCartPrice -=
-              allUsers[currentUserIndex].cart[i].productPrice *
-              allUsers[currentUserIndex].cart[i].count;
-          } else {
-            let priceAfterPromotion =
-              allUsers[currentUserIndex].cart[i].productPrice -
-              allUsers[currentUserIndex].cart[i].productPrice *
-                (allUsers[currentUserIndex].cart[i].promotion / 100);
-            allUsers[currentUserIndex].totalCartPrice -=
-              priceAfterPromotion * allUsers[currentUserIndex].cart[i].count;
-          }
-          allUsers[currentUserIndex].cart.splice(i, 1);
-          localStorage.setItem("allUsers", JSON.stringify(allUsers));
-          localStorage.setItem(
-            "currentUser",
-            JSON.stringify(allUsers[currentUserIndex])
-          );
-          displayCurrentUserCart();
-        } else if (result.dismiss === Swal.DismissReason.cancel) {
-          swalWithBootstrapButtons.fire({
-            title: "Cancelled",
-            icon: "error",
-          });
         }
-      });
-  }
 
-  function addProductCounter(i) {
-    for (let j = 0; j < allProducts.length; j++) {
-      if (
-        allUsers[currentUserIndex].cart[i].productID == allProducts[j].productID
-      ) {
-        if (allProducts[j].stock > 0) {
-          allProducts[j].stock -= 1;
-          localStorage.setItem("allProducts", JSON.stringify(allProducts));
-          allUsers[currentUserIndex].cart[i].count += 1;
-          if (allUsers[currentUserIndex].cart[i].featured) {
-            allUsers[currentUserIndex].totalCartPrice +=
-              allUsers[currentUserIndex].cart[i].productPrice;
-          } else {
-            let priceAfterPromotion =
-              allUsers[currentUserIndex].cart[i].productPrice -
-              allUsers[currentUserIndex].cart[i].productPrice *
-                (allUsers[currentUserIndex].cart[i].promotion / 100);
-            allUsers[currentUserIndex].totalCartPrice += priceAfterPromotion;
-          }
-
-          localStorage.setItem("allUsers", JSON.stringify(allUsers));
-          localStorage.setItem(
-            "currentUser",
-            JSON.stringify(allUsers[currentUserIndex])
-          );
-          displayCurrentUserCart();
-
-          Swal.fire({
-            position: "top-end",
-            icon: "success",
-            title: "Product has been added successfully",
-            showConfirmButton: false,
-            timer: 1500,
-          });
-          break;
-        }
+        allUsers[currentUserIndex].cart = [];
+        allUsers[currentUserIndex].totalCartPrice = 0;
+        allUsers[currentUserIndex].totalCartPrice = 0;
+        allUsers[currentUserIndex].cart = [];
+        localStorage.setItem("allUsers", JSON.stringify(allUsers));
+        displayCurrentUserCart();
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        swalWithBootstrapButtons.fire({
+          title: "Cancelled",
+          icon: "error",
+        });
       }
-    }
-  }
-
-  function removeProductCounter(i) {
-    for (let j = 0; j < allProducts.length; j++) {
-      if (
-        allUsers[currentUserIndex].cart[i].productID == allProducts[j].productID
-      ) {
-        if (allUsers[currentUserIndex].cart[i].count > 1) {
-          allProducts[j].stock += 1;
-          localStorage.setItem("allProducts", JSON.stringify(allProducts));
-          allUsers[currentUserIndex].cart[i].count -= 1;
-
-          if (allUsers[currentUserIndex].cart[i].featured) {
-            allUsers[currentUserIndex].totalCartPrice -=
-              allUsers[currentUserIndex].cart[i].productPrice;
-          } else {
-            let priceAfterPromotion =
-              allUsers[currentUserIndex].cart[i].productPrice -
-              allUsers[currentUserIndex].cart[i].productPrice *
-                (allUsers[currentUserIndex].cart[i].promotion / 100);
-            allUsers[currentUserIndex].totalCartPrice -= priceAfterPromotion;
-          }
-
-          localStorage.setItem("allUsers", JSON.stringify(allUsers));
-          localStorage.setItem(
-            "currentUser",
-            JSON.stringify(allUsers[currentUserIndex])
-          );
-          displayCurrentUserCart();
-
-          Swal.fire({
-            position: "top-end",
-            icon: "error",
-            title: "Product has been removed successfully",
-            showConfirmButton: false,
-            timer: 1500,
-          });
-          break;
-        }
-      }
-    }
-  }
-
-  displayCurrentUserCart();
+    });
 }
+
+function removeProduct(i) {
+  const swalWithBootstrapButtons = Swal.mixin({
+    customClass: {
+      confirmButton: "btn  btn-danger",
+      cancelButton: "btn btn-success",
+    },
+    buttonsStyling: true,
+  });
+  swalWithBootstrapButtons
+    .fire({
+      title: "Oops...",
+      text: "Are you sure ?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Remove Product",
+      cancelButtonText: "cancel!",
+      reverseButtons: true,
+    })
+    .then((result) => {
+      if (result.isConfirmed) {
+        for (let j = 0; j < allProducts.length; j++) {
+          if (
+            allUsers[currentUserIndex].cart[i].productID ==
+            allProducts[j].productID
+          ) {
+            allProducts[j].stock += allUsers[currentUserIndex].cart[i].count;
+            localStorage.setItem("allProducts", JSON.stringify(allProducts));
+            localStorage.setItem(
+              "currentUser",
+              JSON.stringify(allProducts[currentUserIndex])
+            );
+          }
+        }
+        if (allUsers[currentUserIndex].cart[i].featured) {
+          allUsers[currentUserIndex].totalCartPrice -=
+            allUsers[currentUserIndex].cart[i].productPrice *
+            allUsers[currentUserIndex].cart[i].count;
+        } else {
+          let priceAfterPromotion =
+            allUsers[currentUserIndex].cart[i].productPrice -
+            allUsers[currentUserIndex].cart[i].productPrice *
+              (allUsers[currentUserIndex].cart[i].promotion / 100);
+          allUsers[currentUserIndex].totalCartPrice -=
+            priceAfterPromotion * allUsers[currentUserIndex].cart[i].count;
+        }
+        allUsers[currentUserIndex].cart.splice(i, 1);
+        localStorage.setItem("allUsers", JSON.stringify(allUsers));
+        localStorage.setItem(
+          "currentUser",
+          JSON.stringify(allUsers[currentUserIndex])
+        );
+        displayCurrentUserCart();
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        swalWithBootstrapButtons.fire({
+          title: "Cancelled",
+          icon: "error",
+        });
+      }
+    });
+}
+
+function addProductCounter(i) {
+  for (let j = 0; j < allProducts.length; j++) {
+    if (
+      allUsers[currentUserIndex].cart[i].productID == allProducts[j].productID
+    ) {
+      if (allProducts[j].stock > 0) {
+        allProducts[j].stock -= 1;
+        localStorage.setItem("allProducts", JSON.stringify(allProducts));
+        allUsers[currentUserIndex].cart[i].count += 1;
+        if (allUsers[currentUserIndex].cart[i].featured) {
+          allUsers[currentUserIndex].totalCartPrice +=
+            allUsers[currentUserIndex].cart[i].productPrice;
+        } else {
+          let priceAfterPromotion =
+            allUsers[currentUserIndex].cart[i].productPrice -
+            allUsers[currentUserIndex].cart[i].productPrice *
+              (allUsers[currentUserIndex].cart[i].promotion / 100);
+          allUsers[currentUserIndex].totalCartPrice += priceAfterPromotion;
+        }
+
+        localStorage.setItem("allUsers", JSON.stringify(allUsers));
+        localStorage.setItem(
+          "currentUser",
+          JSON.stringify(allUsers[currentUserIndex])
+        );
+        displayCurrentUserCart();
+
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Product has been added successfully",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        break;
+      }
+    }
+  }
+}
+
+function removeProductCounter(i) {
+  for (let j = 0; j < allProducts.length; j++) {
+    if (
+      allUsers[currentUserIndex].cart[i].productID == allProducts[j].productID
+    ) {
+      if (allUsers[currentUserIndex].cart[i].count > 1) {
+        allProducts[j].stock += 1;
+        localStorage.setItem("allProducts", JSON.stringify(allProducts));
+        allUsers[currentUserIndex].cart[i].count -= 1;
+
+        if (allUsers[currentUserIndex].cart[i].featured) {
+          allUsers[currentUserIndex].totalCartPrice -=
+            allUsers[currentUserIndex].cart[i].productPrice;
+        } else {
+          let priceAfterPromotion =
+            allUsers[currentUserIndex].cart[i].productPrice -
+            allUsers[currentUserIndex].cart[i].productPrice *
+              (allUsers[currentUserIndex].cart[i].promotion / 100);
+          allUsers[currentUserIndex].totalCartPrice -= priceAfterPromotion;
+        }
+
+        localStorage.setItem("allUsers", JSON.stringify(allUsers));
+        localStorage.setItem(
+          "currentUser",
+          JSON.stringify(allUsers[currentUserIndex])
+        );
+        displayCurrentUserCart();
+
+        Swal.fire({
+          position: "top-end",
+          icon: "error",
+          title: "Product has been removed successfully",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        break;
+      }
+    }
+  }
+}
+
+displayCurrentUserCart();

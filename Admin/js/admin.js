@@ -1,16 +1,9 @@
-if (!localStorage.getItem("currentUser")) {
-  window.location.replace("../index.html");
-}
 let allProducts = JSON.parse(localStorage.getItem("allProducts")) || [];
 let currentUserIndex =
   JSON.parse(localStorage.getItem("currentUserIndex")) || 0;
 let currentUser = JSON.parse(localStorage.getItem("currentUser")) || {};
 let allUsers = JSON.parse(localStorage.getItem("allUsers")) || [];
 let allTickets = JSON.parse(localStorage.getItem("allTickets")) || [];
-
-if (!currentUser.role === "admin") {
-  window.location.replace("../index.html");
-}
 
 let productName = document.getElementById("product-name");
 let productPrice = document.getElementById("product-price");
@@ -32,6 +25,30 @@ let dropdownButton = document.getElementById("dropdownMenuButton1");
 let pendingTableBody = document.getElementById("pendingProductsTableBody");
 let handledTicketsTableBody = document.getElementById(
   "handledTicketsTableBody"
+);
+// Password Toggle Icons
+let passwordToggleIcon = document.getElementById("toggle-password");
+let rePasswordToggleIcon = document.getElementById("toggle-rePassword");
+
+//      Create/Update Buttons
+let createBtn = document.getElementById("createUserBtn");
+let updateBtn = document.getElementById("updateUserBtn");
+
+//      USERNAME      //
+let userEmail = document.getElementById("user-email");
+let userName = document.getElementById("user-name");
+let userAddress = document.getElementById("user-address");
+let userRole = document.getElementById("user-role");
+let userPassword = document.getElementById("user-password");
+let userConfirmPassword = document.getElementById("user-confirm-password");
+
+let userEmailAlert = document.getElementById("email-alert");
+let userNameAlert = document.getElementById("name-alert");
+let userAddressAlert = document.getElementById("address-alert");
+let userRoleAlert = document.getElementById("role-alert");
+let userPasswordAlert = document.getElementById("password-alert");
+let userConfirmPasswordAlert = document.getElementById(
+  "user-confirm-password-alert"
 );
 
 let existingProduct = null;
@@ -64,7 +81,30 @@ function productDetailsValidation() {
   let detailsRegex = /^[a-zA-Z0-9_ !@#$%^&*()-+=,.]{20,100}$/;
   return detailsRegex.test(productDetails.value);
 }
-
+// User Management Form Validation
+function nameValidation() {
+  let nameRegex = /^[a-zA-Z0-9_-]{3,16}$/;
+  return nameRegex.test(userName.value);
+}
+function emailValidation() {
+  let emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  return emailRegex.test(userEmail.value);
+}
+function addressValidation() {
+  let addressRegex = /^[a-zA-Z\u0080-\u024F0-9\s\/\-\']{6,20}$/;
+  return addressRegex.test(userAddress.value);
+}
+function roleValidation() {
+  if (userRole && userRole.value) return true;
+  else return false;
+}
+function passwordValidation() {
+  let passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*])[a-zA-Z!@#$%^&*\d]{8,}$/;
+  return passwordRegex.test(userPassword.value);
+}
+function rePasswordValidation() {
+  return userConfirmPassword.value === userPassword.value;
+}
 document.addEventListener("DOMContentLoaded", function () {
   dropdownItems.forEach((item) => {
     item.addEventListener("click", function (event) {
@@ -114,7 +154,31 @@ promotion.addEventListener("keyup", function () {
     addPromotionAlert();
   }
 });
-
+// Event Listeners on User Management Form
+userEmail.addEventListener("keyup", function () {
+  if (emailValidation()) removeUserEmailAlert();
+  else addUserEmailAlert();
+});
+userName.addEventListener("keyup", function () {
+  if (nameValidation()) removeUserNameAlert();
+  else addUserNameAlert();
+});
+userAddress.addEventListener("keyup", function () {
+  if (addressValidation()) removeUserAddressAlert();
+  else addUserAddressAlert();
+});
+userRole.addEventListener("keyup", function () {
+  if (roleValidation()) removeUserAddressAlert();
+  else addUserRoleAlert();
+});
+userPassword.addEventListener("keyup", function () {
+  if (passwordValidation()) removePasswordAlert();
+  else addPasswordAlert();
+});
+userConfirmPassword.addEventListener("keyup", function () {
+  if (rePasswordValidation()) removeRePasswordAlert();
+  else addRePasswordAlert();
+});
 // add and remove Alerts
 function addProductNameAlert() {
   productName.classList.add("is-invalid");
@@ -178,6 +242,75 @@ function removeProductDetailsAlert() {
   productDetails.classList.remove("is-invalid");
   productDetails.classList.add("is-valid");
   detailsAlert.classList.add("d-none");
+}
+// Add and remove user Alerts
+function addUserEmailAlert() {
+  userEmail.classList.add("is-invalid");
+  userEmail.classList.remove("is-valid");
+  userEmailAlert.classList.remove("d-none");
+}
+function removeUserEmailAlert() {
+  userEmail.classList.remove("is-invalid");
+  userEmail.classList.add("is-valid");
+  userEmailAlert.classList.add("d-none");
+}
+function addUserNameAlert() {
+  userName.classList.add("is-invalid");
+  userName.classList.remove("is-valid");
+  userNameAlert.classList.remove("d-none");
+}
+function removeUserNameAlert() {
+  userName.classList.remove("is-invalid");
+  userName.classList.add("is-valid");
+  userNameAlert.classList.add("d-none");
+}
+function addUserAddressAlert() {
+  userAddress.classList.add("is-invalid");
+  userAddress.classList.remove("is-valid");
+  userAddressAlert.classList.remove("d-none");
+}
+function removeUserAddressAlert() {
+  userAddress.classList.remove("is-invalid");
+  userAddress.classList.add("is-valid");
+  userAddressAlert.classList.add("d-none");
+}
+function addUserRoleAlert() {
+  userRole.classList.add("is-invalid");
+  userRole.classList.remove("is-valid");
+  userRoleAlert.classList.remove("d-none");
+}
+function removeUserRoleAlert() {
+  userRole.classList.remove("is-invalid");
+  userRole.classList.add("is-valid");
+  userRoleAlert.classList.add("d-none");
+}
+function addPasswordAlert() {
+  userPassword.classList.add("is-invalid");
+  userPassword.classList.remove("is-valid");
+  userPasswordAlert.classList.remove("d-none");
+}
+function removePasswordAlert() {
+  userPassword.classList.remove("is-invalid");
+  userPassword.classList.add("is-valid");
+  userPasswordAlert.classList.add("d-none");
+}
+function addRePasswordAlert() {
+  userConfirmPassword.classList.add("is-invalid");
+  userConfirmPassword.classList.remove("is-valid");
+  userConfirmPasswordAlert.classList.remove("d-none");
+}
+function removeRePasswordAlert() {
+  userConfirmPassword.classList.remove("is-invalid");
+  userConfirmPassword.classList.add("is-valid");
+  userConfirmPasswordAlert.classList.add("d-none");
+}
+function resetUserValidation() {
+  userName.classList.remove("is-valid")
+  userEmail.classList.remove("is-valid")
+  userAddress.classList.remove("is-valid")
+  userRole.classList.remove("is-valid")
+  userPassword.classList.remove("is-valid")
+  userConfirmPassword.classList.remove("is-valid")
 }
 
 function clearInputs() {
@@ -366,6 +499,16 @@ document.addEventListener("click", function (event) {
   }
 });
 
+document.addEventListener("click", function (event) {
+  if (event.target.classList.contains("handle-btn")) {
+    let ticketID = event.target.getAttribute("data-product-id");
+    handleTicket(ticketID);
+  } else if (event.target.classList.contains("ignore-btn")) {
+    let ticketID = event.target.getAttribute("data-product-id");
+    ignoreTicket(ticketID);
+  }
+});
+
 function updateRow(productID) {
   window.scrollTo({ top: 0, behavior: "smooth" });
 
@@ -517,7 +660,7 @@ function displayPendingTickets() {
     }
   }
   if (ticketsTrs === ``) {
-    ticketsTrs = `<tr><td colspan="10" rowspan="3" class="text-center py-5"><h2 class="fs-1 fw-bolder py-5">No products found</h2></td></tr>`;
+    ticketsTrs = `<tr><td colspan="10" rowspan="3" class="text-center py-5"><h2 class="fs-1 fw-bolder py-5">No tickets found</h2></td></tr>`;
   }
   pendingTicketsTableBody.innerHTML = ticketsTrs;
 }
@@ -540,20 +683,10 @@ function displayHandledTickets() {
     }
   }
   if (handledTicketsTrs === ``) {
-    handledTicketsTrs = `<tr><td colspan="10" rowspan="3" class="text-center py-5"><h2 class="fs-1 fw-bolder py-5">No products found</h2></td></tr>`;
+    handledTicketsTrs = `<tr><td colspan="10" rowspan="3" class="text-center py-5"><h2 class="fs-1 fw-bolder py-5">No tickets found</h2></td></tr>`;
   }
   handledTicketsTableBody.innerHTML = handledTicketsTrs;
 }
-
-document.addEventListener("click", function (event) {
-  if (event.target.classList.contains("handle-btn")) {
-    let ticketID = event.target.getAttribute("data-product-id");
-    handleTicket(ticketID);
-  } else if (event.target.classList.contains("ignore-btn")) {
-    let ticketID = event.target.getAttribute("data-product-id");
-    ignoreTicket(ticketID);
-  }
-});
 
 function handleTicket(ticketID) {
   let ticketToUpdate = allTickets.find((p) => p.ticketID === ticketID);
@@ -624,6 +757,365 @@ function displayTickets() {
   displayHandledTickets();
 }
 
+// Users
+
+//      Show Password     //
+function eye(targetInput, icon) {
+  if (targetInput.type === "password") {
+    targetInput.type = "text";
+    icon.classList.remove("fa-eye");
+    icon.classList.add("fa-eye-slash");
+  } else {
+    targetInput.type = "password";
+    icon.classList.remove("fa-eye-slash");
+    icon.classList.add("fa-eye");
+  }
+}
+passwordToggleIcon.addEventListener("click", function (e) {
+  eye(userPassword, e.target);
+});
+rePasswordToggleIcon.addEventListener("click", function (e) {
+  eye(userConfirmPassword, e.target);
+});
+
+function displayUsers() {
+  let tempUsers = "";
+  allUsers = JSON.parse(localStorage.getItem("allUsers"));
+  for (let i = 1; i < allUsers.length; i++) {
+    tempUsers += `
+            <tr>
+              <td>${allUsers[i].name}</td>
+              <td>${allUsers[i].email}</td>
+              <td>${allUsers[i].address}</td>
+              <td>${allUsers[i].role}</td>
+              <td>${allUsers[i].totalCartPrice}</td>
+              <td class="text-center"><button type="button" class="btn" onclick="displayOrders(${i})" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                  View Orders
+                </button></td>
+              <td class="text-center"><button type="button" class="btn" onclick="displayCart(${i})" data-bs-toggle="modal" data-bs-target="#cart-modal">
+                  View Cart
+                </button></td>
+              <td class="text-center"><button type="button" class="btn" onclick="preUpdateUser(${i})">Update</button></td>
+              <td class="text-center"><button type="button" class="btn delete-btn-user" onclick="deleteUser(${i})">Delete</button></td>
+            </tr>
+    `;
+  }
+  if (!tempUsers) {
+    tempUsers = `<tr><td colspan="10" rowspan="3" class="text-center py-5"><h2 class="fs-1 fw-bolder py-5">No products found</h2></td></tr>`;
+  }
+  document.getElementById("tableBodyUsers").innerHTML = tempUsers;
+}
+
+function createUser() {
+  let createdUser = {};
+  if (
+    emailValidation() &&
+    nameValidation() &&
+    addressValidation() &&
+    roleValidation() &&
+    passwordValidation() &&
+    rePasswordValidation()
+  ) {
+    for (let i = 0; i < allUsers.length; i++) {
+      if (userEmail.value == allUsers[i].email) {
+        return Swal.fire({
+          position: "top-center",
+          icon: "error",
+          title: "This email already exists",
+          showConfirmButton: false,
+          timer: 2000,
+        });
+      } else emailValue = userEmail.value;
+    }
+
+    createdUser.name = userName.value;
+    createdUser.email = emailValue;
+    createdUser.address = userAddress.value;
+    createdUser.role = userRole.value;
+    createdUser.totalCartPrice = 0;
+    createdUser.cart = [];
+    createdUser.orders = [];
+    createdUser.password = userPassword.value;
+    createdUser.isLogin = false;
+
+    allUsers.push(createdUser);
+
+    localStorage.setItem("allUsers", JSON.stringify(allUsers));
+    displayUsers();
+    resetUserValidation();
+
+    userEmail.value = "";
+    userName.value = "";
+    userAddress.value = "";
+    userRole.value = "";
+    userPassword.value = "";
+    userConfirmPassword.value = "";
+
+    Swal.fire({
+      position: "top-center",
+      icon: "success",
+      title: "User has been added",
+      showConfirmButton: false,
+      timer: 2000,
+    });
+  } else {
+    Swal.fire({
+      position: "top-center",
+      icon: "error",
+      title: "Please validate User Data",
+      showConfirmButton: false,
+      timer: 2000,
+    });
+  }
+}
+
+function deleteUser(userIndex) {
+  // Remove Product from all Products array only if it exists
+  if (allUsers[userIndex].role == "seller") {
+    for (let i = allProducts.length - 1; i >= 0; i--) {
+      if (allUsers[userIndex].email == allProducts[i].sellerID) {
+        allProducts.splice(i, 1);
+        localStorage.setItem("allProducts", JSON.stringify(allProducts));
+      }
+    }
+
+    // Remove Product from all users cart only if it exists
+    for (let x = 0; x < allUsers.length; x++) {
+      for (let i = allUsers[x].cart.length - 1; i >= 0; i--) {
+        if (allUsers[x].cart[i].sellerID == allUsers[userIndex].email) {
+          allUsers[x].cart.splice(i, 1);
+        }
+      }
+      reCalcTotalCartPrice(allUsers[x]);
+    }
+    localStorage.setItem("allUsers", JSON.stringify(allUsers));
+  }
+  if (allUsers[userIndex].email == currentUser.email) {
+    logout();
+  }
+  allUsers.splice(userIndex, 1);
+  localStorage.setItem("allUsers", JSON.stringify(allUsers));
+  Swal.fire({
+    position: "center",
+    icon: "success",
+    title: "User Deleted",
+    showConfirmButton: false,
+    timer: 1000,
+  });
+  displayUsers();
+}
+
+let userIndexToUpdate = 0;
+
+function preUpdateUser(userIndex) {
+  userIndexToUpdate = userIndex;
+  window.scrollTo({ top: 0, behavior: "smooth" });
+  userEmail.value = allUsers[userIndex].email;
+  userName.value = allUsers[userIndex].name;
+  userAddress.value = allUsers[userIndex].address;
+  userRole.value = allUsers[userIndex].role;
+  createBtn.classList.add("d-none");
+  updateBtn.classList.remove("d-none");
+}
+
+function updateUser() {
+  for (let i = 0; i < allUsers.length; i++) {
+    if (userEmail.value == allUsers[i].email) {
+      if (i == userIndexToUpdate) break;
+      return Swal.fire({
+        position: "top-center",
+        icon: "error",
+        title: "This email already exists",
+        showConfirmButton: false,
+        timer: 2000,
+      });
+    } else {
+      allUsers[userIndexToUpdate].email = userEmail.value;
+    }
+  }
+  allUsers[userIndexToUpdate].name = userName.value;
+  allUsers[userIndexToUpdate].address = userAddress.value;
+  allUsers[userIndexToUpdate].role = userRole.value;
+
+  // Update CurrentUser in local storage
+  if (userIndexToUpdate == currentUserIndex) {
+    currentUser.name = userName.value;
+    currentUser.address = userAddress.value;
+    currentUser.role = userRole.value;
+    currentUser.email = userEmail.value;
+  }
+  if (userPassword.value) {
+    if (passwordValidation() && rePasswordValidation()) {
+      allUsers[userIndexToUpdate].password = userPassword.value;
+      if (userIndexToUpdate == currentUserIndex)
+        currentUser.password = userPassword.value;
+    } else {
+      return Swal.fire({
+        position: "top-center",
+        icon: "error",
+        title: "Please validate your password",
+        showConfirmButton: false,
+        timer: 2000,
+      });
+    }
+  }
+  localStorage.setItem("allUsers", JSON.stringify(allUsers));
+  localStorage.setItem("currentUser", JSON.stringify(currentUser));
+  displayUsers();
+
+  createBtn.classList.remove("d-none");
+  updateBtn.classList.add("d-none");
+
+  userEmail.value = "";
+  userName.value = "";
+  userAddress.value = "";
+  userRole.value = "";
+  userPassword.value = "";
+  userConfirmPassword.value = "";
+
+  return Swal.fire({
+    position: "top-center",
+    icon: "success",
+    title: "User data has been updated",
+    showConfirmButton: false,
+    timer: 2000,
+  });
+}
+
+function displayOrders(index) {
+  let orderTemp = "";
+  let cartTemp = "";
+
+  for (let i = 0; i < allUsers[index].orders.length; i++) {
+    cartTemp = "";
+    for (let x = 0; x < allUsers[index].orders[i].cart.length; x++) {
+      cartTemp += `<tr>
+                                    <td>${allUsers[index].orders[i]?.cart[x].productID}</td>
+                                    <td>${allUsers[index].orders[i]?.cart[x].productName}</td>
+                                    <td><img src="${allUsers[index].orders[i]?.cart[x].productImage}"/></td>
+                                    <td>${allUsers[index].orders[i]?.cart[x].productDetails}</td>
+                                    <td>${allUsers[index].orders[i]?.cart[x].productPrice}</td>
+                                    <td>${allUsers[index].orders[i]?.cart[x].category}</td>
+                                    <td>${allUsers[index].orders[i]?.cart[x].promotion}</td>
+                                    <td>${allUsers[index].orders[i]?.cart[x].stock}</td>
+                                    <td>${allUsers[index].orders[i]?.cart[x].seller}</td>
+                                  </tr>`;
+    }
+    orderTemp += `<div class="orderContainer mb-5 p-3 shadow-lg rounded-5 px-3 bg-info bg-opacity-10">
+                          <h2 class="text-center">Order ${i + 1}</h2>
+                          <div class="orderInnerContainer mb-3 p-4">
+                            <div class="shippingDetails mb-4">
+                              <h4>Shipping Details</h4>
+                              <table class="table table-striped table-bordered">
+                                <thead>
+                                  <tr>
+                                    <td>Name</td>
+                                    <td>Phone</td>
+                                    <td>Address</td>
+                                    <td>Comments</td>
+                                    <td>Total Cart Price</td>
+                                  </tr>
+                                </thead>
+
+                                <tbody class="table-group-divider">
+                                  <tr class="text-center">
+                                    <td>${allUsers[index].name}</td>
+                                    <td>${
+                                      allUsers[index].orders[i].shippingDetails
+                                        .phone
+                                    }</td>
+                                    <td>${
+                                      allUsers[index].orders[i].shippingDetails
+                                        .address
+                                    }</td>
+                                    <td>${
+                                      allUsers[index].orders[i].shippingDetails
+                                        .notes
+                                    }</td>
+                                    <td>${
+                                      allUsers[index].orders[i].shippingDetails
+                                        .totalCartPrice
+                                    }</td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </div>
+                            <div class="orderDetails">
+                              <h4>Order Details</h4>
+                              <table class="table table-striped table-bordered">
+                                <thead>
+                                  <tr>
+                                    <td>ID</td>
+                                    <td>Name</td>
+                                    <td>Image</td>
+                                    <td>Details</td>
+                                    <td>Price</td>
+                                    <td>Category</td>
+                                    <td>Promotion</td>
+                                    <td>Stock</td>
+                                    <td>Seller</td>
+                                  </tr>
+                                </thead>
+
+                                <tbody class="table-group-divider" id="cartBody">
+                                  ${cartTemp}
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        </div>`;
+  }
+  if (!orderTemp) {
+    orderTemp += `<tr><td colspan="10" rowspan="3" class="text-center py-5"><h2 class="fs-1 fw-bolder py-5">No orders history</h2></td></tr>`;
+  }
+  document.getElementById("ordersContainer").innerHTML = orderTemp;
+}
+
+function displayCart(index) {
+  let cartTemp = "";
+  let cartData = "";
+  for (let i = 0; i < allUsers[index].cart.length; i++) {
+    cartData += `
+                                
+                                  <tr class="text-center">
+                                    <td>${allUsers[index].cart[i].productID}</td>
+                                    <td>${allUsers[index].cart[i].productName}</td>
+                                    <td><img src="${allUsers[index].cart[i].productImage}" /></td>
+                                    <td>${allUsers[index].cart[i].productDetails}</td>
+                                    <td>${allUsers[index].cart[i].productPrice}</td>
+                                    <td>${allUsers[index].cart[i].category}</td>
+                                    <td>${allUsers[index].cart[i].promotion}</td>
+                                    <td>${allUsers[index].cart[i].count}</td>
+                                    <td>${allUsers[index].cart[i].seller}</td>
+                                  </tr>`;
+  }
+  cartTemp = `<div class="orderInnerContainer mb-3 p-4">
+                            <div class="cartDetails mb-4">
+                              <h4>Cart Details</h4>
+                              <table class="table table-striped table-bordered">
+                                <thead>
+                                  <tr>
+                                    <td>ID</td>
+                                    <td>Name</td>
+                                    <td>Image</td>
+                                    <td>Details</td>
+                                    <td>Price</td>
+                                    <td>Category</td>
+                                    <td>Promotion</td>
+                                    <td>Amount</td>
+                                    <td>Seller</td>
+                                  </tr>
+                                </thead>
+                                <tbody class="table-group-divider">
+                                ${cartData}
+                                </tbody>
+                            </table>
+                            </div>
+                    </div>`;
+  if (!cartData) {
+    cartData = `<tr><td colspan="10" rowspan="3" class="text-center py-5"><h2 class="fs-1 fw-bolder py-5">No products found</h2></td></tr>`;
+  }
+  document.getElementById("cartContainer").innerHTML = cartData;
+}
+
 displayProducts();
-displayPendingProducts();
-displayTickets();

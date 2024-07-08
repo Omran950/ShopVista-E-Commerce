@@ -13,7 +13,6 @@ let passwordAlert = document.getElementById("password-alert");
 let rePasswordAlert = document.getElementById("repassword-alert");
 let passwordIcon = document.getElementById("toggle-password");
 let rePasswordIcon = document.getElementById("toggle-rePassword");
-
 let allUsers = [];
 
 // Create Array to save data of all users and get users info from local storage

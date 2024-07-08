@@ -8,6 +8,19 @@
     <link rel="stylesheet" href="../css/all.min.css" />
     <link rel="stylesheet" href="../css/bootstrap.min.css" />
     <link rel="stylesheet" href="../css/index.css" />
+    <script>
+      if (!localStorage.getItem("currentUser")) {
+        window.location.replace("../index.html");
+      } else {
+        let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+        if (currentUser.role == "admin") {
+          window.location.replace("../Admin/admin.html");
+        }
+        if (currentUser.role == "customer") {
+          window.location.replace("../index.html");
+        }
+      }
+    </script>
   </head>
   <body>
     <!-- NvBar -->

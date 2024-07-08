@@ -1,3 +1,11 @@
+if (localStorage.getItem("currentUser")) {
+  let allProducts = JSON.parse(localStorage.getItem("allProducts")) || [];
+  let currentUserIndex =
+    JSON.parse(localStorage.getItem("currentUserIndex")) || 0;
+  let currentUser = JSON.parse(localStorage.getItem("currentUser")) || {};
+  let allUsers = JSON.parse(localStorage.getItem("allUsers")) || [];
+}
+
 let ticketReasonSelected = document.getElementById("ticket-reason");
 let ticketTitle = document.getElementById("ticket-title");
 let ticketName = document.getElementById("ticket-name");
@@ -11,12 +19,6 @@ let emailAlert = document.getElementById("email-alert");
 let mobileAlert = document.getElementById("mobile-alert");
 let messageAlert = document.getElementById("message-alert");
 let navUl = document.getElementById("navUl");
-
-let allProducts = JSON.parse(localStorage.getItem("allProducts")) || [];
-let currentUserIndex =
-  JSON.parse(localStorage.getItem("currentUserIndex")) || 0;
-let currentUser = JSON.parse(localStorage.getItem("currentUser")) || {};
-let allUsers = JSON.parse(localStorage.getItem("allUsers")) || [];
 let allTickets = JSON.parse(localStorage.getItem("allTickets")) || [];
 
 document.getElementById("contact-right").addEventListener("click", function () {

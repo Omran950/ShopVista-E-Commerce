@@ -1,52 +1,49 @@
-if (!localStorage.getItem("currentUser")) {
-  window.location.replace("../index.html");
-} else {
-  let allProducts = JSON.parse(localStorage.getItem("allProducts")) || [];
-  let currentUserIndex =
-    JSON.parse(localStorage.getItem("currentUserIndex")) || 0;
-  let currentUser = JSON.parse(localStorage.getItem("currentUser")) || {};
-  let allUsers = JSON.parse(localStorage.getItem("allUsers")) || [];
+let allProducts = JSON.parse(localStorage.getItem("allProducts")) || [];
+let currentUserIndex =
+  JSON.parse(localStorage.getItem("currentUserIndex")) || 0;
+let currentUser = JSON.parse(localStorage.getItem("currentUser")) || {};
+let allUsers = JSON.parse(localStorage.getItem("allUsers")) || [];
 
-  if (currentUser.role === "seller") {
-    let sellerDashboard = document.getElementById("sellerDashboard");
-    sellerDashboard.innerHTML = `<a class="nav-link" aria-current="page" href="../Seller/seller.html">Dashboard</a>`;
+if (currentUser.role === "seller") {
+  let sellerDashboard = document.getElementById("sellerDashboard");
+  sellerDashboard.innerHTML = `<a class="nav-link" aria-current="page" href="../Seller/seller.html">Dashboard</a>`;
+}
+
+let modalHeader = document.getElementById("staticBackdropLabel");
+let modalBody = document.getElementById("modalBody");
+let cart = document.getElementById("cart");
+let SearchBar = document.getElementById("SearchBar");
+
+function logout() {
+  currentUserIndex = JSON.parse(localStorage.getItem("currentUserIndex"));
+  allUsers[currentUserIndex].isLogin = false;
+  localStorage.setItem("allUsers", JSON.stringify(allUsers));
+  localStorage.removeItem("currentUser");
+  localStorage.removeItem("currentUserIndex");
+  Swal.fire({
+    position: "top-center",
+    icon: "success",
+    title: "Logged Out Successfully",
+    showConfirmButton: false,
+    timer: 1000,
+  });
+  setTimeout(() => {
+    window.location.replace("../index.html");
+  }, 1000);
+}
+
+function productDetails(i) {
+  allProducts = JSON.parse(localStorage.getItem("allProducts"));
+
+  let newPrice = "";
+  if (!allProducts[i].featured) {
+    priceAfterPromotion =
+      allProducts[i].productPrice -
+      allProducts[i].productPrice * (allProducts[i].promotion / 100);
+    newPrice = `<p class="my-2 py-2" id="priceAfter"><span class="fw-bold text-">After Discount :</span> ${priceAfterPromotion} EGP</p>`;
   }
-
-  let modalHeader = document.getElementById("staticBackdropLabel");
-  let modalBody = document.getElementById("modalBody");
-  let cart = document.getElementById("cart");
-  let SearchBar = document.getElementById("SearchBar");
-
-  function logout() {
-    currentUserIndex = JSON.parse(localStorage.getItem("currentUserIndex"));
-    allUsers[currentUserIndex].isLogin = false;
-    localStorage.setItem("allUsers", JSON.stringify(allUsers));
-    localStorage.removeItem("currentUser");
-    localStorage.removeItem("currentUserIndex");
-    Swal.fire({
-      position: "top-center",
-      icon: "success",
-      title: "Logged Out Successfully",
-      showConfirmButton: false,
-      timer: 1000,
-    });
-    setTimeout(() => {
-      window.location.replace("../index.html");
-    }, 1000);
-  }
-
-  function productDetails(i) {
-    allProducts = JSON.parse(localStorage.getItem("allProducts"));
-
-    let newPrice = "";
-    if (!allProducts[i].featured) {
-      priceAfterPromotion =
-        allProducts[i].productPrice -
-        allProducts[i].productPrice * (allProducts[i].promotion / 100);
-      newPrice = `<p class="my-2 py-2" id="priceAfter"><span class="fw-bold text-">After Discount :</span> ${priceAfterPromotion} EGP</p>`;
-    }
-    modalHeader.innerHTML = `${allProducts[i].productName}`;
-    modalBody.innerHTML = `<div class="col-md-5">
+  modalHeader.innerHTML = `${allProducts[i].productName}`;
+  modalBody.innerHTML = `<div class="col-md-5">
                       <figure class="overflow-hidden p-3">
                         <img src="${allProducts[i].productImage}" alt="${allProducts[i].productName}" class="w-100 d-block"/>
                       </figure>
@@ -62,110 +59,107 @@ if (!localStorage.getItem("currentUser")) {
                         <p class="my-2 py-2"><span class="fw-bold">Rating :</span> ${allProducts[i].rating}<i class="fa-solid fa-star"></i></p>
                       </div>
                     </div>`;
-  }
+}
 
-  function addToCart(event, i, cat, body) {
-    let productCategory = cat;
-    let productsBody = body;
-    event.stopPropagation();
-    if (allProducts[i].stock > 0) {
-      Swal.fire({
-        position: "top-end",
-        icon: "success",
-        title: "Product has been added successfully",
-        showConfirmButton: false,
-        timer: 1500,
-      });
-      allProducts[i].stock--;
-      localStorage.setItem("allProducts", JSON.stringify(allProducts));
-      allUsers = JSON.parse(localStorage.getItem("allUsers"));
-      currentUserIndex = JSON.parse(localStorage.getItem("currentUserIndex"));
+function addToCart(event, i, cat, body) {
+  let productCategory = cat;
+  let productsBody = body;
+  event.stopPropagation();
+  if (allProducts[i].stock > 0) {
+    Swal.fire({
+      position: "top-end",
+      icon: "success",
+      title: "Product has been added successfully",
+      showConfirmButton: false,
+      timer: 1500,
+    });
+    allProducts[i].stock--;
+    localStorage.setItem("allProducts", JSON.stringify(allProducts));
+    allUsers = JSON.parse(localStorage.getItem("allUsers"));
+    currentUserIndex = JSON.parse(localStorage.getItem("currentUserIndex"));
 
-      let checkCartProducts = false;
-      if (allUsers[currentUserIndex].cart.length == 0) {
+    let checkCartProducts = false;
+    if (allUsers[currentUserIndex].cart.length == 0) {
+      allUsers[currentUserIndex].cart.push(allProducts[i]);
+      allUsers[currentUserIndex].cart[
+        allUsers[currentUserIndex].cart.length - 1
+      ].count = 1;
+    } else {
+      for (let j = 0; j < allUsers[currentUserIndex].cart.length; j++) {
+        if (
+          allProducts[i].productID ===
+          allUsers[currentUserIndex].cart[j].productID
+        ) {
+          allUsers[currentUserIndex].cart[j].count += 1;
+          checkCartProducts = true;
+          break;
+        }
+      }
+      if (!checkCartProducts) {
         allUsers[currentUserIndex].cart.push(allProducts[i]);
         allUsers[currentUserIndex].cart[
           allUsers[currentUserIndex].cart.length - 1
         ].count = 1;
-      } else {
-        for (let j = 0; j < allUsers[currentUserIndex].cart.length; j++) {
-          if (
-            allProducts[i].productID ===
-            allUsers[currentUserIndex].cart[j].productID
-          ) {
-            allUsers[currentUserIndex].cart[j].count += 1;
-            checkCartProducts = true;
-            break;
-          }
-        }
-        if (!checkCartProducts) {
-          allUsers[currentUserIndex].cart.push(allProducts[i]);
-          allUsers[currentUserIndex].cart[
-            allUsers[currentUserIndex].cart.length - 1
-          ].count = 1;
-        }
       }
-
-      if (allProducts[i].featured) {
-        allUsers[currentUserIndex].totalCartPrice +=
-          allProducts[i].productPrice;
-      } else {
-        let priceAfterPromotion =
-          allProducts[i].productPrice -
-          allProducts[i].productPrice * (allProducts[i].promotion / 100);
-        allUsers[currentUserIndex].totalCartPrice += priceAfterPromotion;
-      }
-      localStorage.setItem("allUsers", JSON.stringify(allUsers));
-      localStorage.setItem(
-        "currentUser",
-        JSON.stringify(allUsers[currentUserIndex])
-      );
-    } else {
-      Swal.fire({
-        position: "top-end",
-        icon: "warning",
-        title: "Product out of stock",
-        showConfirmButton: false,
-        timer: 1500,
-      });
-      searchByCategory(cat, body);
     }
-    cart.innerHTML = allUsers[currentUserIndex].cart.length;
+
+    if (allProducts[i].featured) {
+      allUsers[currentUserIndex].totalCartPrice += allProducts[i].productPrice;
+    } else {
+      let priceAfterPromotion =
+        allProducts[i].productPrice -
+        allProducts[i].productPrice * (allProducts[i].promotion / 100);
+      allUsers[currentUserIndex].totalCartPrice += priceAfterPromotion;
+    }
+    localStorage.setItem("allUsers", JSON.stringify(allUsers));
+    localStorage.setItem(
+      "currentUser",
+      JSON.stringify(allUsers[currentUserIndex])
+    );
+  } else {
+    Swal.fire({
+      position: "top-end",
+      icon: "warning",
+      title: "Product out of stock",
+      showConfirmButton: false,
+      timer: 1500,
+    });
+    searchByCategory(cat, body);
   }
+  cart.innerHTML = allUsers[currentUserIndex].cart.length;
+}
 
-  function searchByCategory(cat, body, query = "") {
-    cart.innerHTML = allUsers[currentUserIndex].cart.length;
-    let products = "";
-    let productCategory = cat;
-    let productsBody = body;
-    let lowerCaseQuery = query.toLowerCase();
+function searchByCategory(cat, body, query = "") {
+  cart.innerHTML = allUsers[currentUserIndex].cart.length;
+  let products = "";
+  let productCategory = cat;
+  let productsBody = body;
+  let lowerCaseQuery = query.toLowerCase();
 
-    for (let i = 0; i < allProducts.length; i++) {
-      if (
-        (allProducts[i].category === cat || cat === "all") &&
-        (allProducts[i].productName.toLowerCase().includes(lowerCaseQuery) ||
-          allProducts[i].productDetails
-            .toLowerCase()
-            .includes(lowerCaseQuery) ||
-          allProducts[i].category.toLowerCase().includes(lowerCaseQuery) ||
-          allProducts[i].seller.toLowerCase().includes(lowerCaseQuery))
-      ) {
-        if (!allProducts[i].pending && allProducts[i].stock > 0) {
-          let priceAfterPromotion = "";
-          let newPrice = "";
-          if (!allProducts[i].featured) {
-            priceAfterPromotion =
-              allProducts[i].productPrice -
-              allProducts[i].productPrice * (allProducts[i].promotion / 100);
-            newPrice = `<p class="my-2 py-2" id="priceAfter"><span class="fw-bold text-">After Discount :</span> ${priceAfterPromotion} EGP</p>`;
-          }
-          products += `<div class="col-sm-6 col-md-4 col-lg-3">
+  for (let i = 0; i < allProducts.length; i++) {
+    if (
+      (allProducts[i].category === cat || cat === "all") &&
+      (allProducts[i].productName.toLowerCase().includes(lowerCaseQuery) ||
+        allProducts[i].productDetails.toLowerCase().includes(lowerCaseQuery) ||
+        allProducts[i].category.toLowerCase().includes(lowerCaseQuery) ||
+        allProducts[i].seller.toLowerCase().includes(lowerCaseQuery))
+    ) {
+      if (!allProducts[i].pending && allProducts[i].stock > 0) {
+        let priceAfterPromotion = "";
+        let newPrice = "";
+        if (!allProducts[i].featured) {
+          priceAfterPromotion =
+            allProducts[i].productPrice -
+            allProducts[i].productPrice * (allProducts[i].promotion / 100);
+          newPrice = `<p class="my-2 py-2" id="priceAfter"><span class="fw-bold text-">After Discount :</span> ${priceAfterPromotion} EGP</p>`;
+        }
+        products += `<div class="col-sm-6 col-md-4 col-lg-3">
             <div class="card rounded-3 overflow-hidden">
               <div class="" onclick="productDetails(${i})" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                 <figure class="m-0 p-2">
                   <img src="${allProducts[i].productImage}" alt="${
-            allProducts[i].productName
-          }" class="d-block w-75 m-auto" style="height: 200px"/>
+          allProducts[i].productName
+        }" class="d-block w-75 m-auto" style="height: 200px"/>
                 </figure>
                 <div class="text px-2 py-3">
                   <h6 class="text-center fw-bolder">${
@@ -175,8 +169,8 @@ if (!localStorage.getItem("currentUser")) {
                     0,
                     20
                   )}${
-            allProducts[i].productDetails.length > 50 ? "..." : ""
-          }</p>
+          allProducts[i].productDetails.length > 50 ? "..." : ""
+        }</p>
                   <p class="text-center" id="price">${
                     allProducts[i].featured
                       ? `Price : ${allProducts[i].productPrice} EGP`
@@ -187,19 +181,18 @@ if (!localStorage.getItem("currentUser")) {
               <button class="btn w-75 text-capitalize m-auto d-block my-3" onclick="addToCart(event, ${i}, '${productCategory}', '${productsBody}')">Add to cart</button>
             </div>
           </div>`;
-        }
       }
     }
-
-    if (products == "") {
-      products += `<div class="d-flex justify-content-center"><img src="../images/no-products.jpg" class="d-block m-auto" alt="noProductFound" id="noProductFound"></div>`;
-    }
-    document.getElementById(body).innerHTML = products;
   }
 
-  SearchBar.addEventListener("keyup", function () {
-    searchByCategory("all", "row-all-tab-pane", SearchBar.value);
-  });
-
-  searchByCategory("all", "row-all-tab-pane");
+  if (products == "") {
+    products += `<div class="d-flex justify-content-center"><img src="../images/no-products.jpg" class="d-block m-auto" alt="noProductFound" id="noProductFound"></div>`;
+  }
+  document.getElementById(body).innerHTML = products;
 }
+
+SearchBar.addEventListener("keyup", function () {
+  searchByCategory("all", "row-all-tab-pane", SearchBar.value);
+});
+
+searchByCategory("all", "row-all-tab-pane");

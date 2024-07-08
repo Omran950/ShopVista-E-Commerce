@@ -24,6 +24,7 @@ if (!localStorage.getItem("allUsers")) {
 let currentUserIndex =
   JSON.parse(localStorage.getItem("currentUserIndex")) || 0;
 let currentUser = JSON.parse(localStorage.getItem("currentUser")) || {};
+
 let navUl = document.getElementById("navUl");
 let featuredProducts = document.getElementById("featured-products");
 let promotedProducts = document.getElementById("promoted-products");

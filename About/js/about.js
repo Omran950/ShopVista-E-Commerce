@@ -2,11 +2,14 @@ document.addEventListener("DOMContentLoaded", function () {
   updateNav();
 });
 
-let allProducts = JSON.parse(localStorage.getItem("allProducts")) || [];
-let currentUserIndex =
-  JSON.parse(localStorage.getItem("currentUserIndex")) || 0;
-let currentUser = JSON.parse(localStorage.getItem("currentUser")) || {};
-let allUsers = JSON.parse(localStorage.getItem("allUsers")) || [];
+if (localStorage.getItem("currentUser")) {
+  let allProducts = JSON.parse(localStorage.getItem("allProducts")) || [];
+  let currentUserIndex =
+    JSON.parse(localStorage.getItem("currentUserIndex")) || 0;
+  let currentUser = JSON.parse(localStorage.getItem("currentUser")) || {};
+  let allUsers = JSON.parse(localStorage.getItem("allUsers")) || [];
+}
+
 let navUl = document.getElementById("navUl");
 
 function updateNav() {

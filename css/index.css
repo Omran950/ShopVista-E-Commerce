@@ -90,10 +90,12 @@ a {
   background-color: rgb(0, 128, 128, 0.7);
 }
 
-.delete-btn {
+.delete-btn,
+.delete-btn-user {
   background-color: #dc3545;
 }
-.delete-btn:hover {
+.delete-btn:hover,
+.delete-btn-user:hover {
   background-color: rgb(220, 53, 69, 0.8);
 }
 

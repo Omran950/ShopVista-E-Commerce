@@ -1,8 +1,4 @@
-// Select Elemnts
-let loginEmail = document.getElementById("login-email");
-let loginPassword = document.getElementById("login-password");
-let loginBtn = document.getElementById("login-btn");
-let passwordIcon = document.getElementById("toggle-password");
+// Get data from local storage and copy it in an array
 let allUsers = [];
 let currentUser = [];
 let currentUserIndex = 0;
@@ -10,13 +6,17 @@ if (localStorage.getItem("currentUserIndex")) {
   currentUser = JSON.parse(localStorage.getItem("currentUser"));
   currentUserIndex = JSON.parse(localStorage.getItem("currentUserIndex"));
 }
-
-// Get data from local storage and copy it in an array
 if (JSON.parse(localStorage.getItem("allUsers")) != null) {
   allUsers = JSON.parse(localStorage.getItem("allUsers"));
 } else {
   allUsers = [];
 }
+
+// Select Elemnts
+let loginEmail = document.getElementById("login-email");
+let loginPassword = document.getElementById("login-password");
+let loginBtn = document.getElementById("login-btn");
+let passwordIcon = document.getElementById("toggle-password");
 
 // Clear Function
 function clearInputs() {

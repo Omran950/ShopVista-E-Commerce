@@ -9,164 +9,181 @@
     <link rel="stylesheet" href="../css/bootstrap.min.css" />
     <link rel="stylesheet" href="../css/index.css" />
     <link rel="stylesheet" href="css/authentication.css" />
+    <script>
+      if (localStorage.getItem("currentUser")) {
+        let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+        if (currentUser.role == "admin") {
+          window.location.replace("../Admin/admin.html");
+        }
+        window.location.replace("../index.html");
+      }
+    </script>
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg" id="navBar">
-      <div class="container-fluid ms-4">
-        <a class="navbar-brand" href="../index.html">
-          <img
-            src="../images/logoo.jpeg"
-            alt=""
-            style="width: 60px; height: 60px"
-            class="rounded-3 me-2"
-          />
-          ShopVista</a
-        >
-      </div>
-    </nav>
-    <section id="main-signup" class="py-3">
-      <div
-        class="form w-75 m-auto shadow-lg rounded-5 px-3 pt-3 bg-info bg-opacity-10"
-      >
-        <h2 class="text-center">Register</h2>
-        <div class="mt-3 pt-4">
-          <div class="input-group mb-3">
-            <span class="input-group-text"
-              ><i class="fa-solid fa-user"></i
-            ></span>
-            <div class="form-floating">
-              <input
-                id="sign-name"
-                type="text"
-                class="form-control"
-                id="floatingInputGroup1"
-                placeholder="Username"
-              />
-              <label for="floatingInputGroup1">Username</label>
-            </div>
-          </div>
-          <p id="name-alert" class="text-danger mb-3 d-none">
-            Name must be at least 3 characters
-          </p>
-
-          <div class="input-group mb-3">
-            <span class="input-group-text"
-              ><i class="fa-solid fa-envelope"></i
-            ></span>
-            <div class="form-floating">
-              <input
-                id="sign-email"
-                type="email"
-                class="form-control"
-                id="floatingInputGroup1"
-                placeholder="Username"
-              />
-              <label for="floatingInputGroup1">Email</label>
-            </div>
-          </div>
-          <p id="email-alert" class="text-danger mb-3 d-none">
-            Invaild email (ex:example@ex.com)
-          </p>
-
-          <div class="input-group mb-3">
-            <span class="input-group-text"
-              ><i class="fa-solid fa-location-dot"></i
-            ></span>
-            <div class="form-floating">
-              <input
-                id="sign-address"
-                type="text"
-                class="form-control"
-                id="floatingInputGroup1"
-                placeholder="Username"
-              />
-              <label for="floatingInputGroup1">Address</label>
-            </div>
-          </div>
-          <p id="address-alert" class="text-danger mb-3 d-none">
-            Pddress must be between 6 and 20 characters long.
-          </p>
-
-          <div class="input-group mb-3">
-            <span class="input-group-text"
-              ><i class="fa-solid fa-lock"></i
-            ></span>
-            <div class="form-floating">
-              <input
-                id="sign-password"
-                type="password"
-                class="form-control"
-                id="floatingInputGroup1"
-                placeholder="Username"
-              />
-              <label for="floatingInputGroup1">Password</label>
-            </div>
-            <span class="input-group-text">
-              <i
-                id="toggle-password"
-                class="fa-solid fa-eye"
-                style="cursor: pointer"
-              ></i>
-            </span>
-          </div>
-          <p id="password-alert" class="text-danger mb-3 d-none">
-            Password must be 8 characters at least and contain one capital
-            letter and one symbol
-          </p>
-
-          <div class="input-group mb-3">
-            <span class="input-group-text"
-              ><i class="fa-solid fa-repeat"></i
-            ></span>
-            <div class="form-floating">
-              <input
-                id="re-password"
-                type="password"
-                class="form-control"
-                id="floatingInputGroup1"
-                placeholder="Repassword"
-              />
-              <label for="floatingInputGroup1">Repassword</label>
-            </div>
-            <span class="input-group-text">
-              <i
-                id="toggle-rePassword"
-                class="fa-solid fa-eye"
-                style="cursor: pointer"
-              ></i>
-            </span>
-          </div>
-          <p id="repassword-alert" class="text-danger mb-3 d-none">
-            Password does not match
-          </p>
-
-          <div class="input-group mb-3">
-            <span class="input-group-text"
-              ><i class="fa-solid fa-user-tag"></i
-            ></span>
-            <div class="form-floating">
-              <select id="sign-role" class="form-control">
-                <option value="customer">Customer</option>
-                <option value="seller">Seller</option>
-              </select>
-              <label for="sign-role">Role</label>
-            </div>
-          </div>
-
-          <button
-            id="signup-btn"
-            type="button"
-            class="btn mt-2 text-center w-100"
+    <div class="video-background">
+      <video autoplay muted loop id="bg-video">
+        <source src="../images/bg111.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+    </div>
+    <div class="content-bg">
+      <nav class="navbar navbar-expand-lg" id="navBar">
+        <div class="container-fluid ms-4">
+          <a class="navbar-brand" href="../index.html">
+            <img
+              src="../images/logoo.jpeg"
+              alt=""
+              style="width: 30px; height: 30px"
+              class="rounded-3 me-2"
+            />
+            ShopVista</a
           >
-            Sign Up
-          </button>
-          <p class="text-center py-2 my-0">
-            You have an account?
-            <a href="login.html" class="">Login</a>
-          </p>
         </div>
-      </div>
-    </section>
+      </nav>
+      <section id="main-signup" class="">
+        <div
+          class="form w-75 m-auto shadow-lg rounded-5 py-2 px-3 bg-info bg-opacity-10"
+        >
+          <h2 class="text-center text-warning">Register</h2>
+          <div class="mt-3 pt-4">
+            <div class="input-group mb-3">
+              <span class="input-group-text"
+                ><i class="fa-solid fa-user"></i
+              ></span>
+              <div class="form-floating">
+                <input
+                  id="sign-name"
+                  type="text"
+                  class="form-control"
+                  id="floatingInputGroup1"
+                  placeholder="Username"
+                />
+                <label for="floatingInputGroup1">Username</label>
+              </div>
+            </div>
+            <p id="name-alert" class="text-danger mb-3 d-none">
+              Name must be at least 3 characters
+            </p>
+
+            <div class="input-group mb-3">
+              <span class="input-group-text"
+                ><i class="fa-solid fa-envelope"></i
+              ></span>
+              <div class="form-floating">
+                <input
+                  id="sign-email"
+                  type="email"
+                  class="form-control"
+                  id="floatingInputGroup1"
+                  placeholder="Username"
+                />
+                <label for="floatingInputGroup1">Email</label>
+              </div>
+            </div>
+            <p id="email-alert" class="text-danger mb-3 d-none">
+              Invaild email (ex:example@ex.com)
+            </p>
+
+            <div class="input-group mb-3">
+              <span class="input-group-text"
+                ><i class="fa-solid fa-location-dot"></i
+              ></span>
+              <div class="form-floating">
+                <input
+                  id="sign-address"
+                  type="text"
+                  class="form-control"
+                  id="floatingInputGroup1"
+                  placeholder="Username"
+                />
+                <label for="floatingInputGroup1">Address</label>
+              </div>
+            </div>
+            <p id="address-alert" class="text-danger mb-3 d-none">
+              Pddress must be between 6 and 20 characters long.
+            </p>
+
+            <div class="input-group mb-3">
+              <span class="input-group-text"
+                ><i class="fa-solid fa-lock"></i
+              ></span>
+              <div class="form-floating">
+                <input
+                  id="sign-password"
+                  type="password"
+                  class="form-control"
+                  id="floatingInputGroup1"
+                  placeholder="Username"
+                />
+                <label for="floatingInputGroup1">Password</label>
+              </div>
+              <span class="input-group-text">
+                <i
+                  id="toggle-password"
+                  class="fa-solid fa-eye"
+                  style="cursor: pointer"
+                ></i>
+              </span>
+            </div>
+            <p id="password-alert" class="text-danger mb-3 d-none">
+              Password must be 8 characters at least and contain one capital
+              letter and one symbol
+            </p>
+
+            <div class="input-group mb-3">
+              <span class="input-group-text"
+                ><i class="fa-solid fa-repeat"></i
+              ></span>
+              <div class="form-floating">
+                <input
+                  id="re-password"
+                  type="password"
+                  class="form-control"
+                  id="floatingInputGroup1"
+                  placeholder="Repassword"
+                />
+                <label for="floatingInputGroup1">Repassword</label>
+              </div>
+              <span class="input-group-text">
+                <i
+                  id="toggle-rePassword"
+                  class="fa-solid fa-eye"
+                  style="cursor: pointer"
+                ></i>
+              </span>
+            </div>
+            <p id="repassword-alert" class="text-danger mb-3 d-none">
+              Password does not match
+            </p>
+
+            <div class="input-group mb-3">
+              <span class="input-group-text"
+                ><i class="fa-solid fa-user-tag"></i
+              ></span>
+              <div class="form-floating">
+                <select id="sign-role" class="form-control">
+                  <option value="customer">Customer</option>
+                  <option value="seller">Seller</option>
+                </select>
+                <label for="sign-role">Role</label>
+              </div>
+            </div>
+
+            <button
+              id="signup-btn"
+              type="button"
+              class="btn mt-2 text-center w-100"
+            >
+              Sign Up
+            </button>
+            <p class="text-center py-2 my-0 text-warning">
+              You have an account ?
+              <a href="login.html" class=""> Login</a>
+            </p>
+          </div>
+        </div>
+      </section>
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="../js/bootstrap.bundle.min.js"></script>
