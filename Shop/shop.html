@@ -96,7 +96,7 @@
           <div class="modal-body">
             <div class="container">
               <div
-                class="row gx-5  flex-md-row-reverse flex-column"
+                class="row gx-5 flex-md-row-reverse flex-column"
                 id="modalBody"
               ></div>
             </div>
@@ -193,8 +193,24 @@
           aria-labelledby="all-tab"
           tabindex="0"
         >
+          <div class="input-group my-3 m-auto">
+            <span class="input-group-text"
+              ><i class="fa-solid fa-magnifying-glass"></i
+            ></span>
+            <div class="form-floating">
+              <input
+                id="SearchBar"
+                type="text"
+                class="form-control"
+                id="floatingInputGroup1"
+                placeholder="Search"
+                onkeyup="searchProducts()"
+              />
+              <label for="floatingInputGroup1">Search</label>
+            </div>
+          </div>
           <div
-            class="row g-4 justify-content-center"
+            class="row g-4 mt-4 justify-content-center"
             id="row-all-tab-pane"
           ></div>
         </div>

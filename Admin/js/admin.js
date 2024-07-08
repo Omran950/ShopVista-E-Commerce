@@ -1,12 +1,17 @@
+if (!localStorage.getItem("currentUser")) {
+  location.replace("../index.html");
+}
+
 let currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
-// if (currentUser.role != "admin") {
-//   location.replace("../../index.html");
-// }
+if (currentUser.role != "admin") {
+  location.replace("../index.html");
+}
 
-let allProducts = JSON.parse(localStorage.getItem("allProducts"));
-let allUsers = JSON.parse(localStorage.getItem("allUsers"));
-let currentUserIndex = Number(localStorage.getItem("currentUserIndex"));
+let allProducts = JSON.parse(localStorage.getItem("allProducts")) || [];
+let allUsers = JSON.parse(localStorage.getItem("allUsers")) || [];
+let currentUserIndex =
+  JSON.parse(localStorage.getItem("currentUserIndex")) || 0;
 
 // Password Toggle Icons
 let passwordToggleIcon = document.getElementById("toggle-password");

@@ -717,6 +717,14 @@ function addToCart(event, i) {
         "currentUser",
         JSON.stringify(allUsers[currentUserIndex])
       );
+    } else {
+      Swal.fire({
+        position: "top-end",
+        icon: "warning",
+        title: "Product out of stock",
+        showConfirmButton: false,
+        timer: 1500,
+      });
       displayAllProducts();
     }
   }

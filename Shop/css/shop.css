@@ -1,32 +1,16 @@
-#noProductFound {
+#noProductFound,
+.input-group {
   width: 50%;
 }
 @media screen and (max-width: 992px) {
-  #noProductFound {
+  #noProductFound,
+  .input-group {
     width: 75%;
   }
 }
 @media screen and (max-width: 576px) {
-  #noProductFound {
+  #noProductFound,
+  .input-group {
     width: 100%;
   }
 }
-
-#searchBar {
-  width: 50%;
-}
-#selectCriteria {
-  width: 25%;
-}
-@media screen and (max-width: 768px) {
-  #searchBar {
-    width: 90%;
-    margin: auto;
-  }
-  #selectCriteria {
-    width: 60%;
-    margin: auto;
-  }
-}
-
-
