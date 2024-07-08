@@ -30,6 +30,9 @@ let pendingTicketsTableBody = document.getElementById("ticketsTableBody");
 let dropdownItems = document.querySelectorAll(".dropdown-item");
 let dropdownButton = document.getElementById("dropdownMenuButton1");
 let pendingTableBody = document.getElementById("pendingProductsTableBody");
+let handledTicketsTableBody = document.getElementById(
+  "handledTicketsTableBody"
+);
 
 let existingProduct = null;
 
@@ -518,10 +521,6 @@ function displayPendingTickets() {
   }
   pendingTicketsTableBody.innerHTML = ticketsTrs;
 }
-
-let handledTicketsTableBody = document.getElementById(
-  "handledTicketsTableBody"
-);
 
 function displayHandledTickets() {
   let handledTicketsTrs = "";
