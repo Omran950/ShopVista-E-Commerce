@@ -56,6 +56,9 @@ let existingProduct = null;
 categorySelected.addEventListener("change", function () {
   let category = categorySelected.value;
 });
+stock.addEventListener("change", function () {
+  let stock = stock.value;
+});
 
 function productNameValidation() {
   let productNameRegex = /^[a-zA-Z0-9_ ]{3,20}$/;
@@ -73,12 +76,17 @@ function productImageValidation() {
 function categoryValidation() {
   return categorySelected.value !== "";
 }
+function stockValidation() {
+  let stockRegex = /^[1-9]\d*(\.\d{1,2})?$|^0\.\d{1,2}$/;
+  return stockRegex.test(stock.value);
+}
 function promotionValidation() {
   let promotionRegex = /^(100|[1-9]?[0-9])$/;
   return promotionRegex.test(promotion.value);
 }
 function productDetailsValidation() {
-  let detailsRegex = /^[a-zA-Z0-9_ !@#$%^&*()-+=,.]{20,100}$/;
+  let detailsRegex =
+    /^[a-zA-Z0-9 !"#$%&'()*+,\-./:;<=>?@[\\\]^_`{|}~]{20,100}$/;
   return detailsRegex.test(productDetails.value);
 }
 // User Management Form Validation
@@ -130,7 +138,13 @@ productPrice.addEventListener("keyup", function () {
     addProductPriceAlert();
   }
 });
-
+stock.addEventListener("keyup", function () {
+  if (stockValidation()) {
+    removeStockAlert();
+  } else {
+    addStockAlert();
+  }
+});
 productImage.addEventListener("keyup", function () {
   if (productImageValidation()) {
     removeProductImageAlert();
@@ -220,6 +234,14 @@ function addCategoryAlert() {
 function removeCategoryAlert() {
   categorySelected.classList.remove("is-invalid");
   categorySelected.classList.add("is-valid");
+}
+function addStockAlert() {
+  stock.classList.add("is-invalid");
+  stock.classList.remove("is-valid");
+}
+function removeStockAlert() {
+  stock.classList.remove("is-invalid");
+  stock.classList.add("is-valid");
 }
 
 function addPromotionAlert() {
@@ -362,8 +384,16 @@ addProduct.addEventListener("click", function () {
     productNameValidation() &&
     productPriceValidation() &&
     productImageValidation() &&
-    productDetailsValidation()
+    productDetailsValidation() &&
+    stockValidation()
   ) {
+    productName.classList.remove("is-valid");
+    productPrice.classList.remove("is-valid");
+    productImage.classList.remove("is-valid");
+    productDetails.classList.remove("is-valid");
+    categorySelected.classList.remove("is-valid");
+    stock.classList.remove("is-valid");
+    promotion.classList.remove("is-valid");
     if (existingProduct) {
       let index = allProducts.findIndex((p) => p.productID === existingProduct);
       product.rating = allProducts[index].rating;
@@ -441,8 +471,8 @@ addProduct.addEventListener("click", function () {
       showConfirmButton: false,
       timer: 1000,
     });
-  } else if (!categoryValidation()) {
-    addCategoryAlert();
+  } else if (!stockValidation()) {
+    addStockAlert();
     Swal.fire({
       position: "center",
       icon: "error",
@@ -512,16 +542,16 @@ document.addEventListener("click", function (event) {
 function updateRow(productID) {
   window.scrollTo({ top: 0, behavior: "smooth" });
 
-  let productToUpdate = allProducts.find((p) => p.productID === productID);
+  existingProduct = allProducts.find((p) => p.productID === productID);
 
-  if (productToUpdate) {
-    productName.value = productToUpdate.productName;
-    productPrice.value = productToUpdate.productPrice;
-    productImage.value = productToUpdate.productImage;
-    productDetails.value = productToUpdate.productDetails;
-    categorySelected.value = productToUpdate.category;
-    stock.value = productToUpdate.stock;
-    promotion.value = productToUpdate.promotion;
+  if (existingProduct) {
+    productName.value = existingProduct.productName;
+    productPrice.value = existingProduct.productPrice;
+    productImage.value = existingProduct.productImage;
+    productDetails.value = existingProduct.productDetails;
+    categorySelected.value = existingProduct.category;
+    stock.value = existingProduct.stock;
+    promotion.value = existingProduct.promotion;
     existingProduct = productID;
   }
 }
@@ -566,10 +596,12 @@ function deleteRow(productID) {
 // Pending Products
 function displayPendingProducts() {
   let pendingTrs = "";
+  let no = 1;
   for (let i = 0; i < allProducts.length; i++) {
     if (allProducts[i].pending == true) {
       pendingTrs += `
             <tr class="text-center">
+                <td>${no}</td>
                 <td>${allProducts[i].productName}</td>
                 <td>${allProducts[i].productPrice}</td>
                 <td><img src="${allProducts[i].productImage}" alt="${allProducts[i].productName}" style="max-width: 100px; max-height: 100px;"></td>
@@ -584,6 +616,7 @@ function displayPendingProducts() {
                     <button type="button" class="btn btn-sm reject-btn" data-product-id="${allProducts[i].productID}">Reject</button></td>
         </tr>
         `;
+      no++;
     }
   }
   if (pendingTrs === ``) {
@@ -603,10 +636,9 @@ document.addEventListener("click", function (event) {
 });
 
 function approveProduct(productID) {
-  let productToUpdate = allProducts.find((p) => p.productID === productID);
-
-  if (productToUpdate) {
-    productToUpdate.pending = false;
+  existingProduct = allProducts.find((p) => p.productID === productID);
+  if (existingProduct) {
+    existingProduct.pending = false;
     localStorage.setItem("allProducts", JSON.stringify(allProducts));
     displayPendingProducts();
     displayProducts();
@@ -621,10 +653,10 @@ function approveProduct(productID) {
 }
 
 function rejectProduct(productID) {
-  let productToUpdate = allProducts.find((p) => p.productID === productID);
+  existingProduct = allProducts.find((p) => p.productID === productID);
 
-  if (productToUpdate) {
-    allProducts.splice(allProducts.indexOf(productToUpdate), 1);
+  if (existingProduct) {
+    allProducts.splice(allProducts.indexOf(existingProduct), 1);
     localStorage.setItem("allProducts", JSON.stringify(allProducts));
     displayPendingProducts();
     displayProducts();
@@ -641,10 +673,12 @@ function rejectProduct(productID) {
 // Customer Service
 function displayPendingTickets() {
   let ticketsTrs = "";
+  let no = 1;
   for (let i = 0; i < allTickets.length; i++) {
     if (allTickets[i].pending == true) {
       ticketsTrs += `
             <tr class="text-center">
+                <td>${no}</td>
                 <td>${allTickets[i].email}</td>
                 <td>${allTickets[i].name}</td>
                 <td>${allTickets[i].mobile}</td>
@@ -657,6 +691,7 @@ function displayPendingTickets() {
                     <button type="button" class="btn btn-sm ignore-btn" data-product-id="${allTickets[i].ticketID}">Ignore</button></td>
         </tr>
         `;
+      no++;
     }
   }
   if (ticketsTrs === ``) {
@@ -667,10 +702,12 @@ function displayPendingTickets() {
 
 function displayHandledTickets() {
   let handledTicketsTrs = "";
+  let no = 1;
   for (let i = 0; i < allTickets.length; i++) {
     if (allTickets[i].pending == false) {
       handledTicketsTrs += `
             <tr class="text-center">
+                <td>${no}</td>
                 <td>${allTickets[i].email}</td>
                 <td>${allTickets[i].name}</td>
                 <td>${allTickets[i].mobile}</td>
@@ -680,6 +717,7 @@ function displayHandledTickets() {
                 <td><i class="fa-regular fa-square-check"></i></td>
         </tr>
         `;
+      no++;
     }
   }
   if (handledTicketsTrs === ``) {
@@ -780,10 +818,12 @@ rePasswordToggleIcon.addEventListener("click", function (e) {
 
 function displayUsers() {
   let tempUsers = "";
+  let no = 1;
   allUsers = JSON.parse(localStorage.getItem("allUsers"));
   for (let i = 1; i < allUsers.length; i++) {
     tempUsers += `
-            <tr>
+            <tr>    
+             <td>${no}</td>
               <td>${allUsers[i].name}</td>
               <td>${allUsers[i].email}</td>
               <td>${allUsers[i].address}</td>
@@ -799,6 +839,7 @@ function displayUsers() {
               <td class="text-center"><button type="button" class="btn delete-btn-user" onclick="deleteUser(${i})">Delete</button></td>
             </tr>
     `;
+    no++;
   }
   if (!tempUsers) {
     tempUsers = `<tr><td colspan="10" rowspan="3" class="text-center py-5"><h2 class="fs-1 fw-bolder py-5">No products found</h2></td></tr>`;

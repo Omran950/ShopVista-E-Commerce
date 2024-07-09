@@ -24,12 +24,14 @@ let tableBody = document.getElementById("productsTableBody");
 
 function getSoldProducts() {
   cart.innerHTML = currentUser.cart.length;
+  let no = 1;
   let product = ``;
   for (let i = 0; i < allUsers.length; i++) {
     for (let j = 0; j < allUsers[i].orders.length; j++) {
       for (let k = 0; k < allUsers[i].orders[j].cart.length; k++) {
         if (allUsers[i].orders[j].cart[k].sellerID == currentUser.email) {
           product += `<tr class="text-center fs-6">
+                <td>${no}</td>
                 <td>${allUsers[i].orders[j].cart[k].productName}</td>
                 <td><img src="${allUsers[i].orders[j].cart[k].productImage}" alt="${allUsers[i].orders[j].cart[k].productName}" class="table-img" style="width: 50px;"></td>
                 <td>${allUsers[i].orders[j].cart[k].category}</td>
@@ -41,6 +43,7 @@ function getSoldProducts() {
                 <td>${allUsers[i].orders[j].shippingDetails.phone}</td>
                 <td>${allUsers[i].orders[j].shippingDetails.address}</td>
               </tr>`;
+          no++;
         }
       }
     }
@@ -71,6 +74,9 @@ function logout() {
 categorySelected.addEventListener("change", function () {
   let category = categorySelected.value;
 });
+stock.addEventListener("change", function () {
+  let category = stock.value;
+});
 productName.addEventListener("keyup", function () {
   if (productNameValidation()) {
     removeProductNameAlert();
@@ -84,6 +90,13 @@ productPrice.addEventListener("keyup", function () {
     removeProductPriceAlert();
   } else {
     addProductPriceAlert();
+  }
+});
+stock.addEventListener("keyup", function () {
+  if (stockValidation()) {
+    removeStockAlert();
+  } else {
+    addStockAlert();
   }
 });
 
@@ -127,12 +140,17 @@ function productImageValidation() {
 function categoryValidation() {
   return categorySelected.value !== "";
 }
+function stockValidation() {
+  let stockRegex = /^[1-9]\d*(\.\d{1,2})?$|^0\.\d{1,2}$/;
+  return stockRegex.test(stock.value);
+}
 function promotionValidation() {
   let promotionRegex = /^(100|[1-9]?[0-9])$/;
   return promotionRegex.test(promotion.value);
 }
 function productDetailsValidation() {
-  let detailsRegex = /^[a-zA-Z0-9_ ]{50,100}$/;
+  let detailsRegex =
+    /^[a-zA-Z0-9 !"#$%&'()*+,\-./:;<=>?@[\\\]^_`{|}~]{20,100}$/;
   return detailsRegex.test(productDetails.value);
 }
 function addProductNameAlert() {
@@ -175,6 +193,14 @@ function addCategoryAlert() {
 function removeCategoryAlert() {
   categorySelected.classList.remove("is-invalid");
   categorySelected.classList.add("is-valid");
+}
+function addStockAlert() {
+  stock.classList.add("is-invalid");
+  stock.classList.remove("is-valid");
+}
+function removeStockAlert() {
+  stock.classList.remove("is-invalid");
+  stock.classList.add("is-valid");
 }
 
 function addPromotionAlert() {
@@ -280,8 +306,16 @@ addProduct.addEventListener("click", function () {
     productPriceValidation() &&
     productImageValidation() &&
     productDetailsValidation() &&
-    categoryValidation()
+    categoryValidation() &&
+    stockValidation()
   ) {
+    productName.classList.remove("is-valid");
+    productPrice.classList.remove("is-valid");
+    productImage.classList.remove("is-valid");
+    productDetails.classList.remove("is-valid");
+    categorySelected.classList.remove("is-valid");
+    stock.classList.remove("is-valid");
+    promotion.classList.remove("is-valid");
     if (existingProduct) {
       let index = allProducts.findIndex((p) => p.productID === existingProduct);
       product.rating = allProducts[index].rating;
@@ -368,20 +402,29 @@ addProduct.addEventListener("click", function () {
       showConfirmButton: false,
       timer: 1000,
     });
+  } else if (!stockValidation()) {
+    addStockAlert();
+    Swal.fire({
+      position: "center",
+      icon: "error",
+      title: "Please fill all the fields",
+      showConfirmButton: false,
+      timer: 1000,
+    });
   }
 });
 
 function updateRow(productID) {
   window.scrollTo({ top: 0, behavior: "smooth" });
-  let productToUpdate = allProducts.find((p) => p.productID === productID);
-  if (productToUpdate) {
-    productName.value = productToUpdate.productName;
-    productPrice.value = productToUpdate.productPrice;
-    productImage.value = productToUpdate.productImage;
-    productDetails.value = productToUpdate.productDetails;
-    categorySelected.value = productToUpdate.category;
-    stock.value = productToUpdate.stock;
-    promotion.value = productToUpdate.promotion;
+  existingProduct = allProducts.find((p) => p.productID === productID);
+  if (existingProduct) {
+    productName.value = existingProduct.productName;
+    productPrice.value = existingProduct.productPrice;
+    productImage.value = existingProduct.productImage;
+    productDetails.value = existingProduct.productDetails;
+    categorySelected.value = existingProduct.category;
+    stock.value = existingProduct.stock;
+    promotion.value = existingProduct.promotion;
     existingProduct = productID;
   }
 }
@@ -420,6 +463,7 @@ function deleteRow(productID) {
 function displayProducts() {
   cart.innerHTML = allUsers[currentUserIndex].cart.length;
   let trs = "";
+  let no = 1;
   for (let i = 0; i < allProducts.length; i++) {
     let state = "";
     if (allProducts[i].pending == true) {
@@ -430,6 +474,7 @@ function displayProducts() {
     if (allProducts[i].sellerID === currentUser.email) {
       trs += `
                 <tr class="text-center">
+                    <td>${no}</td>
                     <td>${allProducts[i].productName}</td>
                     <td>${allProducts[i].productPrice}</td>
                     <td><img src="${allProducts[i].productImage}" alt="${allProducts[i].productName}" style="max-width: 100px; max-height: 100px;"></td>
@@ -444,6 +489,7 @@ function displayProducts() {
                         <button type="button" class="btn  delete-btn" data-product-id="${allProducts[i].productID}">Delete</button></td>
             </tr>
             `;
+      no++;
     }
   }
   if (trs === ``) {
