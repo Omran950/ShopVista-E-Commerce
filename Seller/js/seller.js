@@ -15,6 +15,8 @@ let stock = document.getElementById("product-stock");
 let promotion = document.getElementById("promotion");
 let addProduct = document.getElementById("add-product");
 let productNameAlert = document.getElementById("product-name-alert");
+let productStockAlert = document.getElementById("stock-alert");
+let productCategoryAlert = document.getElementById("category-alert");
 let priceAlert = document.getElementById("price-alert");
 let imageAlert = document.getElementById("image-alert");
 let promotionAlert = document.getElementById("promotion-alert");
@@ -72,11 +74,13 @@ function logout() {
 }
 
 categorySelected.addEventListener("change", function () {
-  let category = categorySelected.value;
+  if (addCategoryAlert()) {
+    removeCategoryAlert();
+  } else {
+    addCategoryAlert();
+  }
 });
-stock.addEventListener("change", function () {
-  let category = stock.value;
-});
+
 productName.addEventListener("keyup", function () {
   if (productNameValidation()) {
     removeProductNameAlert();
@@ -92,6 +96,7 @@ productPrice.addEventListener("keyup", function () {
     addProductPriceAlert();
   }
 });
+
 stock.addEventListener("keyup", function () {
   if (stockValidation()) {
     removeStockAlert();
@@ -125,7 +130,7 @@ promotion.addEventListener("keyup", function () {
 });
 
 function productNameValidation() {
-  let productNameRegex = /^[a-zA-Z0-9_-]{3,16}$/;
+  let productNameRegex = /^[a-zA-Z0-9_-][a-zA-Z0-9_ -]{1,14}[a-zA-Z0-9_-]$/;
   return productNameRegex.test(productName.value);
 }
 function productPriceValidation() {
@@ -138,7 +143,8 @@ function productImageValidation() {
   return imageRegex.test(productImage.value);
 }
 function categoryValidation() {
-  return categorySelected.value !== "";
+  let catRegex = /\b(sport|electronics|fashion|grocery)\b/;
+  return catRegex.test(categorySelected.value);
 }
 function stockValidation() {
   let stockRegex = /^[1-9]\d*(\.\d{1,2})?$|^0\.\d{1,2}$/;
@@ -161,6 +167,16 @@ function removeProductNameAlert() {
   productName.classList.remove("is-invalid");
   productName.classList.add("is-valid");
   productNameAlert.classList.add("d-none");
+}
+function addProductCategoryAlert() {
+  categorySelected.classList.add("is-invalid");
+  categorySelected.classList.remove("is-valid");
+  categorySelectedAlert.classList.remove("d-none");
+}
+function removeProductCategoryAlert() {
+  categorySelected.classList.remove("is-invalid");
+  categorySelected.classList.add("is-valid");
+  categorySelectedAlert.classList.add("d-none");
 }
 
 function addProductPriceAlert() {
@@ -188,18 +204,22 @@ function removeProductImageAlert() {
 function addCategoryAlert() {
   categorySelected.classList.add("is-invalid");
   categorySelected.classList.remove("is-valid");
+  productCategoryAlert.classList.add("d-none");
 }
 function removeCategoryAlert() {
   categorySelected.classList.remove("is-invalid");
   categorySelected.classList.add("is-valid");
+  productCategoryAlert.classList.add("d-none");
 }
 function addStockAlert() {
   stock.classList.add("is-invalid");
   stock.classList.remove("is-valid");
+  productStockAlert.classList.add("d-none");
 }
 function removeStockAlert() {
   stock.classList.remove("is-invalid");
   stock.classList.add("is-valid");
+  productStockAlert.classList.add("d-none");
 }
 
 function addPromotionAlert() {
@@ -282,10 +302,6 @@ function recalcTotalCartPrice(user) {
 }
 
 addProduct.addEventListener("click", function () {
-  if (!categoryValidation()) {
-    addCategoryAlert();
-    return;
-  }
   let featured = promotion.value == 0 || promotion.value == "";
   let product = {
     productName: productName.value,
@@ -315,6 +331,7 @@ addProduct.addEventListener("click", function () {
     productImage.classList.remove("is-valid");
     productDetails.classList.remove("is-valid");
     categorySelected.classList.remove("is-valid");
+    categorySelected.classList.remove("is-invalid");
     stock.classList.remove("is-valid");
     promotion.classList.remove("is-valid");
     if (existingProduct) {
@@ -385,15 +402,6 @@ addProduct.addEventListener("click", function () {
       showConfirmButton: false,
       timer: 1000,
     });
-  } else if (!productDetailsValidation()) {
-    addProductDetailsAlert();
-    Swal.fire({
-      position: "center",
-      icon: "error",
-      title: "Please fill all the fields",
-      showConfirmButton: false,
-      timer: 1000,
-    });
   } else if (!categoryValidation()) {
     addCategoryAlert();
     Swal.fire({
@@ -405,6 +413,15 @@ addProduct.addEventListener("click", function () {
     });
   } else if (!stockValidation()) {
     addStockAlert();
+    Swal.fire({
+      position: "center",
+      icon: "error",
+      title: "Please fill all the fields",
+      showConfirmButton: false,
+      timer: 1000,
+    });
+  } else if (!productDetailsValidation()) {
+    addProductDetailsAlert();
     Swal.fire({
       position: "center",
       icon: "error",

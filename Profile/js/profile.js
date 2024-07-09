@@ -253,6 +253,16 @@ function updateUser() {
   }
 }
 
+function recalcTotalCartPrice(user) {
+  user.totalCartPrice = user.cart.reduce((total, cartProduct) => {
+    let priceAfterPromotion = cartProduct.featured
+      ? cartProduct.productPrice
+      : cartProduct.productPrice -
+        cartProduct.productPrice * (cartProduct.promotion / 100);
+    return total + cartProduct.count * priceAfterPromotion;
+  }, 0);
+}
+
 function deleteAccount() {
   if (oldUserPasswordDeleteAccount.value === currentUser.password) {
     clearAllButton();
@@ -273,7 +283,7 @@ function deleteAccount() {
             allUsers[x].cart.splice(i, 1);
           }
         }
-        reCalcTotalCartPrice(allUsers[x]);
+        recalcTotalCartPrice(allUsers[x]);
       }
     }
 
