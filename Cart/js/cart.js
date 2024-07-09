@@ -34,7 +34,21 @@ function logout() {
   }, 1000);
 }
 
+function recalcTotalCartPrice() {
+  let user = allUsers[currentUserIndex];
+  user.totalCartPrice = user.cart.reduce((total, cartProduct) => {
+    let priceAfterPromotion = cartProduct.featured
+      ? cartProduct.productPrice
+      : cartProduct.productPrice -
+        cartProduct.productPrice * (cartProduct.promotion / 100);
+    return total + cartProduct.count * priceAfterPromotion;
+  }, 0);
+  localStorage.setItem("allUsers", JSON.stringify(allUsers));
+}
+
 function displayCurrentUserCart() {
+  recalcTotalCartPrice();
+  checkStock();
   cart.innerHTML = allUsers[currentUserIndex].cart.length;
   totalPrice.innerHTML = `Total cart price : ${allUsers[currentUserIndex].totalCartPrice} EGP`;
   if (allUsers[currentUserIndex].cart.length == 0) {
@@ -66,7 +80,7 @@ function displayCurrentUserCart() {
         allProducts.find(
           (product) =>
             product.productID === allUsers[currentUserIndex].cart[i].productID
-        ).stock === 0
+        ).stock === allUsers[currentUserIndex].cart[i].count
           ? "disabled"
           : "";
       cartProducts += `<div id="row"
@@ -173,22 +187,8 @@ function clearAllButton() {
     })
     .then((result) => {
       if (result.isConfirmed) {
-        for (let i = 0; i < allUsers[currentUserIndex].cart.length; i++) {
-          for (let j = 0; j < allProducts.length; j++) {
-            if (
-              allUsers[currentUserIndex].cart[i].productID ==
-              allProducts[j].productID
-            ) {
-              allProducts[j].stock += allUsers[currentUserIndex].cart[i].count;
-              localStorage.setItem("allProducts", JSON.stringify(allProducts));
-            }
-          }
-        }
-
         allUsers[currentUserIndex].cart = [];
         allUsers[currentUserIndex].totalCartPrice = 0;
-        allUsers[currentUserIndex].totalCartPrice = 0;
-        allUsers[currentUserIndex].cart = [];
         localStorage.setItem("allUsers", JSON.stringify(allUsers));
         displayCurrentUserCart();
       } else if (result.dismiss === Swal.DismissReason.cancel) {
@@ -225,25 +225,11 @@ function removeProduct(i) {
             allUsers[currentUserIndex].cart[i].productID ==
             allProducts[j].productID
           ) {
-            allProducts[j].stock += allUsers[currentUserIndex].cart[i].count;
-            localStorage.setItem("allProducts", JSON.stringify(allProducts));
             localStorage.setItem(
               "currentUser",
               JSON.stringify(allProducts[currentUserIndex])
             );
           }
-        }
-        if (allUsers[currentUserIndex].cart[i].featured) {
-          allUsers[currentUserIndex].totalCartPrice -=
-            allUsers[currentUserIndex].cart[i].productPrice *
-            allUsers[currentUserIndex].cart[i].count;
-        } else {
-          let priceAfterPromotion =
-            allUsers[currentUserIndex].cart[i].productPrice -
-            allUsers[currentUserIndex].cart[i].productPrice *
-              (allUsers[currentUserIndex].cart[i].promotion / 100);
-          allUsers[currentUserIndex].totalCartPrice -=
-            priceAfterPromotion * allUsers[currentUserIndex].cart[i].count;
         }
         allUsers[currentUserIndex].cart.splice(i, 1);
         localStorage.setItem("allUsers", JSON.stringify(allUsers));
@@ -266,37 +252,33 @@ function addProductCounter(i) {
     if (
       allUsers[currentUserIndex].cart[i].productID == allProducts[j].productID
     ) {
-      if (allProducts[j].stock > 0) {
-        allProducts[j].stock -= 1;
-        localStorage.setItem("allProducts", JSON.stringify(allProducts));
-        allUsers[currentUserIndex].cart[i].count += 1;
-        if (allUsers[currentUserIndex].cart[i].featured) {
-          allUsers[currentUserIndex].totalCartPrice +=
-            allUsers[currentUserIndex].cart[i].productPrice;
-        } else {
-          let priceAfterPromotion =
-            allUsers[currentUserIndex].cart[i].productPrice -
-            allUsers[currentUserIndex].cart[i].productPrice *
-              (allUsers[currentUserIndex].cart[i].promotion / 100);
-          allUsers[currentUserIndex].totalCartPrice += priceAfterPromotion;
-        }
-
-        localStorage.setItem("allUsers", JSON.stringify(allUsers));
-        localStorage.setItem(
-          "currentUser",
-          JSON.stringify(allUsers[currentUserIndex])
-        );
-        displayCurrentUserCart();
-
-        Swal.fire({
-          position: "top-end",
-          icon: "success",
-          title: "Product has been added successfully",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-        break;
+      allUsers[currentUserIndex].cart[i].count += 1;
+      if (allUsers[currentUserIndex].cart[i].featured) {
+        allUsers[currentUserIndex].totalCartPrice +=
+          allUsers[currentUserIndex].cart[i].productPrice;
+      } else {
+        let priceAfterPromotion =
+          allUsers[currentUserIndex].cart[i].productPrice -
+          allUsers[currentUserIndex].cart[i].productPrice *
+            (allUsers[currentUserIndex].cart[i].promotion / 100);
+        allUsers[currentUserIndex].totalCartPrice += priceAfterPromotion;
       }
+
+      localStorage.setItem("allUsers", JSON.stringify(allUsers));
+      localStorage.setItem(
+        "currentUser",
+        JSON.stringify(allUsers[currentUserIndex])
+      );
+      displayCurrentUserCart();
+
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "Product has been added successfully",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      break;
     }
   }
 }
@@ -307,10 +289,7 @@ function removeProductCounter(i) {
       allUsers[currentUserIndex].cart[i].productID == allProducts[j].productID
     ) {
       if (allUsers[currentUserIndex].cart[i].count > 1) {
-        allProducts[j].stock += 1;
-        localStorage.setItem("allProducts", JSON.stringify(allProducts));
         allUsers[currentUserIndex].cart[i].count -= 1;
-
         if (allUsers[currentUserIndex].cart[i].featured) {
           allUsers[currentUserIndex].totalCartPrice -=
             allUsers[currentUserIndex].cart[i].productPrice;
@@ -342,4 +321,20 @@ function removeProductCounter(i) {
   }
 }
 
+function checkStock() {
+  for (let i = 0; i < allUsers[currentUserIndex].cart.length; i++) {
+    for (let j = 0; j < allProducts.length; j++) {
+      if (
+        allUsers[currentUserIndex].cart[i].productID ===
+        allProducts[j].productID
+      ) {
+        if (allUsers[currentUserIndex].cart[i].count > allProducts[j].stock) {
+          allUsers[currentUserIndex].cart[i].count = allProducts[j].stock;
+        }
+        break;
+      }
+    }
+  }
+  localStorage.setItem("allUsers", JSON.stringify(allUsers));
+}
 displayCurrentUserCart();

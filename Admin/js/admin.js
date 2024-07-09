@@ -69,7 +69,7 @@ function productImageValidation() {
   return imageRegex.test(productImage.value);
 }
 function categoryValidation() {
-  let catRegex = /\b(sport|electronics|fashion|grocery)\b/;
+  let catRegex = /\b(sports|electronics|fashion|grocery)\b/;
   return catRegex.test(categorySelected.value);
 }
 function stockValidation() {
@@ -401,6 +401,8 @@ addProduct.addEventListener("click", function () {
     if (existingProduct) {
       let index = allProducts.findIndex((p) => p.productID === existingProduct);
       product.rating = allProducts[index].rating;
+      product.seller = allProducts[index].seller;
+      product.sellerID = allProducts[index].sellerID;
       allProducts[index] = product;
       allUsers.forEach((user) => {
         user.cart.forEach((cartProduct) => {
@@ -657,7 +659,6 @@ function approveProduct(productID) {
     existingProduct.pending = false;
     localStorage.setItem("allProducts", JSON.stringify(allProducts));
     displayPendingProducts();
-    displayProducts();
     Swal.fire({
       position: "center",
       icon: "success",
@@ -1181,6 +1182,9 @@ function displayCart(index) {
                                     <td>${allUsers[index].cart[i].seller}</td>
                                   </tr>`;
   }
+  if (!cartData) {
+    cartData = `<tr><td colspan="11" rowspan="3" class="text-center py-5"><h2 class="fs-1 fw-bolder py-5">No products found</h2></td></tr>`;
+  }
   cartTemp = `<div class="orderInnerContainer mb-3 p-4">
                             <div class="cartDetails mb-4">
                               <h4>Cart Details</h4>
@@ -1204,9 +1208,6 @@ function displayCart(index) {
                             </table>
                             </div>
                     </div>`;
-  if (!cartData) {
-    cartData = `<tr><td colspan="11" rowspan="3" class="text-center py-5"><h2 class="fs-1 fw-bolder py-5">No products found</h2></td></tr>`;
-  }
   document.getElementById("cartContainer").innerHTML = cartTemp;
 }
 

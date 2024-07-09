@@ -211,6 +211,17 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
+function recalcTotalCartPrice(user) {
+  user.totalCartPrice = user.cart.reduce((total, cartProduct) => {
+    let priceAfterPromotion = cartProduct.featured
+      ? cartProduct.productPrice
+      : cartProduct.productPrice -
+        cartProduct.productPrice * (cartProduct.promotion / 100);
+    return total + cartProduct.count * priceAfterPromotion;
+  }, 0);
+  localStorage.setItem("allUsers", JSON.stringify(allUsers));
+}
+
 if (paymentMethodSelect.value == "Cash") {
   checkoutBtn.addEventListener("click", function () {
     if (
@@ -236,7 +247,33 @@ if (paymentMethodSelect.value == "Cash") {
         timer: 1000,
       });
       let userOrder = {};
-      let totalCartPrice = parseInt(currentUser.totalCartPrice, 10);
+      let totalCartPrice = allUsers[currentUserIndex].totalCartPrice;
+
+      for (let i = 0; i < allUsers[currentUserIndex].cart.length; i++) {
+        for (let j = 0; j < allProducts.length; j++) {
+          if (
+            allUsers[currentUserIndex].cart[i].productID ===
+            allProducts[j].productID
+          ) {
+            allProducts[j].stock -= allUsers[currentUserIndex].cart[i].count;
+            for (let x = 0; x < allUsers.length; x++) {
+              for (let k = 0; k < allUsers[x].cart.length; k++) {
+                if (
+                  allUsers[x].cart[k].productID ==
+                  allUsers[currentUserIndex].cart[i].productID
+                ) {
+                  if (allUsers[x].cart[k].count > allProducts[j].stock) {
+                    allUsers[x].cart[k].count = allProducts[j].stock;
+                    recalcTotalCartPrice(allUsers[x]);
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+
+      localStorage.setItem("allProducts", JSON.stringify(allProducts));
 
       let shippingDetails = {
         phone: phoneCheckout.value,
@@ -300,6 +337,19 @@ if (paymentMethodSelect.value == "Cash") {
         showConfirmButton: false,
         timer: 1000,
       });
+      for (let i = 0; i < allUsers[currentUserIndex].cart.length; i++) {
+        for (let j = 0; j < allProducts.length; j++) {
+          if (
+            allUsers[currentUserIndex].cart[i].productID ===
+            allProducts[j].productID
+          ) {
+            allProducts[j].stock -= allUsers[currentUserIndex].cart[i].count;
+            break;
+          }
+        }
+      }
+      localStorage.setItem("allProducts", JSON.stringify(allProducts));
+
       let userOrder = {};
       let totalCartPrice = parseInt(currentUser.totalCartPrice, 10);
 

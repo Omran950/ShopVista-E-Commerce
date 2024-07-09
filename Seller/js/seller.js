@@ -143,7 +143,7 @@ function productImageValidation() {
   return imageRegex.test(productImage.value);
 }
 function categoryValidation() {
-  let catRegex = /\b(sport|electronics|fashion|grocery)\b/;
+  let catRegex = /\b(sports|electronics|fashion|grocery)\b/;
   return catRegex.test(categorySelected.value);
 }
 function stockValidation() {
@@ -340,7 +340,9 @@ addProduct.addEventListener("click", function () {
       allProducts[index] = product;
       for (let x = 0; x < allUsers.length; x++) {
         for (let i = allUsers[x].cart.length - 1; i >= 0; i--) {
-          if (allUsers[x].cart[i].sellerID == allUsers[userIndex].email) {
+          if (
+            allUsers[x].cart[i].sellerID == allUsers[currentUserIndex].email
+          ) {
             allUsers[x].cart.splice(i, 1);
           }
         }

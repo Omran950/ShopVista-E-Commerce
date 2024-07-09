@@ -492,7 +492,7 @@ function updateNav() {
                 <span
                   id="cart"
                   class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                >${currentUser.cart.length}</span>
+                >${allUsers[currentUserIndex].cart.length}</span>
               </a>
             </li>
       <li class="nav-item mx-1">
@@ -529,48 +529,25 @@ function displayAllProducts() {
   let cardPromotionProduct = "";
   let priceAfterPromotion = 0;
   for (let i = 0; i < allProducts.length; i++) {
-    if (!allProducts[i].pending) {
-      if (allProducts[i].stock > 0) {
+    let disableAddToCartBtn = "";
+    let buttonText = "Add to cart";
+    let textDanger = "";
+    let productInCart = allUsers[currentUserIndex].cart.find(
+      (item) => item.productID == allProducts[i].productID
+    );
+    if (allProducts[i].stock > 0) {
+      if (!allProducts[i].pending) {
+        if (productInCart) {
+          if (productInCart.count == allProducts[i].stock) {
+            disableAddToCartBtn = "disabled";
+            buttonText = "Out of stock";
+            textDanger = "text-danger";
+          }
+        }
         if (allProducts[i].featured) {
           cardFeaturedProduct += `<div class="col-sm-6 col-md-4 col-lg-3">
-              <div class="card rounded-3  overflow-hidden">
-              <div class="" onclick="productDetails(${i})" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                  <figure class="m-0 p-2">
-                    <img
-                      src="${allProducts[i].productImage}"
-                      alt="${allProducts[i].productName}"
-                      class="d-block w-75 m-auto"
-                      style="height: 200px"
-                    />
-                  </figure>
-                  <div class="text px-2 py-3">
-                    <h6  class="text-center fw-bolder">${
-                      allProducts[i].productName
-                    }</h6>
-                    <p class="">${allProducts[i].productDetails.substring(
-                      0,
-                      20
-                    )}${
-            allProducts[i].productDetails.length > 50 ? "..." : ""
-          }</p>
-                    <p class="text-center" id='price'>Price : ${
-                      allProducts[i].productPrice
-                    } EGP</p>
-                  </div>
-                </div>
-                <button class="btn w-75 text-capitalize m-auto d-block my-3" onclick="addToCart(event, ${i})">
-                      Add to cart
-                    </button>
-                </div>
-              </div>`;
-        } else {
-          priceAfterPromotion =
-            allProducts[i].productPrice -
-            allProducts[i].productPrice * (allProducts[i].promotion / 100);
-          cardPromotionProduct += `<div class="col-sm-6 col-md-4 col-lg-3">
-            <div class="card rounded-3 overflow-hidden">
-      <div class="" onclick="productDetails(${i})" data-bs-toggle="modal"
-      data-bs-target="#staticBackdrop">
+          <div class="card rounded-3  overflow-hidden">
+          <div class="" onclick="productDetails(${i})" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
               <figure class="m-0 p-2">
                 <img
                   src="${allProducts[i].productImage}"
@@ -580,25 +557,53 @@ function displayAllProducts() {
                 />
               </figure>
               <div class="text px-2 py-3">
-                <h6 class="text-center fw-bolder">${
+                <h6  class="text-center fw-bolder">${
                   allProducts[i].productName
                 }</h6>
-                <p class="">${allProducts[i].productDetails.substring(0, 40)}${
-            allProducts[i].productDetails.length > 20 ? "..." : ""
+                <p class="">${allProducts[i].productDetails.substring(0, 20)}${
+            allProducts[i].productDetails.length > 50 ? "..." : ""
           }</p>
-                <div class="d-flex justify-content-around">
-                <p class="text-center" id="priceBefore">Price : <span class="text-decoration-line-through">${
+                <p class="text-center" id='price'>Price : ${
                   allProducts[i].productPrice
-                } EGP</span></p>
-                <p class="text-center" id="priceAfter">${priceAfterPromotion} EGP</p>
-                </div>
+                } EGP</p>
               </div>
             </div>
-            <button class="btn  w-75 text-capitalize m-auto d-block my-3"  onclick="addToCart(event, ${i})">
-                  Add to cart
-                </button>
+          <button class="btn w-75 ${textDanger} m-auto d-block my-3" ${disableAddToCartBtn} onclick="addToCart(${i})">${buttonText}</button>
             </div>
           </div>`;
+        } else {
+          priceAfterPromotion =
+            allProducts[i].productPrice -
+            allProducts[i].productPrice * (allProducts[i].promotion / 100);
+          cardPromotionProduct += `<div class="col-sm-6 col-md-4 col-lg-3">
+        <div class="card rounded-3 overflow-hidden">
+  <div class="" onclick="productDetails(${i})" data-bs-toggle="modal"
+  data-bs-target="#staticBackdrop">
+          <figure class="m-0 p-2">
+            <img
+              src="${allProducts[i].productImage}"
+              alt="${allProducts[i].productName}"
+              class="d-block w-75 m-auto"
+              style="height: 200px"
+            />
+          </figure>
+          <div class="text px-2 py-3">
+            <h6 class="text-center fw-bolder">${allProducts[i].productName}</h6>
+            <p class="">${allProducts[i].productDetails.substring(0, 40)}${
+            allProducts[i].productDetails.length > 20 ? "..." : ""
+          }</p>
+            <div class="d-flex justify-content-around">
+            <p class="text-center" id="priceBefore">Price : <span class="text-decoration-line-through">${
+              allProducts[i].productPrice
+            } EGP</span></p>
+            <p class="text-center" id="priceAfter">${priceAfterPromotion} EGP</p>
+            </div>
+          </div>
+        </div>
+          <button class="btn w-75 ${textDanger} m-auto d-block my-3" ${disableAddToCartBtn} onclick="addToCart(${i})">${buttonText}</button>
+
+        </div>
+      </div>`;
         }
       }
     }
@@ -650,8 +655,19 @@ function productDetails(i) {
                 </div>`;
 }
 
-function addToCart(event, i) {
-  event.stopPropagation();
+function recalcTotalCartPrice() {
+  let user = allUsers[currentUserIndex];
+  user.totalCartPrice = user.cart.reduce((total, cartProduct) => {
+    let priceAfterPromotion = cartProduct.featured
+      ? cartProduct.productPrice
+      : cartProduct.productPrice -
+        cartProduct.productPrice * (cartProduct.promotion / 100);
+    localStorage.setItem("allUsers", JSON.stringify(allUsers));
+    return total + cartProduct.count * priceAfterPromotion;
+  }, 0);
+}
+
+function addToCart(i) {
   if (!localStorage.getItem("currentUser")) {
     Swal.fire({
       position: "center",
@@ -664,70 +680,44 @@ function addToCart(event, i) {
       window.location.replace("Authentication/login.html");
     }, 1000);
   } else {
-    if (allProducts[i].stock > 0) {
-      Swal.fire({
-        position: "top-end",
-        icon: "success",
-        title: "Product has been added successfully",
-        showConfirmButton: false,
-        timer: 1500,
-      });
-      allProducts[i].stock--;
-      localStorage.setItem("allProducts", JSON.stringify(allProducts));
-      allUsers = JSON.parse(localStorage.getItem("allUsers"));
-      currentUser = JSON.parse(localStorage.getItem("currentUser"));
-      currentUserIndex = JSON.parse(localStorage.getItem("currentUserIndex"));
-
-      // Chech product in cart
-      let checkCartProducts = false;
-      if (allUsers[currentUserIndex].cart.length == 0) {
+    // Chech product in cart
+    let checkCartProducts = false;
+    if (allUsers[currentUserIndex].cart.length == 0) {
+      allUsers[currentUserIndex].cart.push(allProducts[i]);
+      allUsers[currentUserIndex].cart[0].count = 1;
+    } else {
+      for (let j = 0; j < allUsers[currentUserIndex].cart.length; j++) {
+        if (
+          allProducts[i].productID ===
+          allUsers[currentUserIndex].cart[j].productID
+        ) {
+          allUsers[currentUserIndex].cart[j].count += 1;
+          checkCartProducts = true;
+          break;
+        }
+      }
+      if (!checkCartProducts) {
         allUsers[currentUserIndex].cart.push(allProducts[i]);
         allUsers[currentUserIndex].cart[
           allUsers[currentUserIndex].cart.length - 1
         ].count = 1;
-      } else {
-        for (let j = 0; j < allUsers[currentUserIndex].cart.length; j++) {
-          if (
-            allProducts[i].productID ===
-            allUsers[currentUserIndex].cart[j].productID
-          ) {
-            allUsers[currentUserIndex].cart[j].count += 1;
-            checkCartProducts = true;
-            break;
-          }
-        }
-        if (!checkCartProducts) {
-          allUsers[currentUserIndex].cart.push(allProducts[i]);
-          allUsers[currentUserIndex].cart[
-            allUsers[currentUserIndex].cart.length - 1
-          ].count = 1;
-        }
       }
-
-      if (allProducts[i].featured) {
-        allUsers[currentUserIndex].totalCartPrice +=
-          allProducts[i].productPrice;
-      } else {
-        let priceAfterPromotion =
-          allProducts[i].productPrice -
-          allProducts[i].productPrice * (allProducts[i].promotion / 100);
-        allUsers[currentUserIndex].totalCartPrice += priceAfterPromotion;
-      }
-      localStorage.setItem("allUsers", JSON.stringify(allUsers));
-      localStorage.setItem(
-        "currentUser",
-        JSON.stringify(allUsers[currentUserIndex])
-      );
-    } else {
-      Swal.fire({
-        position: "top-end",
-        icon: "warning",
-        title: "Product out of stock",
-        showConfirmButton: false,
-        timer: 1500,
-      });
-      displayAllProducts();
     }
+    recalcTotalCartPrice();
+    Swal.fire({
+      position: "top-end",
+      icon: "success",
+      title: "Product has been added successfully",
+      showConfirmButton: false,
+      timer: 1500,
+    });
+    localStorage.setItem("allUsers", JSON.stringify(allUsers));
+    localStorage.setItem(
+      "currentUser",
+      JSON.stringify(allUsers[currentUserIndex])
+    );
+    displayAllProducts();
   }
+
   updateNav();
 }

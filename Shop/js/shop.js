@@ -61,72 +61,56 @@ function productDetails(i) {
                     </div>`;
 }
 
-function addToCart(event, i, cat, body) {
-  let productCategory = cat;
-  let productsBody = body;
-  event.stopPropagation();
-  if (allProducts[i].stock > 0) {
-    Swal.fire({
-      position: "top-end",
-      icon: "success",
-      title: "Product has been added successfully",
-      showConfirmButton: false,
-      timer: 1500,
-    });
-    allProducts[i].stock--;
-    localStorage.setItem("allProducts", JSON.stringify(allProducts));
-    allUsers = JSON.parse(localStorage.getItem("allUsers"));
-    currentUserIndex = JSON.parse(localStorage.getItem("currentUserIndex"));
-
-    let checkCartProducts = false;
-    if (allUsers[currentUserIndex].cart.length == 0) {
+function addToCart(i, cat, body) {
+  let checkCartProducts = false;
+  if (allUsers[currentUserIndex].cart.length == 0) {
+    allUsers[currentUserIndex].cart.push(allProducts[i]);
+    allUsers[currentUserIndex].cart[0].count = 1;
+  } else {
+    for (let j = 0; j < allUsers[currentUserIndex].cart.length; j++) {
+      if (
+        allProducts[i].productID ===
+        allUsers[currentUserIndex].cart[j].productID
+      ) {
+        allUsers[currentUserIndex].cart[j].count += 1;
+        checkCartProducts = true;
+        break;
+      }
+    }
+    if (!checkCartProducts) {
       allUsers[currentUserIndex].cart.push(allProducts[i]);
       allUsers[currentUserIndex].cart[
         allUsers[currentUserIndex].cart.length - 1
       ].count = 1;
-    } else {
-      for (let j = 0; j < allUsers[currentUserIndex].cart.length; j++) {
-        if (
-          allProducts[i].productID ===
-          allUsers[currentUserIndex].cart[j].productID
-        ) {
-          allUsers[currentUserIndex].cart[j].count += 1;
-          checkCartProducts = true;
-          break;
-        }
-      }
-      if (!checkCartProducts) {
-        allUsers[currentUserIndex].cart.push(allProducts[i]);
-        allUsers[currentUserIndex].cart[
-          allUsers[currentUserIndex].cart.length - 1
-        ].count = 1;
-      }
     }
-
-    if (allProducts[i].featured) {
-      allUsers[currentUserIndex].totalCartPrice += allProducts[i].productPrice;
-    } else {
-      let priceAfterPromotion =
-        allProducts[i].productPrice -
-        allProducts[i].productPrice * (allProducts[i].promotion / 100);
-      allUsers[currentUserIndex].totalCartPrice += priceAfterPromotion;
-    }
-    localStorage.setItem("allUsers", JSON.stringify(allUsers));
-    localStorage.setItem(
-      "currentUser",
-      JSON.stringify(allUsers[currentUserIndex])
-    );
-  } else {
-    Swal.fire({
-      position: "top-end",
-      icon: "warning",
-      title: "Product out of stock",
-      showConfirmButton: false,
-      timer: 1500,
-    });
-    searchByCategory(cat, body);
   }
+  recalcTotalCartPrice();
+  Swal.fire({
+    position: "top-end",
+    icon: "success",
+    title: "Product has been added successfully",
+    showConfirmButton: false,
+    timer: 1500,
+  });
+  localStorage.setItem("allUsers", JSON.stringify(allUsers));
+  localStorage.setItem(
+    "currentUser",
+    JSON.stringify(allUsers[currentUserIndex])
+  );
+  searchByCategory(cat, body);
   cart.innerHTML = allUsers[currentUserIndex].cart.length;
+}
+
+function recalcTotalCartPrice() {
+  let user = allUsers[currentUserIndex];
+  user.totalCartPrice = user.cart.reduce((total, cartProduct) => {
+    let priceAfterPromotion = cartProduct.featured
+      ? cartProduct.productPrice
+      : cartProduct.productPrice -
+        cartProduct.productPrice * (cartProduct.promotion / 100);
+    localStorage.setItem("allUsers", JSON.stringify(allUsers));
+    return total + cartProduct.count * priceAfterPromotion;
+  }, 0);
 }
 
 function searchByCategory(cat, body, query = "") {
@@ -137,6 +121,21 @@ function searchByCategory(cat, body, query = "") {
   let lowerCaseQuery = query.toLowerCase();
 
   for (let i = 0; i < allProducts.length; i++) {
+    let disableAddToCartBtn = "";
+    let buttonText = "Add to cart";
+    let textDanger = "";
+    let productInCart = allUsers[currentUserIndex].cart.find(
+      (item) => item.productID == allProducts[i].productID
+    );
+
+    if (productInCart) {
+      if (productInCart.count == allProducts[i].stock) {
+        disableAddToCartBtn = "disabled";
+        buttonText = "Out of stock";
+        textDanger = "text-danger";
+      }
+    }
+
     if (
       (allProducts[i].category === cat || cat === "all") &&
       (allProducts[i].productName.toLowerCase().includes(lowerCaseQuery) ||
@@ -178,7 +177,7 @@ function searchByCategory(cat, body, query = "") {
                   }</p>
                 </div>
               </div>
-              <button class="btn w-75 text-capitalize m-auto d-block my-3" onclick="addToCart(event, ${i}, '${productCategory}', '${productsBody}')">Add to cart</button>
+              <button class="btn w-75 ${textDanger} m-auto d-block my-3" ${disableAddToCartBtn} onclick="addToCart( ${i}, '${productCategory}', '${productsBody}')">${buttonText}</button>
             </div>
           </div>`;
       }
