@@ -338,21 +338,14 @@ addProduct.addEventListener("click", function () {
       let index = allProducts.findIndex((p) => p.productID === existingProduct);
       product.rating = allProducts[index].rating;
       allProducts[index] = product;
-      allUsers.forEach((user) => {
-        user.cart.forEach((cartProduct) => {
-          if (cartProduct.productID === existingProduct) {
-            cartProduct.productName = product.productName;
-            cartProduct.productPrice = product.productPrice;
-            cartProduct.productImage = product.productImage;
-            cartProduct.productDetails = product.productDetails;
-            cartProduct.category = product.category;
-            cartProduct.stock = product.stock;
-            cartProduct.promotion = product.promotion;
-            cartProduct.featured = product.featured;
+      for (let x = 0; x < allUsers.length; x++) {
+        for (let i = allUsers[x].cart.length - 1; i >= 0; i--) {
+          if (allUsers[x].cart[i].sellerID == allUsers[userIndex].email) {
+            allUsers[x].cart.splice(i, 1);
           }
-          recalcTotalCartPrice(user);
-        });
-      });
+        }
+        recalcTotalCartPrice(allUsers[x]);
+      }
       localStorage.setItem("allUsers", JSON.stringify(allUsers));
       Swal.fire({
         position: "center",
