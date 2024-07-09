@@ -1,10 +1,8 @@
-if (localStorage.getItem("currentUser")) {
-  let allProducts = JSON.parse(localStorage.getItem("allProducts")) || [];
-  let currentUserIndex =
-    JSON.parse(localStorage.getItem("currentUserIndex")) || 0;
-  let currentUser = JSON.parse(localStorage.getItem("currentUser")) || {};
-  let allUsers = JSON.parse(localStorage.getItem("allUsers")) || [];
-}
+let allProducts = JSON.parse(localStorage.getItem("allProducts")) || [];
+let currentUserIndex =
+  JSON.parse(localStorage.getItem("currentUserIndex")) || 0;
+let currentUser = JSON.parse(localStorage.getItem("currentUser")) || {};
+let allUsers = JSON.parse(localStorage.getItem("allUsers")) || [];
 
 let ticketReasonSelected = document.getElementById("ticket-reason");
 let ticketTitle = document.getElementById("ticket-title");
@@ -33,11 +31,11 @@ ticketReasonSelected.addEventListener("change", function () {
 
 // regex
 function titleValidation() {
-  let titleRegex = /^[a-zA-Z0-9_ ]{3,30}$/;
+  let titleRegex = /^[a-zA-Z0-9_-]{3,16}$/;
   return titleRegex.test(ticketTitle.value);
 }
 function nameValidation() {
-  let nameRegex = /^[a-zA-Z_ ]{3,30}$/;
+  let nameRegex = /^[a-zA-Z0-9_-]{3,16}$/;
   return nameRegex.test(ticketName.value);
 }
 function emailValidation() {
@@ -49,7 +47,7 @@ function mobileValidation() {
   return mobileRegex.test(ticketMobile.value);
 }
 function messageValidation() {
-  let messageRegex = /^[a-zA-Z0-9_ ]{3,100}$/;
+  let messageRegex = /^[a-zA-Z0-9_-]{10,100}$/;
   return messageRegex.test(ticketMessage.value);
 }
 document.addEventListener("DOMContentLoaded", function () {

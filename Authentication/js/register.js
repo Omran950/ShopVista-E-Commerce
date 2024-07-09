@@ -30,7 +30,7 @@ function emailValidation() {
   return emailRegex.test(signEmail.value);
 }
 function addressValidation() {
-  let addressRegex = /^[a-zA-Z\u0080-\u024F0-9\s\/\-\']{6,20}$/;
+  let addressRegex = /^(?!\s).{6,20}$/;
   return addressRegex.test(signAddress.value);
 }
 function passwordValidation() {

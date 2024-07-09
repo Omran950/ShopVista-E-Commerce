@@ -49,7 +49,7 @@ function getSoldProducts() {
     }
   }
   if (product === ``) {
-    product = `<tr><td colspan="10" rowspan="3" class="text-center py-5"><h2 class="fs-1 fw-bolder py-5">No products found</h2></td></tr>`;
+    product = `<tr><td colspan="11" rowspan="3" class="text-center py-5"><h2 class="fs-1 fw-bolder py-5">No products found</h2></td></tr>`;
   }
   tbody.innerHTML = product;
 }
@@ -125,7 +125,7 @@ promotion.addEventListener("keyup", function () {
 });
 
 function productNameValidation() {
-  let productNameRegex = /^[a-zA-Z0-9_ ]{3,20}$/;
+  let productNameRegex = /^[a-zA-Z0-9_-]{3,16}$/;
   return productNameRegex.test(productName.value);
 }
 function productPriceValidation() {
@@ -149,8 +149,7 @@ function promotionValidation() {
   return promotionRegex.test(promotion.value);
 }
 function productDetailsValidation() {
-  let detailsRegex =
-    /^[a-zA-Z0-9 !"#$%&'()*+,\-./:;<=>?@[\\\]^_`{|}~]{20,100}$/;
+  let detailsRegex = /^(?!\s).{20,100}$/;
   return detailsRegex.test(productDetails.value);
 }
 function addProductNameAlert() {
@@ -244,7 +243,9 @@ function generateUUID() {
 }
 
 function generateRandomRating() {
-  return Math.floor(Math.random() * 6);
+  const ratings = [1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5];
+  const randomIndex = Math.floor(Math.random() * ratings.length);
+  return ratings[randomIndex];
 }
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -494,7 +495,7 @@ function displayProducts() {
   }
   if (trs === ``) {
     trs = `<tr>
-            <td colspan="10" rowspan="3" class="text-center py-5">
+            <td colspan="11" rowspan="3" class="text-center py-5">
               <h2 class="fs-1 fw-bolder py-5">No products found</h2>
             </td>
           </tr>`;

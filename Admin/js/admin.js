@@ -61,7 +61,7 @@ stock.addEventListener("change", function () {
 });
 
 function productNameValidation() {
-  let productNameRegex = /^[a-zA-Z0-9_ ]{3,20}$/;
+  let productNameRegex = /^[a-zA-Z0-9_-]{3,16}$/;
   return productNameRegex.test(productName.value);
 }
 function productPriceValidation() {
@@ -85,8 +85,7 @@ function promotionValidation() {
   return promotionRegex.test(promotion.value);
 }
 function productDetailsValidation() {
-  let detailsRegex =
-    /^[a-zA-Z0-9 !"#$%&'()*+,\-./:;<=>?@[\\\]^_`{|}~]{20,100}$/;
+  let detailsRegex = /^(?!\s).{20,100}$/;
   return detailsRegex.test(productDetails.value);
 }
 // User Management Form Validation
@@ -99,7 +98,7 @@ function emailValidation() {
   return emailRegex.test(userEmail.value);
 }
 function addressValidation() {
-  let addressRegex = /^[a-zA-Z\u0080-\u024F0-9\s\/\-\']{6,20}$/;
+  let addressRegex = /^(?!\s).{6,20}$/;
   return addressRegex.test(userAddress.value);
 }
 function roleValidation() {
@@ -373,7 +372,7 @@ addProduct.addEventListener("click", function () {
     category: categorySelected.value,
     stock: Number(stock.value),
     rating: generateRandomRating(),
-    seller: currentUser.name,
+    seller: "ShopVista",
     sellerID: "ShopVista",
     promotion: Number(promotion.value),
     featured: featured,
@@ -485,10 +484,12 @@ addProduct.addEventListener("click", function () {
 
 function displayProducts() {
   let trs = "";
+  let no = 1;
   for (let i = 0; i < allProducts.length; i++) {
     if (allProducts[i].pending == false) {
       trs += `
             <tr class="text-center">
+                <td>${no}</td>
                 <td>${allProducts[i].productName}</td>
                 <td>${allProducts[i].productPrice}</td>
                 <td><img src="${allProducts[i].productImage}" alt="${allProducts[i].productName}" style="max-width: 100px; max-height: 100px;"></td>
@@ -503,6 +504,7 @@ function displayProducts() {
                     <button type="button" class="btn btn-sm delete-btn" data-product-id="${allProducts[i].productID}">Delete</button></td>
         </tr>
         `;
+      no++;
     }
   }
   tableBody.innerHTML = trs;
@@ -620,7 +622,7 @@ function displayPendingProducts() {
     }
   }
   if (pendingTrs === ``) {
-    pendingTrs = `<tr><td colspan="10" rowspan="3" class="text-center py-5"><h2 class="fs-1 fw-bolder py-5">No products found</h2></td></tr>`;
+    pendingTrs = `<tr><td colspan="11" rowspan="3" class="text-center py-5"><h2 class="fs-1 fw-bolder py-5">No products found</h2></td></tr>`;
   }
   pendingTableBody.innerHTML = pendingTrs;
 }
@@ -695,7 +697,7 @@ function displayPendingTickets() {
     }
   }
   if (ticketsTrs === ``) {
-    ticketsTrs = `<tr><td colspan="10" rowspan="3" class="text-center py-5"><h2 class="fs-1 fw-bolder py-5">No tickets found</h2></td></tr>`;
+    ticketsTrs = `<tr><td colspan="11" rowspan="3" class="text-center py-5"><h2 class="fs-1 fw-bolder py-5">No tickets found</h2></td></tr>`;
   }
   pendingTicketsTableBody.innerHTML = ticketsTrs;
 }
@@ -721,7 +723,7 @@ function displayHandledTickets() {
     }
   }
   if (handledTicketsTrs === ``) {
-    handledTicketsTrs = `<tr><td colspan="10" rowspan="3" class="text-center py-5"><h2 class="fs-1 fw-bolder py-5">No tickets found</h2></td></tr>`;
+    handledTicketsTrs = `<tr><td colspan="11" rowspan="3" class="text-center py-5"><h2 class="fs-1 fw-bolder py-5">No tickets found</h2></td></tr>`;
   }
   handledTicketsTableBody.innerHTML = handledTicketsTrs;
 }
@@ -842,7 +844,7 @@ function displayUsers() {
     no++;
   }
   if (!tempUsers) {
-    tempUsers = `<tr><td colspan="10" rowspan="3" class="text-center py-5"><h2 class="fs-1 fw-bolder py-5">No products found</h2></td></tr>`;
+    tempUsers = `<tr><td colspan="11" rowspan="3" class="text-center py-5"><h2 class="fs-1 fw-bolder py-5">No products found</h2></td></tr>`;
   }
   document.getElementById("tableBodyUsers").innerHTML = tempUsers;
 }
@@ -1144,7 +1146,7 @@ function displayOrders(index) {
                         </div>`;
   }
   if (!orderTemp) {
-    orderTemp += `<tr><td colspan="10" rowspan="3" class="text-center py-5"><h2 class="fs-1 fw-bolder py-5">No orders history</h2></td></tr>`;
+    orderTemp += `<tr><td colspan="11" rowspan="3" class="text-center py-5"><h2 class="fs-1 fw-bolder py-5">No order history</h2></td></tr>`;
   }
   document.getElementById("ordersContainer").innerHTML = orderTemp;
 }
@@ -1153,9 +1155,7 @@ function displayCart(index) {
   let cartTemp = "";
   let cartData = "";
   for (let i = 0; i < allUsers[index].cart.length; i++) {
-    cartData += `
-                                
-                                  <tr class="text-center">
+    cartData += `<tr class="text-center">
                                     <td>${allUsers[index].cart[i].productID}</td>
                                     <td>${allUsers[index].cart[i].productName}</td>
                                     <td><img src="${allUsers[index].cart[i].productImage}" /></td>
@@ -1191,9 +1191,9 @@ function displayCart(index) {
                             </div>
                     </div>`;
   if (!cartData) {
-    cartData = `<tr><td colspan="10" rowspan="3" class="text-center py-5"><h2 class="fs-1 fw-bolder py-5">No products found</h2></td></tr>`;
+    cartData = `<tr><td colspan="11" rowspan="3" class="text-center py-5"><h2 class="fs-1 fw-bolder py-5">No products found</h2></td></tr>`;
   }
-  document.getElementById("cartContainer").innerHTML = cartData;
+  document.getElementById("cartContainer").innerHTML = cartTemp;
 }
 
 displayProducts();

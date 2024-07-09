@@ -27,6 +27,7 @@ a {
 #navBar .nav-link,
 #navBar .navbar-brand {
   color: white;
+  margin-top: 2px;
 }
 
 #navBar .nav-link.active,
@@ -180,4 +181,9 @@ thead td {
 
 td img {
   width: 50px;
+}
+
+/* Seller dashboard */
+#pendingProducts-tab-pane {
+  min-height: 25vh;
 }
