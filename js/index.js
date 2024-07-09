@@ -513,7 +513,7 @@ function logout() {
   localStorage.removeItem("currentUser");
   localStorage.removeItem("currentUserIndex");
   Swal.fire({
-    position: "top-center",
+    position: "center",
     icon: "success",
     title: "Logged Out Successfully",
     showConfirmButton: false,
@@ -654,7 +654,7 @@ function addToCart(event, i) {
   event.stopPropagation();
   if (!localStorage.getItem("currentUser")) {
     Swal.fire({
-      position: "top-center",
+      position: "center",
       icon: "warning",
       title: "Please LogIn First",
       showConfirmButton: false,

@@ -61,7 +61,7 @@ loginBtn.addEventListener("click", function () {
     );
     localStorage.setItem("currentUserIndex", JSON.stringify(currentUserIndex));
     Swal.fire({
-      position: "top-center",
+      position: "center",
       icon: "success",
       title: "Welcome",
       showConfirmButton: false,

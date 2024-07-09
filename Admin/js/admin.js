@@ -305,12 +305,12 @@ function removeRePasswordAlert() {
   userConfirmPasswordAlert.classList.add("d-none");
 }
 function resetUserValidation() {
-  userName.classList.remove("is-valid")
-  userEmail.classList.remove("is-valid")
-  userAddress.classList.remove("is-valid")
-  userRole.classList.remove("is-valid")
-  userPassword.classList.remove("is-valid")
-  userConfirmPassword.classList.remove("is-valid")
+  userName.classList.remove("is-valid");
+  userEmail.classList.remove("is-valid");
+  userAddress.classList.remove("is-valid");
+  userRole.classList.remove("is-valid");
+  userPassword.classList.remove("is-valid");
+  userConfirmPassword.classList.remove("is-valid");
 }
 
 function clearInputs() {
@@ -741,7 +741,7 @@ function logout() {
   localStorage.removeItem("currentUser");
   localStorage.removeItem("currentUserIndex");
   Swal.fire({
-    position: "top-center",
+    position: "center",
     icon: "success",
     title: "Logged Out Successfully",
     showConfirmButton: false,
@@ -819,7 +819,7 @@ function createUser() {
     for (let i = 0; i < allUsers.length; i++) {
       if (userEmail.value == allUsers[i].email) {
         return Swal.fire({
-          position: "top-center",
+          position: "center",
           icon: "error",
           title: "This email already exists",
           showConfirmButton: false,
@@ -852,7 +852,7 @@ function createUser() {
     userConfirmPassword.value = "";
 
     Swal.fire({
-      position: "top-center",
+      position: "center",
       icon: "success",
       title: "User has been added",
       showConfirmButton: false,
@@ -860,7 +860,7 @@ function createUser() {
     });
   } else {
     Swal.fire({
-      position: "top-center",
+      position: "center",
       icon: "error",
       title: "Please validate User Data",
       showConfirmButton: false,
@@ -875,7 +875,6 @@ function deleteUser(userIndex) {
     for (let i = allProducts.length - 1; i >= 0; i--) {
       if (allUsers[userIndex].email == allProducts[i].sellerID) {
         allProducts.splice(i, 1);
-        localStorage.setItem("allProducts", JSON.stringify(allProducts));
       }
     }
 
@@ -888,13 +887,34 @@ function deleteUser(userIndex) {
       }
       reCalcTotalCartPrice(allUsers[x]);
     }
-    localStorage.setItem("allUsers", JSON.stringify(allUsers));
   }
+
+  for (let i = 0; i < allUsers[userIndex].cart.length; i++) {
+    for (let j = 0; j < allProducts.length; j++) {
+      if (allProducts[j].productID == allUsers[userIndex].cart[i].productID) {
+        allProducts[j].stock += allUsers[userIndex].cart[i].count;
+        break;
+      }
+    }
+  }
+
   if (allUsers[userIndex].email == currentUser.email) {
-    logout();
+    localStorage.removeItem("currentUser");
+    localStorage.removeItem("currentUserIndex");
+    setTimeout(function () {
+      window.location.replace("../index.html");
+    }, 1000);
+    Swal.fire({
+      position: "center",
+      icon: "success",
+      title: "Your account has been deleted!",
+      showConfirmButton: false,
+      timer: 2000,
+    });
   }
   allUsers.splice(userIndex, 1);
   localStorage.setItem("allUsers", JSON.stringify(allUsers));
+  localStorage.setItem("allProducts", JSON.stringify(allProducts));
   Swal.fire({
     position: "center",
     icon: "success",
@@ -923,7 +943,7 @@ function updateUser() {
     if (userEmail.value == allUsers[i].email) {
       if (i == userIndexToUpdate) break;
       return Swal.fire({
-        position: "top-center",
+        position: "center",
         icon: "error",
         title: "This email already exists",
         showConfirmButton: false,
@@ -951,7 +971,7 @@ function updateUser() {
         currentUser.password = userPassword.value;
     } else {
       return Swal.fire({
-        position: "top-center",
+        position: "center",
         icon: "error",
         title: "Please validate your password",
         showConfirmButton: false,
@@ -973,8 +993,25 @@ function updateUser() {
   userPassword.value = "";
   userConfirmPassword.value = "";
 
+  if (allUsers[userIndexToUpdate].role == "seller") {
+    for (let i = 0; i < allProducts.length; i++) {
+      if (allProducts[i].productID == allUsers[userIndexToUpdate].email) {
+        allProducts[i].name = allUsers[userIndexToUpdate].name;
+      }
+    }
+    for (let i = 0; i < allUsers.length; i++) {
+      for (let j = 0; j < allUsers[i].cart.length; j++) {
+        if (
+          allUsers[i].cart[j].productID == allUsers[userIndexToUpdate].email
+        ) {
+          allUsers[i].cart[j].name = allUsers[userIndexToUpdate].name;
+        }
+      }
+    }
+  }
+
   return Swal.fire({
-    position: "top-center",
+    position: "center",
     icon: "success",
     title: "User data has been updated",
     showConfirmButton: false,

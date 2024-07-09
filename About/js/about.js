@@ -80,7 +80,7 @@ function logout() {
   localStorage.removeItem("currentUser");
   localStorage.removeItem("currentUserIndex");
   Swal.fire({
-    position: "top-center",
+    position: "center",
     icon: "success",
     title: "Logged Out Successfully",
     showConfirmButton: false,

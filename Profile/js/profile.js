@@ -56,7 +56,7 @@ function logout() {
   localStorage.removeItem("currentUser");
   localStorage.removeItem("currentUserIndex");
   Swal.fire({
-    position: "top-center",
+    position: "center",
     icon: "success",
     title: "Logged Out Successfully",
     showConfirmButton: false,
@@ -172,7 +172,7 @@ function updateUser() {
       if (currentUser.password == oldUserPassword.value) {
         if (!newUserPassword.value) {
           return Swal.fire({
-            position: "top-center",
+            position: "center",
             icon: "error",
             title: "Please enter the new password",
             showConfirmButton: false,
@@ -181,7 +181,7 @@ function updateUser() {
         }
         if (!newPasswordValidation()) {
           return Swal.fire({
-            position: "top-center",
+            position: "center",
             icon: "error",
             title: "Please validate your new password",
             showConfirmButton: false,
@@ -190,7 +190,7 @@ function updateUser() {
         }
         if (currentUser.password == newUserPassword.value) {
           return Swal.fire({
-            position: "top-center",
+            position: "center",
             icon: "error",
             title: "Old password can't be equal to new password",
             showConfirmButton: false,
@@ -203,7 +203,7 @@ function updateUser() {
         localStorage.setItem("currentUser", updatedUserData);
       } else {
         return Swal.fire({
-          position: "top-center",
+          position: "center",
           icon: "error",
           title: "The old password is incorrect",
           showConfirmButton: false,
@@ -218,8 +218,25 @@ function updateUser() {
     localStorage.setItem("allUsers", updatedAllUsersData);
     localStorage.setItem("currentUser", updatedCurrentUserData);
 
+    if (allUsers[currentUserIndex].role == "seller") {
+      for (let i = 0; i < allProducts.length; i++) {
+        if (allProducts[i].productID == allUsers[currentUserIndex].email) {
+          allProducts[i].name = allUsers[currentUserIndex].name;
+        }
+      }
+      for (let i = 0; i < allUsers.length; i++) {
+        for (let j = 0; j < allUsers[i].cart.length; j++) {
+          if (
+            allUsers[i].cart[j].productID == allUsers[currentUserIndex].email
+          ) {
+            allUsers[i].cart[j].name = allUsers[currentUserIndex].name;
+          }
+        }
+      }
+    }
+
     Swal.fire({
-      position: "top-center",
+      position: "center",
       icon: "success",
       title: "Your Data has been updated!",
       showConfirmButton: false,
@@ -227,7 +244,7 @@ function updateUser() {
     });
   } else {
     Swal.fire({
-      position: "top-center",
+      position: "center",
       icon: "error",
       title: "Please enter all data in a validated format",
       showConfirmButton: false,
@@ -238,18 +255,50 @@ function updateUser() {
 
 function deleteAccount() {
   if (oldUserPasswordDeleteAccount.value === currentUser.password) {
-    let allUsers = JSON.parse(localStorage.getItem("allUsers"));
     clearAllButton();
+
+    if (allUsers[currentUserIndex].role == "seller") {
+      for (let i = allProducts.length - 1; i >= 0; i--) {
+        if (allUsers[currentUserIndex].email == allProducts[i].sellerID) {
+          allProducts.splice(i, 1);
+        }
+      }
+
+      // Remove Product from all users cart only if it exists
+      for (let x = 0; x < allUsers.length; x++) {
+        for (let i = allUsers[x].cart.length - 1; i >= 0; i--) {
+          if (
+            allUsers[x].cart[i].sellerID == allUsers[currentUserIndex].email
+          ) {
+            allUsers[x].cart.splice(i, 1);
+          }
+        }
+        reCalcTotalCartPrice(allUsers[x]);
+      }
+    }
+
+    for (let i = 0; i < allUsers[currentUserIndex].cart.length; i++) {
+      for (let j = 0; j < allProducts.length; j++) {
+        if (
+          allProducts[j].productID ==
+          allUsers[currentUserIndex].cart[i].productID
+        ) {
+          allProducts[j].stock += allUsers[currentUserIndex].cart[i].count;
+          break;
+        }
+      }
+    }
+
     allUsers.splice(currentUserIndex, 1);
-    allUsers = JSON.stringify(allUsers);
-    localStorage.setItem("allUsers", allUsers);
+    localStorage.setItem("allUsers", JSON.stringify(allUsers));
+    localStorage.setItem("allProducts", JSON.stringify(allProducts));
     localStorage.removeItem("currentUser");
     localStorage.removeItem("currentUserIndex");
     setTimeout(function () {
-      window.location.replace("../../index.html");
+      window.location.replace("../index.html");
     }, 1000);
     return Swal.fire({
-      position: "top-center",
+      position: "center",
       icon: "success",
       title: "Your account has been deleted!",
       showConfirmButton: false,
@@ -257,9 +306,9 @@ function deleteAccount() {
     });
   } else {
     return Swal.fire({
-      position: "top-center",
+      position: "center",
       icon: "error",
-      title: "Old password is incorrect",
+      title: "Password is incorrect",
       showConfirmButton: false,
       timer: 2000,
     });
