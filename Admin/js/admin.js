@@ -43,6 +43,7 @@ let userAddress = document.getElementById("user-address");
 let userRole = document.getElementById("user-role");
 let userPassword = document.getElementById("user-password");
 let userConfirmPassword = document.getElementById("user-confirm-password");
+let roleSelect = document.getElementById("roleSelect");
 
 let userEmailAlert = document.getElementById("email-alert");
 let userNameAlert = document.getElementById("name-alert");
@@ -72,6 +73,7 @@ function categoryValidation() {
   let catRegex = /\b(sports|electronics|fashion|grocery)\b/;
   return catRegex.test(categorySelected.value);
 }
+
 function stockValidation() {
   let stockRegex = /^[1-9]\d*(\.\d{1,2})?$|^0\.\d{1,2}$/;
   return stockRegex.test(stock.value);
@@ -98,8 +100,8 @@ function addressValidation() {
   return addressRegex.test(userAddress.value);
 }
 function roleValidation() {
-  if (userRole && userRole.value) return true;
-  else return false;
+  let roleRegex = /\b(customer|seller|admin)\b/;
+  return roleRegex.test(userRole.value);
 }
 function passwordValidation() {
   let passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*])[a-zA-Z!@#$%^&*\d]{8,}$/;
@@ -184,8 +186,8 @@ userAddress.addEventListener("keyup", function () {
   if (addressValidation()) removeUserAddressAlert();
   else addUserAddressAlert();
 });
-userRole.addEventListener("keyup", function () {
-  if (roleValidation()) removeUserAddressAlert();
+userRole.addEventListener("change", function () {
+  if (roleValidation()) removeUserRoleAlert();
   else addUserRoleAlert();
 });
 userPassword.addEventListener("keyup", function () {
@@ -837,6 +839,7 @@ rePasswordToggleIcon.addEventListener("click", function (e) {
 });
 
 function displayUsers() {
+  roleSelect.classList.remove("d-none");
   let tempUsers = "";
   let no = 1;
   allUsers = JSON.parse(localStorage.getItem("allUsers"));
@@ -938,7 +941,6 @@ function deleteUser(userIndex) {
         allProducts.splice(i, 1);
       }
     }
-
     // Remove Product from all users cart only if it exists
     for (let x = 0; x < allUsers.length; x++) {
       for (let i = allUsers[x].cart.length - 1; i >= 0; i--) {
@@ -989,6 +991,7 @@ function deleteUser(userIndex) {
 let userIndexToUpdate = 0;
 
 function preUpdateUser(userIndex) {
+  roleSelect.classList.add("d-none");
   userIndexToUpdate = userIndex;
   window.scrollTo({ top: 0, behavior: "smooth" });
   userEmail.value = allUsers[userIndex].email;
@@ -1088,7 +1091,7 @@ function updateUser() {
       }
     }
   }
-
+  resetUserValidation();
   return Swal.fire({
     position: "center",
     icon: "success",
