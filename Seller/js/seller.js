@@ -74,7 +74,7 @@ function logout() {
 }
 
 categorySelected.addEventListener("change", function () {
-  if (addCategoryAlert()) {
+  if (categoryValidation()) {
     removeCategoryAlert();
   } else {
     addCategoryAlert();
@@ -449,16 +449,7 @@ function deleteRow(productID) {
     );
 
     if (productIndex !== -1) {
-      let cartProduct = user.cart[productIndex];
-      let priceAfterPromotion = cartProduct.featured
-        ? cartProduct.productPrice
-        : cartProduct.productPrice -
-          cartProduct.productPrice * (cartProduct.promotion / 100);
-
-      user.totalCartPrice -= cartProduct.count * priceAfterPromotion;
-
       user.cart.splice(productIndex, 1);
-
       recalcTotalCartPrice(user);
     }
   });

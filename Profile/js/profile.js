@@ -167,6 +167,8 @@ function updateUser() {
   if (nameValidation() && addressValidation()) {
     currentUser.name = currentUserName.value;
     currentUser.address = currentUserAddress.value;
+    currentUserName.classList.remove("is-valid");
+    currentUserAddress.classList.remove("is-valid");
 
     if (oldUserPassword.value) {
       if (currentUser.password == oldUserPassword.value) {
@@ -199,7 +201,10 @@ function updateUser() {
         }
         currentUser.password = newUserPassword.value;
         let updatedUserData = JSON.stringify(currentUser);
-
+        oldUserPassword.classList.remove("is-valid");
+        newUserPassword.classList.remove("is-valid");
+        oldUserPassword.value = "";
+        newUserPassword.value = "";
         localStorage.setItem("currentUser", updatedUserData);
       } else {
         return Swal.fire({
@@ -220,19 +225,21 @@ function updateUser() {
 
     if (allUsers[currentUserIndex].role == "seller") {
       for (let i = 0; i < allProducts.length; i++) {
-        if (allProducts[i].productID == allUsers[currentUserIndex].email) {
-          allProducts[i].name = allUsers[currentUserIndex].name;
+        if (allProducts[i].sellerID == allUsers[currentUserIndex].email) {
+          allProducts[i].seller = allUsers[currentUserIndex].name;
         }
       }
       for (let i = 0; i < allUsers.length; i++) {
         for (let j = 0; j < allUsers[i].cart.length; j++) {
           if (
-            allUsers[i].cart[j].productID == allUsers[currentUserIndex].email
+            allUsers[i].cart[j].sellerID == allUsers[currentUserIndex].email
           ) {
-            allUsers[i].cart[j].name = allUsers[currentUserIndex].name;
+            allUsers[i].cart[j].seller = allUsers[currentUserIndex].name;
           }
         }
       }
+      localStorage.setItem("allUsers", JSON.stringify(allUsers));
+      localStorage.setItem("allProducts", JSON.stringify(allProducts));
     }
 
     Swal.fire({

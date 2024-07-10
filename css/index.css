@@ -171,7 +171,8 @@ a {
 }
 
 /* tables */
-thead td {
+table td,
+table th {
   text-align: center;
 }
 

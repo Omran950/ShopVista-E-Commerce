@@ -48,7 +48,7 @@ function recalcTotalCartPrice() {
 
 function displayCurrentUserCart() {
   recalcTotalCartPrice();
-  checkStock();
+  let outOfStock = "";
   cart.innerHTML = allUsers[currentUserIndex].cart.length;
   totalPrice.innerHTML = `Total cart price : ${allUsers[currentUserIndex].totalCartPrice} EGP`;
   if (allUsers[currentUserIndex].cart.length == 0) {
@@ -75,7 +75,13 @@ function displayCurrentUserCart() {
         newPrice = `<p class="py-1" id="priceAfter"><span class="fw-bold text-">After Discount :</span> ${priceAfterPromotion} EGP</p>`;
       }
       let disableMinus =
-        allUsers[currentUserIndex].cart[i].count === 1 ? "disabled" : "";
+        allUsers[currentUserIndex].cart[i].count <= 1 ? "disabled" : "";
+      if (allUsers[currentUserIndex].cart[i].count === 0) {
+        outOfStock = `<p class="text-danger text-center mt-2">Out of stock</p>`;
+        confirmPaymentButton.disabled = true;
+      } else {
+        outOfStock = "";
+      }
       let disablePlus =
         allProducts.find(
           (product) =>
@@ -111,6 +117,7 @@ function displayCurrentUserCart() {
                 <p class="mb-0">${allUsers[currentUserIndex].cart[i].count}</p>
                 <button class="btn btn-outline-success py-1" ${disablePlus} onclick="addProductCounter(${i})">+</button>
               </div>
+            ${outOfStock}             
             </div>
           </div>`;
     }
@@ -321,20 +328,4 @@ function removeProductCounter(i) {
   }
 }
 
-function checkStock() {
-  for (let i = 0; i < allUsers[currentUserIndex].cart.length; i++) {
-    for (let j = 0; j < allProducts.length; j++) {
-      if (
-        allUsers[currentUserIndex].cart[i].productID ===
-        allProducts[j].productID
-      ) {
-        if (allUsers[currentUserIndex].cart[i].count > allProducts[j].stock) {
-          allUsers[currentUserIndex].cart[i].count = allProducts[j].stock;
-        }
-        break;
-      }
-    }
-  }
-  localStorage.setItem("allUsers", JSON.stringify(allUsers));
-}
 displayCurrentUserCart();

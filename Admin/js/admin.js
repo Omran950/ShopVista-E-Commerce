@@ -127,7 +127,7 @@ productName.addEventListener("keyup", function () {
 });
 
 categorySelected.addEventListener("change", function () {
-  if (addCategoryAlert()) {
+  if (categoryValidation()) {
     removeCategoryAlert();
   } else {
     addCategoryAlert();
@@ -415,6 +415,9 @@ addProduct.addEventListener("click", function () {
             cartProduct.stock = product.stock;
             cartProduct.promotion = product.promotion;
             cartProduct.featured = product.featured;
+            if (cartProduct.count > product.stock) {
+              cartProduct.count = product.stock;
+            }
           }
           recalcTotalCartPrice(user);
         });
@@ -847,10 +850,10 @@ function displayUsers() {
               <td>${allUsers[i].role}</td>
               <td>${allUsers[i].totalCartPrice}</td>
               <td class="text-center"><button type="button" class="btn" onclick="displayOrders(${i})" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                  View Orders
+                   Orders
                 </button></td>
               <td class="text-center"><button type="button" class="btn" onclick="displayCart(${i})" data-bs-toggle="modal" data-bs-target="#cart-modal">
-                  View Cart
+                   Cart
                 </button></td>
               <td class="text-center"><button type="button" class="btn" onclick="preUpdateUser(${i})">Update</button></td>
               <td class="text-center"><button type="button" class="btn delete-btn-user" onclick="deleteUser(${i})">Delete</button></td>
@@ -1008,7 +1011,25 @@ function updateUser() {
         timer: 2000,
       });
     } else {
-      allUsers[userIndexToUpdate].email = userEmail.value;
+      if (allUsers[userIndexToUpdate].role == "seller") {
+        for (let i = 0; i < allProducts.length; i++) {
+          if (allProducts[i].sellerID == allUsers[userIndexToUpdate].email) {
+            allProducts[i].sellerID = userEmail.value;
+          }
+        }
+        for (let i = 0; i < allUsers.length; i++) {
+          for (let j = 0; j < allUsers[i].cart.length; j++) {
+            if (
+              allUsers[i].cart[j].sellerID == allUsers[userIndexToUpdate].email
+            ) {
+              allUsers[i].cart[j].sellerID = userEmail.value;
+            }
+          }
+        }
+        allUsers[userIndexToUpdate].email = userEmail.value;
+        localStorage.setItem("allUsers", JSON.stringify(allUsers));
+        localStorage.setItem("allProducts", JSON.stringify(allProducts));
+      }
     }
   }
   allUsers[userIndexToUpdate].name = userName.value;
@@ -1169,15 +1190,26 @@ function displayOrders(index) {
 function displayCart(index) {
   let cartTemp = "";
   let cartData = "";
+  let count = 1;
   for (let i = 0; i < allUsers[index].cart.length; i++) {
     cartData += `<tr class="text-center">
-                                    <td>${allUsers[index].cart[i].productID}</td>
-                                    <td>${allUsers[index].cart[i].productName}</td>
-                                    <td><img src="${allUsers[index].cart[i].productImage}" /></td>
-                                    <td>${allUsers[index].cart[i].productDetails}</td>
-                                    <td>${allUsers[index].cart[i].productPrice}</td>
+                                    <td>${count++}</td>
+                                    <td>${
+                                      allUsers[index].cart[i].productName
+                                    }</td>
+                                    <td><img src="${
+                                      allUsers[index].cart[i].productImage
+                                    }" /></td>
+                                    <td>${
+                                      allUsers[index].cart[i].productDetails
+                                    }</td>
+                                    <td>${
+                                      allUsers[index].cart[i].productPrice
+                                    }</td>
                                     <td>${allUsers[index].cart[i].category}</td>
-                                    <td>${allUsers[index].cart[i].promotion}</td>
+                                    <td>${
+                                      allUsers[index].cart[i].promotion
+                                    }</td>
                                     <td>${allUsers[index].cart[i].count}</td>
                                     <td>${allUsers[index].cart[i].seller}</td>
                                   </tr>`;
@@ -1191,7 +1223,7 @@ function displayCart(index) {
                               <table class="table table-striped table-bordered">
                                 <thead>
                                   <tr>
-                                    <td>ID</td>
+                                    <td>NO.</td>
                                     <td>Name</td>
                                     <td>Image</td>
                                     <td>Details</td>
