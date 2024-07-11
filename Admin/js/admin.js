@@ -30,7 +30,6 @@ let handledTicketsTableBody = document.getElementById(
 );
 // Password Toggle Icons
 let passwordToggleIcon = document.getElementById("toggle-password");
-let rePasswordToggleIcon = document.getElementById("toggle-rePassword");
 
 //      Create/Update Buttons
 let createBtn = document.getElementById("createUserBtn");
@@ -42,7 +41,6 @@ let userName = document.getElementById("user-name");
 let userAddress = document.getElementById("user-address");
 let userRole = document.getElementById("user-role");
 let userPassword = document.getElementById("user-password");
-let userConfirmPassword = document.getElementById("user-confirm-password");
 let roleSelect = document.getElementById("roleSelect");
 
 let userEmailAlert = document.getElementById("email-alert");
@@ -50,9 +48,6 @@ let userNameAlert = document.getElementById("name-alert");
 let userAddressAlert = document.getElementById("address-alert");
 let userRoleAlert = document.getElementById("role-alert");
 let userPasswordAlert = document.getElementById("password-alert");
-let userConfirmPasswordAlert = document.getElementById(
-  "user-confirm-password-alert"
-);
 
 let existingProduct = null;
 
@@ -107,9 +102,7 @@ function passwordValidation() {
   let passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*])[a-zA-Z!@#$%^&*\d]{8,}$/;
   return passwordRegex.test(userPassword.value);
 }
-function rePasswordValidation() {
-  return userConfirmPassword.value === userPassword.value;
-}
+
 document.addEventListener("DOMContentLoaded", function () {
   dropdownItems.forEach((item) => {
     item.addEventListener("click", function (event) {
@@ -194,10 +187,7 @@ userPassword.addEventListener("keyup", function () {
   if (passwordValidation()) removePasswordAlert();
   else addPasswordAlert();
 });
-userConfirmPassword.addEventListener("keyup", function () {
-  if (rePasswordValidation()) removeRePasswordAlert();
-  else addRePasswordAlert();
-});
+
 // add and remove Alerts
 function addProductNameAlert() {
   productName.classList.add("is-invalid");
@@ -324,23 +314,13 @@ function removePasswordAlert() {
   userPassword.classList.add("is-valid");
   userPasswordAlert.classList.add("d-none");
 }
-function addRePasswordAlert() {
-  userConfirmPassword.classList.add("is-invalid");
-  userConfirmPassword.classList.remove("is-valid");
-  userConfirmPasswordAlert.classList.remove("d-none");
-}
-function removeRePasswordAlert() {
-  userConfirmPassword.classList.remove("is-invalid");
-  userConfirmPassword.classList.add("is-valid");
-  userConfirmPasswordAlert.classList.add("d-none");
-}
+
 function resetUserValidation() {
   userName.classList.remove("is-valid");
   userEmail.classList.remove("is-valid");
   userAddress.classList.remove("is-valid");
   userRole.classList.remove("is-valid");
   userPassword.classList.remove("is-valid");
-  userConfirmPassword.classList.remove("is-valid");
 }
 
 function clearInputs() {
@@ -643,7 +623,7 @@ function displayPendingProducts() {
     }
   }
   if (pendingTrs === ``) {
-    pendingTrs = `<tr><td colspan="11" rowspan="3" class="text-center py-5"><h2 class="fs-1 fw-bolder py-5">No products found</h2></td></tr>`;
+    pendingTrs = `<tr><td colspan="11" rowspan="3" class="text-center py-5"><h2 class="fs-1 fw-bolder py-5">No pending products</h2></td></tr>`;
   }
   pendingTableBody.innerHTML = pendingTrs;
 }
@@ -834,9 +814,6 @@ function eye(targetInput, icon) {
 passwordToggleIcon.addEventListener("click", function (e) {
   eye(userPassword, e.target);
 });
-rePasswordToggleIcon.addEventListener("click", function (e) {
-  eye(userConfirmPassword, e.target);
-});
 
 function displayUsers() {
   roleSelect.classList.remove("d-none");
@@ -865,7 +842,7 @@ function displayUsers() {
     no++;
   }
   if (!tempUsers) {
-    tempUsers = `<tr><td colspan="11" rowspan="3" class="text-center py-5"><h2 class="fs-1 fw-bolder py-5">No products found</h2></td></tr>`;
+    tempUsers = `<tr><td colspan="11" rowspan="3" class="text-center py-5"><h2 class="fs-1 fw-bolder py-5">No users found</h2></td></tr>`;
   }
   document.getElementById("tableBodyUsers").innerHTML = tempUsers;
 }
@@ -877,8 +854,7 @@ function createUser() {
     nameValidation() &&
     addressValidation() &&
     roleValidation() &&
-    passwordValidation() &&
-    rePasswordValidation()
+    passwordValidation()
   ) {
     for (let i = 0; i < allUsers.length; i++) {
       if (userEmail.value == allUsers[i].email) {
@@ -913,7 +889,6 @@ function createUser() {
     userAddress.value = "";
     userRole.value = "";
     userPassword.value = "";
-    userConfirmPassword.value = "";
 
     Swal.fire({
       position: "center",
@@ -1018,6 +993,7 @@ function updateUser() {
         for (let i = 0; i < allProducts.length; i++) {
           if (allProducts[i].sellerID == allUsers[userIndexToUpdate].email) {
             allProducts[i].sellerID = userEmail.value;
+            allProducts[i].seller = userName.value;
           }
         }
         for (let i = 0; i < allUsers.length; i++) {
@@ -1026,6 +1002,7 @@ function updateUser() {
               allUsers[i].cart[j].sellerID == allUsers[userIndexToUpdate].email
             ) {
               allUsers[i].cart[j].sellerID = userEmail.value;
+              allUsers[i].cart[j].seller = userName.value;
             }
           }
         }
@@ -1047,7 +1024,7 @@ function updateUser() {
     currentUser.email = userEmail.value;
   }
   if (userPassword.value) {
-    if (passwordValidation() && rePasswordValidation()) {
+    if (passwordValidation()) {
       allUsers[userIndexToUpdate].password = userPassword.value;
       if (userIndexToUpdate == currentUserIndex)
         currentUser.password = userPassword.value;
@@ -1055,7 +1032,7 @@ function updateUser() {
       return Swal.fire({
         position: "center",
         icon: "error",
-        title: "Please validate your password",
+        title: "Please validate user password",
         showConfirmButton: false,
         timer: 2000,
       });
@@ -1073,7 +1050,6 @@ function updateUser() {
   userAddress.value = "";
   userRole.value = "";
   userPassword.value = "";
-  userConfirmPassword.value = "";
 
   if (allUsers[userIndexToUpdate].role == "seller") {
     for (let i = 0; i < allProducts.length; i++) {
@@ -1109,15 +1085,37 @@ function displayOrders(index) {
     cartTemp = "";
     for (let x = 0; x < allUsers[index].orders[i].cart.length; x++) {
       cartTemp += `<tr>
-                                    <td>${allUsers[index].orders[i]?.cart[x].productID}</td>
-                                    <td>${allUsers[index].orders[i]?.cart[x].productName}</td>
-                                    <td><img src="${allUsers[index].orders[i]?.cart[x].productImage}"/></td>
-                                    <td>${allUsers[index].orders[i]?.cart[x].productDetails}</td>
-                                    <td>${allUsers[index].orders[i]?.cart[x].productPrice}</td>
-                                    <td>${allUsers[index].orders[i]?.cart[x].category}</td>
-                                    <td>${allUsers[index].orders[i]?.cart[x].promotion}</td>
-                                    <td>${allUsers[index].orders[i]?.cart[x].stock}</td>
-                                    <td>${allUsers[index].orders[i]?.cart[x].seller}</td>
+                                    <td>${x + 1}</td>
+                                    <td>${
+                                      allUsers[index].orders[i]?.cart[x]
+                                        .productName
+                                    }</td>
+                                    <td><img src="${
+                                      allUsers[index].orders[i]?.cart[x]
+                                        .productImage
+                                    }"/></td>
+                                    <td>${
+                                      allUsers[index].orders[i]?.cart[x]
+                                        .productDetails
+                                    }</td>
+                                    <td>${
+                                      allUsers[index].orders[i]?.cart[x]
+                                        .productPrice
+                                    }</td>
+                                    <td>${
+                                      allUsers[index].orders[i]?.cart[x]
+                                        .category
+                                    }</td>
+                                    <td>${
+                                      allUsers[index].orders[i]?.cart[x]
+                                        .promotion
+                                    }</td>
+                                    <td>${
+                                      allUsers[index].orders[i]?.cart[x].stock
+                                    }</td>
+                                    <td>${
+                                      allUsers[index].orders[i]?.cart[x].seller
+                                    }</td>
                                   </tr>`;
     }
     orderTemp += `<div class="orderContainer mb-5 p-3 shadow-lg rounded-5 px-3 bg-info bg-opacity-10">
@@ -1164,7 +1162,7 @@ function displayOrders(index) {
                               <table class="table table-striped table-bordered">
                                 <thead>
                                   <tr>
-                                    <td>ID</td>
+                                    <td>NO.</td>
                                     <td>Name</td>
                                     <td>Image</td>
                                     <td>Details</td>
@@ -1218,7 +1216,7 @@ function displayCart(index) {
                                   </tr>`;
   }
   if (!cartData) {
-    cartData = `<tr><td colspan="11" rowspan="3" class="text-center py-5"><h2 class="fs-1 fw-bolder py-5">No products found</h2></td></tr>`;
+    cartData = `<tr><td colspan="11" rowspan="3" class="text-center py-5"><h2 class="fs-1 fw-bolder py-5">Cart empty</h2></td></tr>`;
   }
   cartTemp = `<div class="orderInnerContainer mb-3 p-4">
                             <div class="cartDetails mb-4">

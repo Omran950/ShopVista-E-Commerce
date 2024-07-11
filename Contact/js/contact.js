@@ -47,7 +47,7 @@ function mobileValidation() {
   return mobileRegex.test(ticketMobile.value);
 }
 function messageValidation() {
-  let messageRegex = /^[a-zA-Z0-9_-]{10,100}$/;
+  let messageRegex = /^[a-zA-Z0-9 _-~!@#$%^&*()+=`{}|:";'<>?,.\/]{10,100}$/;
   return messageRegex.test(ticketMessage.value);
 }
 document.addEventListener("DOMContentLoaded", function () {

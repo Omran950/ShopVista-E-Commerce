@@ -340,9 +340,7 @@ addProduct.addEventListener("click", function () {
       allProducts[index] = product;
       for (let x = 0; x < allUsers.length; x++) {
         for (let i = allUsers[x].cart.length - 1; i >= 0; i--) {
-          if (
-            allUsers[x].cart[i].sellerID == allUsers[currentUserIndex].email
-          ) {
+          if (allUsers[x].cart[i].productID == allProducts[index].productID) {
             allUsers[x].cart.splice(i, 1);
           }
         }
