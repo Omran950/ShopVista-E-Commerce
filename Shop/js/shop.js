@@ -97,7 +97,7 @@ function addToCart(i, cat, body) {
     "currentUser",
     JSON.stringify(allUsers[currentUserIndex])
   );
-  searchByCategory(cat, body);
+  searchByCategory(cat, body, SearchBar.value);
   cart.innerHTML = allUsers[currentUserIndex].cart.length;
 }
 
@@ -145,12 +145,10 @@ function searchByCategory(cat, body, query = "") {
     ) {
       if (!allProducts[i].pending && allProducts[i].stock > 0) {
         let priceAfterPromotion = "";
-        let newPrice = "";
         if (!allProducts[i].featured) {
           priceAfterPromotion =
             allProducts[i].productPrice -
             allProducts[i].productPrice * (allProducts[i].promotion / 100);
-          newPrice = `<p class="my-2 py-2" id="priceAfter"><span class="fw-bold text-">After Discount :</span> ${priceAfterPromotion} EGP</p>`;
         }
         products += `<div class="col-sm-6 col-md-4 col-lg-3">
             <div class="card rounded-3 overflow-hidden">
