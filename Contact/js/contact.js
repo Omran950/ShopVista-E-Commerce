@@ -190,7 +190,13 @@ submitTicket.addEventListener("click", function () {
     mobileValidation() &&
     messageValidation()
   ) {
-    swal("", "Ticket Submitted", "success");
+    Swal.fire({
+      position: "center",
+      icon: "success",
+      title: "Ticket Submitted",
+      showConfirmButton: false,
+      timer: 1000,
+    });
     allTickets.push(ticket);
     localStorage.setItem("allTickets", JSON.stringify(allTickets));
     clearInputs();

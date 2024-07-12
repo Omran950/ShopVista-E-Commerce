@@ -560,40 +560,71 @@ function updateRow(productID) {
 }
 
 function deleteRow(productID) {
-  allUsers.forEach((user) => {
-    let productIndex = user.cart.findIndex(
-      (cartProduct) => cartProduct.productID === productID
-    );
-
-    if (productIndex !== -1) {
-      let cartProduct = user.cart[productIndex];
-      let priceAfterPromotion = cartProduct.featured
-        ? cartProduct.productPrice
-        : cartProduct.productPrice -
-          cartProduct.productPrice * (cartProduct.promotion / 100);
-
-      user.totalCartPrice -= cartProduct.count * priceAfterPromotion;
-
-      user.cart.splice(productIndex, 1);
-
-      recalcTotalCartPrice(user);
-    }
+  const swalWithBootstrapButtons = Swal.mixin({
+    customClass: {
+      confirmButton: "btn  btn-danger",
+      cancelButton: "btn btn-success",
+    },
+    buttonsStyling: true,
   });
+  swalWithBootstrapButtons
+    .fire({
+      text: "Are you sure ?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Remove Product",
+      cancelButtonText: "cancel!",
+      reverseButtons: true,
+    })
+    .then((result) => {
+      if (result.isConfirmed) {
+        allUsers.forEach((user) => {
+          let productIndex = user.cart.findIndex(
+            (cartProduct) => cartProduct.productID === productID
+          );
 
-  localStorage.setItem("allUsers", JSON.stringify(allUsers));
-  Swal.fire({
-    position: "center",
-    icon: "success",
-    title: "Product Deleted",
-    showConfirmButton: false,
-    timer: 1000,
-  });
-  allProducts = allProducts.filter(
-    (product) => product.productID !== productID
-  );
-  localStorage.setItem("allProducts", JSON.stringify(allProducts));
+          if (productIndex !== -1) {
+            let cartProduct = user.cart[productIndex];
+            let priceAfterPromotion = cartProduct.featured
+              ? cartProduct.productPrice
+              : cartProduct.productPrice -
+                cartProduct.productPrice * (cartProduct.promotion / 100);
 
-  displayProducts();
+            user.totalCartPrice -= cartProduct.count * priceAfterPromotion;
+
+            user.cart.splice(productIndex, 1);
+
+            recalcTotalCartPrice(user);
+          }
+        });
+
+        localStorage.setItem("allUsers", JSON.stringify(allUsers));
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Product Deleted",
+          showConfirmButton: false,
+          timer: 1000,
+        });
+        allProducts = allProducts.filter(
+          (product) => product.productID !== productID
+        );
+        localStorage.setItem("allProducts", JSON.stringify(allProducts));
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Product Deleted",
+          showConfirmButton: false,
+          timer: 1000,
+        });
+        displayProducts();
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        swalWithBootstrapButtons.fire({
+          title: "Cancelled",
+          icon: "error",
+        });
+      }
+    });
 }
 
 // Pending Products
@@ -690,7 +721,7 @@ function displayPendingTickets() {
                 <td class="text-center">
                     <button type="button" class="btn btn-sm handle-btn" data-product-id="${allTickets[i].ticketID}">Handle</button></td>
                 <td class="text-center">
-                    <button type="button" class="btn btn-sm ignore-btn" data-product-id="${allTickets[i].ticketID}">Ignore</button></td>
+                    <button type="button" class="btn btn-sm btn-danger ignore-btn" data-product-id="${allTickets[i].ticketID}">Ignore</button></td>
         </tr>
         `;
       no++;
@@ -758,21 +789,45 @@ function handleTicket(ticketID) {
 }
 
 function ignoreTicket(ticketID) {
-  let ticketToUpdate = allTickets.find((p) => p.ticketID === ticketID);
-
-  if (ticketToUpdate) {
-    allTickets.splice(allTickets.indexOf(ticketToUpdate), 1);
-    localStorage.setItem("allTickets", JSON.stringify(allTickets));
-    displayPendingTickets();
-    displayHandledTickets();
-    Swal.fire({
-      position: "center",
-      icon: "success",
-      title: "Ticket Ignored",
-      showConfirmButton: false,
-      timer: 1000,
+  const swalWithBootstrapButtons = Swal.mixin({
+    customClass: {
+      confirmButton: "btn  btn-danger",
+      cancelButton: "btn btn-success",
+    },
+    buttonsStyling: true,
+  });
+  swalWithBootstrapButtons
+    .fire({
+      text: "Are you sure ?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Ignore Ticket ?",
+      cancelButtonText: "cancel!",
+      reverseButtons: true,
+    })
+    .then((result) => {
+      if (result.isConfirmed) {
+        let ticketToUpdate = allTickets.find((p) => p.ticketID === ticketID);
+        if (ticketToUpdate) {
+          allTickets.splice(allTickets.indexOf(ticketToUpdate), 1);
+          localStorage.setItem("allTickets", JSON.stringify(allTickets));
+          displayPendingTickets();
+          displayHandledTickets();
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Ticket Deleted",
+            showConfirmButton: false,
+            timer: 1000,
+          });
+        }
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        swalWithBootstrapButtons.fire({
+          title: "Cancelled",
+          icon: "error",
+        });
+      }
     });
-  }
 }
 
 function logout() {
@@ -909,58 +964,85 @@ function createUser() {
 }
 
 function deleteUser(userIndex) {
-  // Remove Product from all Products array only if it exists
-  if (allUsers[userIndex].role == "seller") {
-    for (let i = allProducts.length - 1; i >= 0; i--) {
-      if (allUsers[userIndex].email == allProducts[i].sellerID) {
-        allProducts.splice(i, 1);
-      }
-    }
-    // Remove Product from all users cart only if it exists
-    for (let x = 0; x < allUsers.length; x++) {
-      for (let i = allUsers[x].cart.length - 1; i >= 0; i--) {
-        if (allUsers[x].cart[i].sellerID == allUsers[userIndex].email) {
-          allUsers[x].cart.splice(i, 1);
-        }
-      }
-      recalcTotalCartPrice(allUsers[x]);
-    }
-  }
-
-  for (let i = 0; i < allUsers[userIndex].cart.length; i++) {
-    for (let j = 0; j < allProducts.length; j++) {
-      if (allProducts[j].productID == allUsers[userIndex].cart[i].productID) {
-        allProducts[j].stock += allUsers[userIndex].cart[i].count;
-        break;
-      }
-    }
-  }
-
-  if (allUsers[userIndex].email == currentUser.email) {
-    localStorage.removeItem("currentUser");
-    localStorage.removeItem("currentUserIndex");
-    setTimeout(function () {
-      window.location.replace("../index.html");
-    }, 1000);
-    Swal.fire({
-      position: "center",
-      icon: "success",
-      title: "Your account has been deleted!",
-      showConfirmButton: false,
-      timer: 2000,
-    });
-  }
-  allUsers.splice(userIndex, 1);
-  localStorage.setItem("allUsers", JSON.stringify(allUsers));
-  localStorage.setItem("allProducts", JSON.stringify(allProducts));
-  Swal.fire({
-    position: "center",
-    icon: "success",
-    title: "User Deleted",
-    showConfirmButton: false,
-    timer: 1000,
+  const swalWithBootstrapButtons = Swal.mixin({
+    customClass: {
+      confirmButton: "btn  btn-danger",
+      cancelButton: "btn btn-success",
+    },
+    buttonsStyling: true,
   });
-  displayUsers();
+  swalWithBootstrapButtons
+    .fire({
+      text: "Are you sure ?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Remove User",
+      cancelButtonText: "cancel!",
+      reverseButtons: true,
+    })
+    .then((result) => {
+      if (result.isConfirmed) {
+        // Remove Product from all Products array only if it exists
+        if (allUsers[userIndex].role == "seller") {
+          for (let i = allProducts.length - 1; i >= 0; i--) {
+            if (allUsers[userIndex].email == allProducts[i].sellerID) {
+              allProducts.splice(i, 1);
+            }
+          }
+          // Remove Product from all users cart only if it exists
+          for (let x = 0; x < allUsers.length; x++) {
+            for (let i = allUsers[x].cart.length - 1; i >= 0; i--) {
+              if (allUsers[x].cart[i].sellerID == allUsers[userIndex].email) {
+                allUsers[x].cart.splice(i, 1);
+              }
+            }
+            recalcTotalCartPrice(allUsers[x]);
+          }
+        }
+
+        for (let i = 0; i < allUsers[userIndex].cart.length; i++) {
+          for (let j = 0; j < allProducts.length; j++) {
+            if (
+              allProducts[j].productID == allUsers[userIndex].cart[i].productID
+            ) {
+              allProducts[j].stock += allUsers[userIndex].cart[i].count;
+              break;
+            }
+          }
+        }
+
+        if (allUsers[userIndex].email == currentUser.email) {
+          localStorage.removeItem("currentUser");
+          localStorage.removeItem("currentUserIndex");
+          setTimeout(function () {
+            window.location.replace("../index.html");
+          }, 1000);
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Your account has been deleted!",
+            showConfirmButton: false,
+            timer: 2000,
+          });
+        }
+        allUsers.splice(userIndex, 1);
+        localStorage.setItem("allUsers", JSON.stringify(allUsers));
+        localStorage.setItem("allProducts", JSON.stringify(allProducts));
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "User Deleted",
+          showConfirmButton: false,
+          timer: 1000,
+        });
+        displayUsers();
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        swalWithBootstrapButtons.fire({
+          title: "Cancelled",
+          icon: "error",
+        });
+      }
+    });
 }
 
 let userIndexToUpdate = 0;

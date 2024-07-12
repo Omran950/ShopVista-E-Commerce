@@ -441,25 +441,56 @@ function updateRow(productID) {
 }
 
 function deleteRow(productID) {
-  allUsers.forEach((user) => {
-    let productIndex = user.cart.findIndex(
-      (cartProduct) => cartProduct.productID === productID
-    );
-
-    if (productIndex !== -1) {
-      user.cart.splice(productIndex, 1);
-      recalcTotalCartPrice(user);
-    }
+  const swalWithBootstrapButtons = Swal.mixin({
+    customClass: {
+      confirmButton: "btn  btn-danger",
+      cancelButton: "btn btn-success",
+    },
+    buttonsStyling: true,
   });
+  swalWithBootstrapButtons
+    .fire({
+      text: "Are you sure ?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Remove Product",
+      cancelButtonText: "cancel!",
+      reverseButtons: true,
+    })
+    .then((result) => {
+      if (result.isConfirmed) {
+        allUsers.forEach((user) => {
+          let productIndex = user.cart.findIndex(
+            (cartProduct) => cartProduct.productID === productID
+          );
 
-  localStorage.setItem("allUsers", JSON.stringify(allUsers));
+          if (productIndex !== -1) {
+            user.cart.splice(productIndex, 1);
+            recalcTotalCartPrice(user);
+          }
+        });
 
-  allProducts = allProducts.filter(
-    (product) => product.productID !== productID
-  );
-  localStorage.setItem("allProducts", JSON.stringify(allProducts));
+        localStorage.setItem("allUsers", JSON.stringify(allUsers));
 
-  displayProducts();
+        allProducts = allProducts.filter(
+          (product) => product.productID !== productID
+        );
+        localStorage.setItem("allProducts", JSON.stringify(allProducts));
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Product has been removed successfully",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        displayProducts();
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        swalWithBootstrapButtons.fire({
+          title: "Cancelled",
+          icon: "error",
+        });
+      }
+    });
 }
 
 function displayProducts() {
@@ -502,6 +533,78 @@ function displayProducts() {
           </tr>`;
   }
   tableBody.innerHTML = trs;
+}
+
+// Sales analytics
+
+let soldProductsNames = [];
+let soldProductsQuantity = [];
+let myChart;
+
+function getSalesAnalytics() {
+  soldProductsNames = [];
+  soldProductsQuantity = [];
+  let productsSold = [];
+  let productSoldCount = 0;
+
+  for (let i = 0; i < allProducts.length; i++) {
+    if (allProducts[i].sellerID == allUsers[currentUserIndex].email) {
+      productsSold.push(allProducts[i]);
+    }
+  }
+
+  console.log(productsSold);
+
+  productsSold.forEach((product) => {
+    soldProductsNames.push(product.productName);
+  });
+
+  console.log(soldProductsNames);
+
+  for (let i = 0; i < productsSold.length; i++) {
+    productSoldCount = 0;
+    for (let j = 0; j < allUsers.length; j++) {
+      for (let k = 0; k < allUsers[j].orders.length; k++) {
+        for (let x = 0; x < allUsers[j].orders[k].cart.length; x++) {
+          if (
+            productsSold[i].productID == allUsers[j].orders[k].cart[x].productID
+          ) {
+            productSoldCount += allUsers[j].orders[k].cart[x].count;
+            break;
+          }
+        }
+      }
+    }
+    soldProductsQuantity.push(productSoldCount);
+  }
+  console.log(soldProductsQuantity);
+
+  // Update the chart
+  if (myChart) {
+    myChart.destroy();
+  }
+
+  const ctx = document.getElementById("myChart").getContext("2d");
+  myChart = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: soldProductsNames,
+      datasets: [
+        {
+          label: "Quantity sold for the product",
+          data: soldProductsQuantity,
+          borderWidth: 1,
+        },
+      ],
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true,
+        },
+      },
+    },
+  });
 }
 
 displayProducts();

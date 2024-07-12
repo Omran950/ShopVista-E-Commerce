@@ -184,7 +184,6 @@ function clearAllButton() {
   });
   swalWithBootstrapButtons
     .fire({
-      title: "Oops...",
       text: "Are you sure ?",
       icon: "warning",
       showCancelButton: true,
@@ -198,6 +197,13 @@ function clearAllButton() {
         allUsers[currentUserIndex].totalCartPrice = 0;
         localStorage.setItem("allUsers", JSON.stringify(allUsers));
         displayCurrentUserCart();
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Your shopping cart has been successfully cleared",
+          showConfirmButton: false,
+          timer: 1500,
+        });
       } else if (result.dismiss === Swal.DismissReason.cancel) {
         swalWithBootstrapButtons.fire({
           title: "Cancelled",
@@ -217,7 +223,6 @@ function removeProduct(i) {
   });
   swalWithBootstrapButtons
     .fire({
-      title: "Oops...",
       text: "Are you sure ?",
       icon: "warning",
       showCancelButton: true,
@@ -244,6 +249,13 @@ function removeProduct(i) {
           "currentUser",
           JSON.stringify(allUsers[currentUserIndex])
         );
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Product has been removed successfully",
+          showConfirmButton: false,
+          timer: 1500,
+        });
         displayCurrentUserCart();
       } else if (result.dismiss === Swal.DismissReason.cancel) {
         swalWithBootstrapButtons.fire({
@@ -317,7 +329,7 @@ function removeProductCounter(i) {
 
         Swal.fire({
           position: "top-end",
-          icon: "error",
+          icon: "success",
           title: "Product has been removed successfully",
           showConfirmButton: false,
           timer: 1500,

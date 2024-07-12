@@ -127,6 +127,7 @@
             role="tab"
             aria-controls="salesAnalytics-tab-pane"
             aria-selected="false"
+            onclick="getSalesAnalytics()"
           >
             Sales Analytics
           </button>
@@ -365,7 +366,11 @@
           tabindex="0"
         >
           <div class="container">
-            <div class="row mt-5" id="salesAnalyticsDiv"></div>
+            <div class="mt-2 m-auto w-75" id="salesAnalyticsDiv">
+              <div>
+                <canvas id="myChart" class="text-center"></canvas>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -411,6 +416,7 @@
         </div>
       </div>
     </footer>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="../js/bootstrap.bundle.min.js"></script>
