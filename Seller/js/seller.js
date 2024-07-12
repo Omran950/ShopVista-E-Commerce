@@ -537,6 +537,92 @@ function displayProducts() {
 
 // Sales analytics
 
+// let soldProductsNames = [];
+// let soldProductsQuantity = [];
+// let myChart;
+
+// function getSalesAnalytics() {
+//   soldProductsNames = [];
+//   soldProductsQuantity = [];
+//   let productsSold = [];
+//   let productSoldCount = 0;
+
+//   for (let i = 0; i < allProducts.length; i++) {
+//     if (allProducts[i].sellerID == allUsers[currentUserIndex].email) {
+//       productsSold.push(allProducts[i]);
+//     }
+//   }
+//   console.log(productsSold);
+
+//   for (let j = 0; j < allUsers.length; j++) {
+//     for (let k = 0; k < allUsers[j].orders.length; k++) {
+//       for (let x = 0; x < allUsers[j].orders[k].cart.length; x++) {
+//         if (
+//           allUsers[currentUserIndex].email ==
+//           allUsers[j].orders[k].cart[x].sellerID
+//         ) {
+//           let myProductIndex = productsSold.findIndex((product) => {
+//             product.productID == allUsers[j].orders[k].cart[x].productID;
+//           });
+//           console.log(myProductIndex);
+//           if (myProductIndex === -1) {
+//             productsSold.push(allUsers[j].orders[k].cart[x]);
+//           }
+//         }
+//       }
+//     }
+//     soldProductsQuantity.push(productSoldCount);
+//   }
+//   console.log(productsSold);
+
+//   productsSold.forEach((product) => {
+//     soldProductsNames.push(product.productName);
+//   });
+//   for (let i = 0; i < productsSold.length; i++) {
+//     productSoldCount = 0;
+//     for (let j = 0; j < allUsers.length; j++) {
+//       for (let k = 0; k < allUsers[j].orders.length; k++) {
+//         for (let x = 0; x < allUsers[j].orders[k].cart.length; x++) {
+//           if (
+//             productsSold[i].productID == allUsers[j].orders[k].cart[x].productID
+//           ) {
+//             productSoldCount += allUsers[j].orders[k].cart[x].count;
+//             break;
+//           }
+//         }
+//       }
+//     }
+//     soldProductsQuantity.push(productSoldCount);
+//   }
+
+//   // Update the chart
+//   if (myChart) {
+//     myChart.destroy();
+//   }
+
+//   const ctx = document.getElementById("myChart").getContext("2d");
+//   myChart = new Chart(ctx, {
+//     type: "bar",
+//     data: {
+//       labels: soldProductsNames,
+//       datasets: [
+//         {
+//           label: "Quantity sold for the product",
+//           data: soldProductsQuantity,
+//           borderWidth: 1,
+//         },
+//       ],
+//     },
+//     options: {
+//       scales: {
+//         y: {
+//           beginAtZero: true,
+//         },
+//       },
+//     },
+//   });
+// }
+
 let soldProductsNames = [];
 let soldProductsQuantity = [];
 let myChart;
@@ -545,39 +631,42 @@ function getSalesAnalytics() {
   soldProductsNames = [];
   soldProductsQuantity = [];
   let productsSold = [];
-  let productSoldCount = 0;
+  let productSoldCounts = {};
 
+  // Collect products sold by the current user
   for (let i = 0; i < allProducts.length; i++) {
     if (allProducts[i].sellerID == allUsers[currentUserIndex].email) {
       productsSold.push(allProducts[i]);
+      productSoldCounts[allProducts[i].productID] = 0;
     }
   }
-
-  console.log(productsSold);
-
-  productsSold.forEach((product) => {
-    soldProductsNames.push(product.productName);
-  });
-
-  console.log(soldProductsNames);
-
-  for (let i = 0; i < productsSold.length; i++) {
-    productSoldCount = 0;
-    for (let j = 0; j < allUsers.length; j++) {
-      for (let k = 0; k < allUsers[j].orders.length; k++) {
-        for (let x = 0; x < allUsers[j].orders[k].cart.length; x++) {
-          if (
-            productsSold[i].productID == allUsers[j].orders[k].cart[x].productID
-          ) {
-            productSoldCount += allUsers[j].orders[k].cart[x].count;
-            break;
+  // Track product sales
+  for (let j = 0; j < allUsers.length; j++) {
+    for (let k = 0; k < allUsers[j].orders.length; k++) {
+      for (let x = 0; x < allUsers[j].orders[k].cart.length; x++) {
+        if (
+          allUsers[j].orders[k].cart[x].sellerID ==
+          allUsers[currentUserIndex].email
+        ) {
+          let myProductIndex = productsSold.findIndex(
+            (product) =>
+              product.productID == allUsers[j].orders[k].cart[x].productID
+          );
+          if (myProductIndex === -1) {
+            productsSold.push(allUsers[j].orders[k].cart[x]);
+            productSoldCounts[allUsers[j].orders[k].cart[x].productID] = 0;
           }
+          productSoldCounts[allUsers[j].orders[k].cart[x].productID] +=
+            allUsers[j].orders[k].cart[x].count;
         }
       }
     }
-    soldProductsQuantity.push(productSoldCount);
   }
-  console.log(soldProductsQuantity);
+  // Extract product names and sold quantities
+  productsSold.forEach((product) => {
+    soldProductsNames.push(product.productName);
+    soldProductsQuantity.push(productSoldCounts[product.productID] || 0);
+  });
 
   // Update the chart
   if (myChart) {

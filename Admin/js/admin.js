@@ -1087,6 +1087,17 @@ function updateUser() {
               allUsers[i].cart[j].seller = userName.value;
             }
           }
+          for (let j = 0; j < allUsers[i].orders.length; j++) {
+            for (let k = 0; k < allUsers[i].orders[j].cart.length; k++) {
+              if (
+                allUsers[i].orders[j].cart[k].sellerID ==
+                allUsers[userIndexToUpdate].email
+              ) {
+                allUsers[i].orders[j].cart[k].sellerID = userEmail.value;
+                allUsers[i].orders[j].cart[k].seller = userName.value;
+              }
+            }
+          }
         }
         allUsers[userIndexToUpdate].email = userEmail.value;
         localStorage.setItem("allUsers", JSON.stringify(allUsers));
