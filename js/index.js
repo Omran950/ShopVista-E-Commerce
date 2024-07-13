@@ -14,6 +14,7 @@ let allUsers = JSON.parse(localStorage.getItem("allUsers")) || [
     cart: [],
     orders: [],
     totalCartPrice: 0,
+    active: true,
   },
 ];
 
@@ -52,6 +53,7 @@ if (localStorage.getItem("allProducts")) {
       productID: "b1d1f69a-01c5-4e68-b1c8-9e1bf9m9d53f",
       sellerID: "shopVista",
       pending: false,
+      active: true,
     },
     {
       productName: "Football",
@@ -69,6 +71,7 @@ if (localStorage.getItem("allProducts")) {
       productID: "b2d1f69b-02c5-4e69-b2c8-9e1bf9m9d53f",
       sellerID: "shopVista",
       pending: false,
+      active: true,
     },
     {
       productName: "Tennis Racket",
@@ -86,6 +89,7 @@ if (localStorage.getItem("allProducts")) {
       productID: "b3d1f69c-03c5-4e70-b3c8-9e1bf9m9d53f",
       sellerID: "shopVista",
       pending: false,
+      active: true,
     },
     {
       productName: "Soccer Ball",
@@ -103,6 +107,7 @@ if (localStorage.getItem("allProducts")) {
       productID: "b4d1f69d-04c5-4e71-b4c8-9e1bf9m9d53f",
       sellerID: "shopVista",
       pending: false,
+      active: true,
     },
     {
       productName: "Running Shoes",
@@ -119,6 +124,7 @@ if (localStorage.getItem("allProducts")) {
       productID: "b5d1f69e-05c5-4e72-b5c8-9e1bf9m9d53f",
       sellerID: "shopVista",
       pending: false,
+      active: true,
     },
     {
       productName: "Smartphone",
@@ -136,6 +142,7 @@ if (localStorage.getItem("allProducts")) {
       productID: "e1d1f69a-06c5-4e73-e1c8-9e1bf9m9d53f",
       sellerID: "shopVista",
       pending: false,
+      active: true,
     },
     {
       productName: "Laptop",
@@ -153,6 +160,7 @@ if (localStorage.getItem("allProducts")) {
       productID: "e2d1f69b-07c5-4e74-e2c8-9e1bf9m9d53f",
       sellerID: "shopVista",
       pending: false,
+      active: true,
     },
     {
       productName: "Smart TV",
@@ -170,6 +178,7 @@ if (localStorage.getItem("allProducts")) {
       productID: "e3d1f69c-08c5-4e75-e3c8-9e1bf9m9d53f",
       sellerID: "shopVista",
       pending: false,
+      active: true,
     },
     {
       productName: "Gaming Console",
@@ -187,6 +196,7 @@ if (localStorage.getItem("allProducts")) {
       productID: "e4d1f69d-09c5-4e76-e4c8-9e1bf9m9d53f",
       sellerID: "shopVista",
       pending: false,
+      active: true,
     },
     {
       productName: "Wireless Speaker",
@@ -204,6 +214,7 @@ if (localStorage.getItem("allProducts")) {
       productID: "e5d1f69e-10c5-4e77-e5c8-9e1bf9m9d53f",
       sellerID: "shopVista",
       pending: false,
+      active: true,
     },
     {
       productName: "Smart Watch",
@@ -220,6 +231,7 @@ if (localStorage.getItem("allProducts")) {
       productID: "e6d1f69f-11c5-4e78-e6c8-9e1bf9m9d53f",
       sellerID: "shopVista",
       pending: false,
+      active: true,
     },
     {
       productName: "Organic Apples",
@@ -237,6 +249,7 @@ if (localStorage.getItem("allProducts")) {
       productID: "g1d1f69a-12c5-4e79-g1c8-9e1bf9m9d53f",
       sellerID: "shopVista",
       pending: false,
+      active: true,
     },
     {
       productName: "Whole Grain Bread",
@@ -254,6 +267,7 @@ if (localStorage.getItem("allProducts")) {
       productID: "g2d1f69b-13c5-4e80-g2c8-9e1bf9m9d53f",
       sellerID: "shopVista",
       pending: false,
+      active: true,
     },
     {
       productName: "Almond Milk",
@@ -271,6 +285,7 @@ if (localStorage.getItem("allProducts")) {
       productID: "g3d1f69c-14c5-4e81-g3c8-9e1bf9m9d53f",
       sellerID: "shopVista",
       pending: false,
+      active: true,
     },
     {
       productName: "Organic Eggs",
@@ -288,6 +303,7 @@ if (localStorage.getItem("allProducts")) {
       productID: "g4d1f69d-15c5-4e82-g4c8-9e1bf9m9d53f",
       sellerID: "shopVista",
       pending: false,
+      active: true,
     },
     {
       productName: "Greek Yogurt",
@@ -305,6 +321,7 @@ if (localStorage.getItem("allProducts")) {
       productID: "g5d1f69e-16c5-4e83-g5c8-9e1bf9m9d53f",
       sellerID: "shopVista",
       pending: false,
+      active: true,
     },
     {
       productName: "Avocado",
@@ -322,6 +339,7 @@ if (localStorage.getItem("allProducts")) {
       productID: "g6d1f69f-17c5-4e84-g6c8-9e1bf9m9d53f",
       sellerID: "shopVista",
       pending: false,
+      active: true,
     },
     {
       productName: "Bananas",
@@ -339,6 +357,7 @@ if (localStorage.getItem("allProducts")) {
       productID: "g7d1f69g-18c5-4e85-g7c8-9e1bf9m9d53f",
       sellerID: "shopVista",
       pending: false,
+      active: true,
     },
     {
       productName: "Organic Spinach",
@@ -356,6 +375,7 @@ if (localStorage.getItem("allProducts")) {
       productID: "g8d1f69h-19c5-4e86-g8c8-9e1bf9m9d53f",
       sellerID: "shopVista",
       pending: false,
+      active: true,
     },
     {
       productName: "Leather Jacket",
@@ -373,6 +393,7 @@ if (localStorage.getItem("allProducts")) {
       productID: "f1d1f69a-20c5-4e87-f1c8-9e1bf9m9d53f",
       sellerID: "shopVista",
       pending: false,
+      active: true,
     },
     {
       productName: "Sneakers",
@@ -390,6 +411,7 @@ if (localStorage.getItem("allProducts")) {
       productID: "f2d1f69b-21c5-4e88-f2c8-9e1bf9m9d53f",
       sellerID: "shopVista",
       pending: false,
+      active: true,
     },
     {
       productName: "Designer Handbag",
@@ -407,6 +429,7 @@ if (localStorage.getItem("allProducts")) {
       productID: "f3d1f69c-22c5-4e89-f3c8-9e1bf9m9d53f",
       sellerID: "shopVista",
       pending: false,
+      active: true,
     },
     {
       productName: "Wool Scarf",
@@ -424,6 +447,7 @@ if (localStorage.getItem("allProducts")) {
       productID: "f4d1f69d-23c5-4e90-f4c8-9e1bf9m9d53f",
       sellerID: "shopVista",
       pending: false,
+      active: true,
     },
     {
       productName: "Sunglasses",
@@ -441,6 +465,7 @@ if (localStorage.getItem("allProducts")) {
       productID: "f5d1f69e-24c5-4e91-f5c8-9e1bf9m9d53f",
       sellerID: "shopVista",
       pending: false,
+      active: true,
     },
   ];
   localStorage.setItem("allProducts", JSON.stringify(allProducts));
@@ -529,23 +554,24 @@ function displayAllProducts() {
   let cardPromotionProduct = "";
   let priceAfterPromotion = 0;
   for (let i = 0; i < allProducts.length; i++) {
-    let disableAddToCartBtn = "";
-    let buttonText = "Add to cart";
-    let textDanger = "";
-    let productInCart = allUsers[currentUserIndex].cart.find(
-      (item) => item.productID == allProducts[i].productID
-    );
-    if (allProducts[i].stock > 0) {
-      if (!allProducts[i].pending) {
-        if (productInCart) {
-          if (productInCart.count == allProducts[i].stock) {
-            disableAddToCartBtn = "disabled";
-            buttonText = "Out of stock";
-            textDanger = "text-danger";
+    if (allProducts[i].active) {
+      let disableAddToCartBtn = "";
+      let buttonText = "Add to cart";
+      let textDanger = "";
+      let productInCart = allUsers[currentUserIndex].cart.find(
+        (item) => item.productID == allProducts[i].productID
+      );
+      if (allProducts[i].stock > 0) {
+        if (!allProducts[i].pending) {
+          if (productInCart) {
+            if (productInCart.count == allProducts[i].stock) {
+              disableAddToCartBtn = "disabled";
+              buttonText = "Out of stock";
+              textDanger = "text-danger";
+            }
           }
-        }
-        if (allProducts[i].featured) {
-          cardFeaturedProduct += `<div class="col-sm-6 col-md-4 col-lg-3">
+          if (allProducts[i].featured) {
+            cardFeaturedProduct += `<div class="col-sm-6 col-md-4 col-lg-3">
           <div class="card rounded-3  overflow-hidden">
           <div class="" onclick="productDetails(${i})" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
               <figure class="m-0 p-2">
@@ -561,8 +587,8 @@ function displayAllProducts() {
                   allProducts[i].productName
                 }</h6>
                 <p class="">${allProducts[i].productDetails.substring(0, 20)}${
-            allProducts[i].productDetails.length > 50 ? "..." : ""
-          }</p>
+              allProducts[i].productDetails.length > 50 ? "..." : ""
+            }</p>
                 <p class="text-center" id='price'>Price : ${
                   allProducts[i].productPrice
                 } EGP</p>
@@ -571,11 +597,11 @@ function displayAllProducts() {
           <button class="btn w-75 ${textDanger} m-auto d-block my-3" ${disableAddToCartBtn} onclick="addToCart(${i})">${buttonText}</button>
             </div>
           </div>`;
-        } else {
-          priceAfterPromotion =
-            allProducts[i].productPrice -
-            allProducts[i].productPrice * (allProducts[i].promotion / 100);
-          cardPromotionProduct += `<div class="col-sm-6 col-md-4 col-lg-3">
+          } else {
+            priceAfterPromotion =
+              allProducts[i].productPrice -
+              allProducts[i].productPrice * (allProducts[i].promotion / 100);
+            cardPromotionProduct += `<div class="col-sm-6 col-md-4 col-lg-3">
         <div class="card rounded-3 overflow-hidden">
   <div class="" onclick="productDetails(${i})" data-bs-toggle="modal"
   data-bs-target="#staticBackdrop">
@@ -590,8 +616,8 @@ function displayAllProducts() {
           <div class="text px-2 py-3">
             <h6 class="text-center fw-bolder">${allProducts[i].productName}</h6>
             <p class="">${allProducts[i].productDetails.substring(0, 40)}${
-            allProducts[i].productDetails.length > 20 ? "..." : ""
-          }</p>
+              allProducts[i].productDetails.length > 20 ? "..." : ""
+            }</p>
             <div class="d-flex justify-content-around">
             <p class="text-center" id="priceBefore">Price : <span class="text-decoration-line-through">${
               allProducts[i].productPrice
@@ -604,12 +630,13 @@ function displayAllProducts() {
 
         </div>
       </div>`;
+          }
         }
       }
+      featuredProducts.innerHTML = cardFeaturedProduct;
+      promotedProducts.innerHTML = cardPromotionProduct;
     }
   }
-  featuredProducts.innerHTML = cardFeaturedProduct;
-  promotedProducts.innerHTML = cardPromotionProduct;
 }
 
 function productDetails(i) {

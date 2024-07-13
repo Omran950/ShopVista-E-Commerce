@@ -272,12 +272,10 @@ function recalcTotalCartPrice(user) {
 
 function deleteAccount() {
   if (oldUserPasswordDeleteAccount.value === currentUser.password) {
-    clearAllButton();
-
     if (allUsers[currentUserIndex].role == "seller") {
       for (let i = allProducts.length - 1; i >= 0; i--) {
         if (allUsers[currentUserIndex].email == allProducts[i].sellerID) {
-          allProducts.splice(i, 1);
+          allProducts[i].active = false;
         }
       }
 
@@ -294,19 +292,9 @@ function deleteAccount() {
       }
     }
 
-    for (let i = 0; i < allUsers[currentUserIndex].cart.length; i++) {
-      for (let j = 0; j < allProducts.length; j++) {
-        if (
-          allProducts[j].productID ==
-          allUsers[currentUserIndex].cart[i].productID
-        ) {
-          allProducts[j].stock += allUsers[currentUserIndex].cart[i].count;
-          break;
-        }
-      }
-    }
+    allUsers[currentUserIndex].active = false;
+    allUsers[currentUserIndex].cart = [];
 
-    allUsers.splice(currentUserIndex, 1);
     localStorage.setItem("allUsers", JSON.stringify(allUsers));
     localStorage.setItem("allProducts", JSON.stringify(allProducts));
     localStorage.removeItem("currentUser");
@@ -317,7 +305,7 @@ function deleteAccount() {
     return Swal.fire({
       position: "center",
       icon: "success",
-      title: "Your account has been deleted!",
+      title: "Your account has been Deactivated!",
       showConfirmButton: false,
       timer: 2000,
     });
@@ -330,21 +318,4 @@ function deleteAccount() {
       timer: 2000,
     });
   }
-}
-
-function clearAllButton() {
-  for (let i = 0; i < currentUser.cart.length; i++) {
-    for (let j = 0; j < allProducts.length; j++) {
-      if (currentUser.cart[i].productID == allProducts[j].productID) {
-        allProducts[j].stock += currentUser.cart[i].count;
-        localStorage.setItem("allProducts", JSON.stringify(allProducts));
-      }
-    }
-  }
-  currentUser.cart = [];
-  currentUser.totalCartPrice = 0;
-  allUsers[currentUserIndex].totalCartPrice = 0;
-  allUsers[currentUserIndex].cart = [];
-  localStorage.setItem("currentUser", JSON.stringify(currentUser));
-  localStorage.setItem("allUsers", JSON.stringify(allUsers));
 }

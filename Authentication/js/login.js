@@ -1,5 +1,6 @@
 // Get data from local storage and copy it in an array
 let allUsers = [];
+let allProducts = [];
 let currentUser = [];
 let currentUserIndex = 0;
 if (localStorage.getItem("currentUserIndex")) {
@@ -10,6 +11,11 @@ if (JSON.parse(localStorage.getItem("allUsers")) != null) {
   allUsers = JSON.parse(localStorage.getItem("allUsers"));
 } else {
   allUsers = [];
+}
+if (JSON.parse(localStorage.getItem("allProducts")) != null) {
+  allProducts = JSON.parse(localStorage.getItem("allProducts"));
+} else {
+  allProducts = [];
 }
 
 // Select Elemnts
@@ -54,6 +60,17 @@ loginBtn.addEventListener("click", function () {
   if (searchUserEmailLogin() && searchUserPasswordLogin()) {
     clearInputs();
     allUsers[currentUserIndex].isLogin = true;
+    if (!allUsers[currentUserIndex].active) {
+      if (allUsers[currentUserIndex].role == "seller") {
+        allProducts.forEach((product) => {
+          if (product.sellerID == allUsers[currentUserIndex].email) {
+            product.active = true;
+          }
+        });
+        localStorage.setItem("allProducts", JSON.stringify(allProducts));
+      }
+      allUsers[currentUserIndex].active = true;
+    }
     localStorage.setItem("allUsers", JSON.stringify(allUsers));
     localStorage.setItem(
       "currentUser",

@@ -220,7 +220,7 @@
                   data-bs-toggle="modal"
                   data-bs-target="#exampleModal"
                 >
-                  Delete
+                  Deactivate
                 </button>
 
                 <!-- Modal -->
@@ -233,17 +233,14 @@
                 >
                   <div class="modal-dialog">
                     <div class="modal-content">
-                      <div class="modal-header">
+                      <div class="modal-header d-block">
                         <h1 class="modal-title fs-5" id="exampleModalLabel">
-                          Are you sure you want to permanently delete your
-                          account?
+                          Are you sure you want to deactivate your account ?
                         </h1>
-                        <button
-                          type="button"
-                          class="btn-close"
-                          data-bs-dismiss="modal"
-                          aria-label="Close"
-                        ></button>
+                        <p class="my-1">
+                          Your account will be deleted within 30 days
+                        </p>
+                        <p class="my-1">Your shopping cart data will be lost</p>
                       </div>
                       <div class="modal-body">
                         <div class="form-floating mb-3">
@@ -269,7 +266,7 @@
                           class="btn deleteAccountBtn"
                           onclick="deleteAccount()"
                         >
-                          Delete Account
+                          Deactivate Account
                         </button>
                       </div>
                     </div>

@@ -193,6 +193,7 @@ signupBtn.addEventListener("click", function () {
     cart: [],
     orders: [],
     totalCartPrice: 0,
+    active: true,
   };
   if (
     nameValidation() &&

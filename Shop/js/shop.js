@@ -121,42 +121,45 @@ function searchByCategory(cat, body, query = "") {
   let lowerCaseQuery = query.toLowerCase();
 
   for (let i = 0; i < allProducts.length; i++) {
-    let disableAddToCartBtn = "";
-    let buttonText = "Add to cart";
-    let textDanger = "";
-    let productInCart = allUsers[currentUserIndex].cart.find(
-      (item) => item.productID == allProducts[i].productID
-    );
+    if (allProducts[i].active) {
+      let disableAddToCartBtn = "";
+      let buttonText = "Add to cart";
+      let textDanger = "";
+      let productInCart = allUsers[currentUserIndex].cart.find(
+        (item) => item.productID == allProducts[i].productID
+      );
 
-    if (productInCart) {
-      if (productInCart.count == allProducts[i].stock) {
-        disableAddToCartBtn = "disabled";
-        buttonText = "Out of stock";
-        textDanger = "text-danger";
-      }
-    }
-
-    if (
-      (allProducts[i].category === cat || cat === "all") &&
-      (allProducts[i].productName.toLowerCase().includes(lowerCaseQuery) ||
-        allProducts[i].productDetails.toLowerCase().includes(lowerCaseQuery) ||
-        allProducts[i].category.toLowerCase().includes(lowerCaseQuery) ||
-        allProducts[i].seller.toLowerCase().includes(lowerCaseQuery))
-    ) {
-      if (!allProducts[i].pending && allProducts[i].stock > 0) {
-        let priceAfterPromotion = "";
-        if (!allProducts[i].featured) {
-          priceAfterPromotion =
-            allProducts[i].productPrice -
-            allProducts[i].productPrice * (allProducts[i].promotion / 100);
+      if (productInCart) {
+        if (productInCart.count == allProducts[i].stock) {
+          disableAddToCartBtn = "disabled";
+          buttonText = "Out of stock";
+          textDanger = "text-danger";
         }
-        products += `<div class="col-sm-6 col-md-4 col-lg-3">
+      }
+
+      if (
+        (allProducts[i].category === cat || cat === "all") &&
+        (allProducts[i].productName.toLowerCase().includes(lowerCaseQuery) ||
+          allProducts[i].productDetails
+            .toLowerCase()
+            .includes(lowerCaseQuery) ||
+          allProducts[i].category.toLowerCase().includes(lowerCaseQuery) ||
+          allProducts[i].seller.toLowerCase().includes(lowerCaseQuery))
+      ) {
+        if (!allProducts[i].pending && allProducts[i].stock > 0) {
+          let priceAfterPromotion = "";
+          if (!allProducts[i].featured) {
+            priceAfterPromotion =
+              allProducts[i].productPrice -
+              allProducts[i].productPrice * (allProducts[i].promotion / 100);
+          }
+          products += `<div class="col-sm-6 col-md-4 col-lg-3">
             <div class="card rounded-3 overflow-hidden">
               <div class="" onclick="productDetails(${i})" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                 <figure class="m-0 p-2">
                   <img src="${allProducts[i].productImage}" alt="${
-          allProducts[i].productName
-        }" class="d-block w-75 m-auto" style="height: 200px"/>
+            allProducts[i].productName
+          }" class="d-block w-75 m-auto" style="height: 200px"/>
                 </figure>
                 <div class="text px-2 py-3">
                   <h6 class="text-center fw-bolder">${
@@ -166,8 +169,8 @@ function searchByCategory(cat, body, query = "") {
                     0,
                     20
                   )}${
-          allProducts[i].productDetails.length > 50 ? "..." : ""
-        }</p>
+            allProducts[i].productDetails.length > 50 ? "..." : ""
+          }</p>
                   <p class="text-center" id="price">${
                     allProducts[i].featured
                       ? `Price : ${allProducts[i].productPrice} EGP`
@@ -178,14 +181,15 @@ function searchByCategory(cat, body, query = "") {
               <button class="btn w-75 ${textDanger} m-auto d-block my-3" ${disableAddToCartBtn} onclick="addToCart( ${i}, '${productCategory}', '${productsBody}')">${buttonText}</button>
             </div>
           </div>`;
+        }
       }
     }
-  }
 
-  if (products == "") {
-    products += `<div class="d-flex justify-content-center"><img src="../images/no-products.jpg" class="d-block m-auto" alt="noProductFound" id="noProductFound"></div>`;
+    if (products == "") {
+      products += `<div class="d-flex justify-content-center"><img src="../images/no-products.jpg" class="d-block m-auto" alt="noProductFound" id="noProductFound"></div>`;
+    }
+    document.getElementById(body).innerHTML = products;
   }
-  document.getElementById(body).innerHTML = products;
 }
 
 SearchBar.addEventListener("keyup", function () {

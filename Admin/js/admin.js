@@ -52,7 +52,7 @@ let userPasswordAlert = document.getElementById("password-alert");
 let existingProduct = null;
 
 function productNameValidation() {
-  let productNameRegex = /^[a-zA-Z0-9_-][a-zA-Z0-9_ -]{1,14}[a-zA-Z0-9_-]$/;
+  let productNameRegex = /^[a-zA-Z0-9_-][a-zA-Z0-9_ -]{1,18}[a-zA-Z0-9_ -]$/;
   return productNameRegex.test(productName.value);
 }
 function productPriceValidation() {
@@ -363,6 +363,7 @@ addProduct.addEventListener("click", function () {
     featured: featured,
     productID: existingProduct || generateUUID(),
     pending: false,
+    active: true,
   };
   if (
     productNameValidation() &&
@@ -486,8 +487,13 @@ addProduct.addEventListener("click", function () {
 function displayProducts() {
   let trs = "";
   let no = 1;
+  let active = "Active";
   for (let i = 0; i < allProducts.length; i++) {
+    active = "Active";
     if (allProducts[i].pending == false) {
+      if (!allProducts[i].active) {
+        active = "Deactivated";
+      }
       trs += `
             <tr class="text-center">
                 <td>${no}</td>
@@ -499,6 +505,7 @@ function displayProducts() {
                 <td>${allProducts[i].stock}</td>
                 <td>${allProducts[i].promotion}%</td>
                 <td>${allProducts[i].sellerID}</td>
+                <td>${active}</td>
                 <td class="text-center">
                     <button type="button" class="btn btn-sm update-btn" data-product-id="${allProducts[i].productID}">Update</button></td>
                 <td class="text-center">
@@ -647,7 +654,7 @@ function displayPendingProducts() {
                 <td class="text-center">
                     <button type="button" class="btn btn-sm approve-btn" data-product-id="${allProducts[i].productID}">Approve</button></td>
                 <td class="text-center">
-                    <button type="button" class="btn btn-sm reject-btn" data-product-id="${allProducts[i].productID}">Reject</button></td>
+                    <button type="button" class="btn btn-sm  reject-btn" data-product-id="${allProducts[i].productID}">Reject</button></td>
         </tr>
         `;
       no++;
@@ -874,26 +881,32 @@ function displayUsers() {
   roleSelect.classList.remove("d-none");
   let tempUsers = "";
   let no = 1;
+  let active = "Active";
   allUsers = JSON.parse(localStorage.getItem("allUsers"));
   for (let i = 1; i < allUsers.length; i++) {
+    active = "Active";
+    if (!allUsers[i].active) {
+      active = "Deactivated";
+    }
     tempUsers += `
-            <tr>    
-             <td>${no}</td>
-              <td>${allUsers[i].name}</td>
-              <td>${allUsers[i].email}</td>
-              <td>${allUsers[i].address}</td>
-              <td>${allUsers[i].role}</td>
-              <td>${allUsers[i].totalCartPrice}</td>
-              <td class="text-center"><button type="button" class="btn" onclick="displayOrders(${i})" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                   Orders
-                </button></td>
-              <td class="text-center"><button type="button" class="btn" onclick="displayCart(${i})" data-bs-toggle="modal" data-bs-target="#cart-modal">
-                   Cart
-                </button></td>
-              <td class="text-center"><button type="button" class="btn" onclick="preUpdateUser(${i})">Update</button></td>
-              <td class="text-center"><button type="button" class="btn delete-btn-user" onclick="deleteUser(${i})">Delete</button></td>
-            </tr>
-    `;
+  <tr>    
+   <td>${no}</td>
+    <td>${allUsers[i].name}</td>
+    <td>${allUsers[i].email}</td>
+    <td>${allUsers[i].address}</td>
+    <td>${allUsers[i].role}</td>
+    <td>${allUsers[i].totalCartPrice}</td>
+    <td>${active}</td>
+    <td class="text-center"><button type="button" class="btn" onclick="displayOrders(${i})" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+         Orders
+      </button></td>
+    <td class="text-center"><button type="button" class="btn" onclick="displayCart(${i})" data-bs-toggle="modal" data-bs-target="#cart-modal">
+         Cart
+      </button></td>
+    <td class="text-center"><button type="button" class="btn" onclick="preUpdateUser(${i})">Update</button></td>
+    <td class="text-center"><button type="button" class="btn delete-btn-user" onclick="deleteUser(${i})">Delete</button></td>
+  </tr>
+`;
     no++;
   }
   if (!tempUsers) {
@@ -997,17 +1010,6 @@ function deleteUser(userIndex) {
               }
             }
             recalcTotalCartPrice(allUsers[x]);
-          }
-        }
-
-        for (let i = 0; i < allUsers[userIndex].cart.length; i++) {
-          for (let j = 0; j < allProducts.length; j++) {
-            if (
-              allProducts[j].productID == allUsers[userIndex].cart[i].productID
-            ) {
-              allProducts[j].stock += allUsers[userIndex].cart[i].count;
-              break;
-            }
           }
         }
 
