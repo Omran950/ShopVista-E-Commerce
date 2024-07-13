@@ -639,7 +639,7 @@ function displayPendingProducts() {
   let pendingTrs = "";
   let no = 1;
   for (let i = 0; i < allProducts.length; i++) {
-    if (allProducts[i].pending == true) {
+    if (allProducts[i].pending && allProducts[i].active) {
       pendingTrs += `
             <tr class="text-center">
                 <td>${no}</td>
