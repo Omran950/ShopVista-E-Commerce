@@ -945,6 +945,8 @@ function createUser() {
     createdUser.orders = [];
     createdUser.password = userPassword.value;
     createdUser.isLogin = false;
+    createdUser.active = true;
+
 
     allUsers.push(createdUser);
 

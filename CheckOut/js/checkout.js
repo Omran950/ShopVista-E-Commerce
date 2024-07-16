@@ -28,6 +28,8 @@ let phoneAlert = document.getElementById("phone-checkout-alert");
 let checkoutBtn = document.getElementById("checkout-btn");
 let cart = document.getElementById("cart");
 let paymentMethodSelect = document.getElementById("payment-method");
+let visaInputs = document.getElementById("visa-inputs");
+let checkoutBtnDiv = document.getElementById("checkoutBtnDiv");
 cart.innerHTML = currentUser.cart.length;
 
 // Validation for inputs
@@ -198,19 +200,6 @@ visaCVC.addEventListener("keyup", function () {
   }
 });
 
-document.addEventListener("DOMContentLoaded", function () {
-  const paymentMethodSelect = document.getElementById("payment-method");
-  const visaInputs = document.getElementById("visa-inputs");
-
-  paymentMethodSelect.addEventListener("change", function () {
-    if (paymentMethodSelect.value == "VISA") {
-      visaInputs.classList.remove("d-none");
-    } else {
-      visaInputs.classList.add("d-none");
-    }
-  });
-});
-
 function recalcTotalCartPrice(user) {
   user.totalCartPrice = user.cart.reduce((total, cartProduct) => {
     let priceAfterPromotion = cartProduct.featured
@@ -222,173 +211,195 @@ function recalcTotalCartPrice(user) {
   localStorage.setItem("allUsers", JSON.stringify(allUsers));
 }
 
-if (paymentMethodSelect.value == "Cash") {
-  checkoutBtn.addEventListener("click", function () {
-    if (
-      nameValidation() &&
-      emailValidation() &&
-      addressValidation() &&
-      phoneValidation()
-    ) {
-      if (currentUser.cart.length == 0) {
-        return Swal.fire({
-          position: "top-center",
-          icon: "error",
-          title: "Your cart is empty",
-          showConfirmButton: false,
-          timer: 1000,
-        });
-      }
-      Swal.fire({
+function checkouCahFun() {
+  if (
+    nameValidation() &&
+    emailValidation() &&
+    addressValidation() &&
+    phoneValidation()
+  ) {
+    if (currentUser.cart.length == 0) {
+      return Swal.fire({
         position: "top-center",
-        icon: "success",
-        title: "Purchase is complete",
+        icon: "error",
+        title: "Your cart is empty",
         showConfirmButton: false,
         timer: 1000,
       });
-      let userOrder = {};
-      let totalCartPrice = allUsers[currentUserIndex].totalCartPrice;
+    }
+    Swal.fire({
+      position: "top-center",
+      icon: "success",
+      title: "Purchase is complete",
+      showConfirmButton: false,
+      timer: 1000,
+    });
+    let userOrder = {};
+    let totalCartPrice = allUsers[currentUserIndex].totalCartPrice;
 
-      for (let i = 0; i < allUsers[currentUserIndex].cart.length; i++) {
-        for (let j = 0; j < allProducts.length; j++) {
-          if (
-            allUsers[currentUserIndex].cart[i].productID ===
-            allProducts[j].productID
-          ) {
-            allProducts[j].stock -= allUsers[currentUserIndex].cart[i].count;
-            for (let x = 0; x < allUsers.length; x++) {
-              for (let k = 0; k < allUsers[x].cart.length; k++) {
-                if (
-                  allUsers[x].cart[k].productID ==
-                  allUsers[currentUserIndex].cart[i].productID
-                ) {
-                  if (allUsers[x].cart[k].count > allProducts[j].stock) {
-                    allUsers[x].cart[k].count = allProducts[j].stock;
-                    recalcTotalCartPrice(allUsers[x]);
-                  }
+    for (let i = 0; i < allUsers[currentUserIndex].cart.length; i++) {
+      for (let j = 0; j < allProducts.length; j++) {
+        if (
+          allUsers[currentUserIndex].cart[i].productID ===
+          allProducts[j].productID
+        ) {
+          allProducts[j].stock -= allUsers[currentUserIndex].cart[i].count;
+          for (let x = 0; x < allUsers.length; x++) {
+            for (let k = 0; k < allUsers[x].cart.length; k++) {
+              if (
+                allUsers[x].cart[k].productID ==
+                allUsers[currentUserIndex].cart[i].productID
+              ) {
+                if (allUsers[x].cart[k].count > allProducts[j].stock) {
+                  allUsers[x].cart[k].count = allProducts[j].stock;
+                  recalcTotalCartPrice(allUsers[x]);
                 }
               }
             }
           }
         }
       }
+    }
 
-      localStorage.setItem("allProducts", JSON.stringify(allProducts));
+    localStorage.setItem("allProducts", JSON.stringify(allProducts));
 
-      let shippingDetails = {
-        phone: phoneCheckout.value,
-        address: signAddress.value,
-        notes: notesShipping.value,
-        totalCartPrice: totalCartPrice,
-        paymentMethod: paymentMethodSelect.value,
-      };
-      userOrder.shippingDetails = shippingDetails;
-      userOrder.cart = currentUser.cart;
+    let shippingDetails = {
+      phone: phoneCheckout.value,
+      address: signAddress.value,
+      notes: notesShipping.value,
+      totalCartPrice: totalCartPrice,
+      paymentMethod: paymentMethodSelect.value,
+    };
+    userOrder.shippingDetails = shippingDetails;
+    userOrder.cart = currentUser.cart;
 
-      currentUser.orders.push(userOrder);
-      allUsers[currentUserIndex].orders.push(userOrder);
-      localStorage.setItem("currentUser", JSON.stringify(currentUser));
-      localStorage.setItem("allUsers", JSON.stringify(allUsers));
+    currentUser.orders.push(userOrder);
+    allUsers[currentUserIndex].orders.push(userOrder);
+    localStorage.setItem("currentUser", JSON.stringify(currentUser));
+    localStorage.setItem("allUsers", JSON.stringify(allUsers));
 
-      currentUser.cart = [];
-      currentUser.totalCartPrice = 0;
-      allUsers[currentUserIndex].cart = [];
-      allUsers[currentUserIndex].totalCartPrice = 0;
-      localStorage.setItem("currentUser", JSON.stringify(currentUser));
-      localStorage.setItem("allUsers", JSON.stringify(allUsers));
+    currentUser.cart = [];
+    currentUser.totalCartPrice = 0;
+    allUsers[currentUserIndex].cart = [];
+    allUsers[currentUserIndex].totalCartPrice = 0;
+    localStorage.setItem("currentUser", JSON.stringify(currentUser));
+    localStorage.setItem("allUsers", JSON.stringify(allUsers));
 
-      setTimeout(function () {
-        location.replace("../Shop/shop.html");
-      }, 1000);
-    } else {
-      Swal.fire({
+    setTimeout(function () {
+      location.replace("../Shop/shop.html");
+    }, 1000);
+  } else {
+    Swal.fire({
+      position: "top-center",
+      icon: "error",
+      title: "Please validate your data",
+      showConfirmButton: false,
+      timer: 1000,
+    });
+  }
+}
+
+function checkoutVisaFun() {
+  if (
+    nameValidation() &&
+    emailValidation() &&
+    addressValidation() &&
+    phoneValidation() &&
+    visaNumberValidation() &&
+    visaExpDateValidation() &&
+    visaCVCValidation()
+  ) {
+    if (currentUser.cart.length == 0) {
+      return Swal.fire({
         position: "top-center",
         icon: "error",
-        title: "Please validate your data",
+        title: "Your cart is empty",
         showConfirmButton: false,
         timer: 1000,
       });
     }
-  });
-} else if (paymentMethodSelect.value == "VISA") {
-  checkoutBtn.addEventListener("click", function () {
-    if (
-      nameValidation() &&
-      emailValidation() &&
-      addressValidation() &&
-      phoneValidation() &&
-      visaNumberValidation() &&
-      visaExpDateValidation() &&
-      visaCVCValidation()
-    ) {
-      if (currentUser.cart.length == 0) {
-        return Swal.fire({
-          position: "top-center",
-          icon: "error",
-          title: "Your cart is empty",
-          showConfirmButton: false,
-          timer: 1000,
-        });
-      }
-      Swal.fire({
-        position: "top-center",
-        icon: "success",
-        title: "Purchase is complete",
-        showConfirmButton: false,
-        timer: 1000,
-      });
-      for (let i = 0; i < allUsers[currentUserIndex].cart.length; i++) {
-        for (let j = 0; j < allProducts.length; j++) {
-          if (
-            allUsers[currentUserIndex].cart[i].productID ===
-            allProducts[j].productID
-          ) {
-            allProducts[j].stock -= allUsers[currentUserIndex].cart[i].count;
-            break;
-          }
+    Swal.fire({
+      position: "top-center",
+      icon: "success",
+      title: "Purchase is complete",
+      showConfirmButton: false,
+      timer: 1000,
+    });
+    for (let i = 0; i < allUsers[currentUserIndex].cart.length; i++) {
+      for (let j = 0; j < allProducts.length; j++) {
+        if (
+          allUsers[currentUserIndex].cart[i].productID ===
+          allProducts[j].productID
+        ) {
+          allProducts[j].stock -= allUsers[currentUserIndex].cart[i].count;
+          break;
         }
       }
-      localStorage.setItem("allProducts", JSON.stringify(allProducts));
-
-      let userOrder = {};
-      let totalCartPrice = parseInt(currentUser.totalCartPrice, 10);
-
-      let shippingDetails = {
-        phone: phoneCheckout.value,
-        address: signAddress.value,
-        notes: notesShipping.value,
-        totalCartPrice: totalCartPrice,
-        paymentMethod: "VISA",
-      };
-      userOrder.shippingDetails = shippingDetails;
-      userOrder.cart = currentUser.cart;
-
-      currentUser.orders.push(userOrder);
-      allUsers[currentUserIndex].orders.push(userOrder);
-      localStorage.setItem("currentUser", JSON.stringify(currentUser));
-      localStorage.setItem("allUsers", JSON.stringify(allUsers));
-
-      currentUser.cart = [];
-      currentUser.totalCartPrice = 0;
-      allUsers[currentUserIndex].cart = [];
-      allUsers[currentUserIndex].totalCartPrice = 0;
-      localStorage.setItem("currentUser", JSON.stringify(currentUser));
-      localStorage.setItem("allUsers", JSON.stringify(allUsers));
-
-      setTimeout(function () {
-        location.replace("../Shop/shop.html");
-      }, 1000);
-    } else {
-      Swal.fire({
-        position: "top-center",
-        icon: "error",
-        title: "Please validate your data",
-        showConfirmButton: false,
-        timer: 1000,
-      });
     }
-  });
+    localStorage.setItem("allProducts", JSON.stringify(allProducts));
+
+    let userOrder = {};
+    let totalCartPrice = parseInt(currentUser.totalCartPrice, 10);
+
+    let shippingDetails = {
+      phone: phoneCheckout.value,
+      address: signAddress.value,
+      notes: notesShipping.value,
+      totalCartPrice: totalCartPrice,
+      paymentMethod: "VISA",
+    };
+    userOrder.shippingDetails = shippingDetails;
+    userOrder.cart = currentUser.cart;
+
+    currentUser.orders.push(userOrder);
+    allUsers[currentUserIndex].orders.push(userOrder);
+    localStorage.setItem("currentUser", JSON.stringify(currentUser));
+    localStorage.setItem("allUsers", JSON.stringify(allUsers));
+
+    currentUser.cart = [];
+    currentUser.totalCartPrice = 0;
+    allUsers[currentUserIndex].cart = [];
+    allUsers[currentUserIndex].totalCartPrice = 0;
+    localStorage.setItem("currentUser", JSON.stringify(currentUser));
+    localStorage.setItem("allUsers", JSON.stringify(allUsers));
+
+    setTimeout(function () {
+      location.replace("../Shop/shop.html");
+    }, 1000);
+  } else {
+    Swal.fire({
+      position: "top-center",
+      icon: "error",
+      title: "Please validate your data",
+      showConfirmButton: false,
+      timer: 1000,
+    });
+  }
 }
+
+paymentMethodSelect.addEventListener("change", function () {
+  if (paymentMethodSelect.value == "VISA") {
+    visaInputs.classList.remove("d-none");
+    checkoutBtnDiv.innerHTML = `<button
+                type="button"
+                class="btn mt-2 mb-4 text-center w-100"
+                onclick="checkoutVisaFun()"
+                id="checkout-btn"
+              >
+                Checkout
+              </button>`;
+  } else {
+    visaInputs.classList.add("d-none");
+    checkoutBtnDiv.innerHTML = `<button
+    type="button"
+    class="btn mt-2 mb-4 text-center w-100"
+    onclick="checkouCahFun()"
+    id="checkout-btn"
+  >
+    Checkout
+  </button>`;
+  }
+});
 
 //Logout
 function logout() {
